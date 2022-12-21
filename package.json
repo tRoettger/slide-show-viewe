@@ -1,0 +1,14 @@
+{
+  "name": "slide-show-viewer",
+  "version": "1.0.0",
+  "description": "An application to show a slide show from existing folders.",
+  "main": "main.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tobias Röttger",
+  "license": "ISC"
+}
