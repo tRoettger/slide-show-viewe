@@ -1,0 +1,45 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+div#root {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid black;
+}
+img.album-img {
+    width: 100%;
+    height: 100%;
+}
+
+div.control-panel-area {
+    position: fixed;
+    bottom: 0px;
+    height: 200px;
+    width: 100%;
+}
+
+div.control-panel-area div.control-panel {
+    display: none;
+}
+
+div.control-panel-area:hover div.control-panel {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+a#slideshow-btn {
+    display: inline-block;
+    border: 1px solid black;
+    padding: 5px 10px;
+    background: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+a#slideshow-btn:hover {
+    background: grey;
+}

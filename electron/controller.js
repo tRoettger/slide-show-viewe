@@ -5,7 +5,6 @@ const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 const isImage = (file) => {
     if(file.stat.isFile()) {
         var extension = file.ext.toUpperCase();
-        console.log("ext: ", extension);
         return IMG_EXT.includes(extension);
     } else {
         return false;
@@ -30,6 +29,10 @@ class Controller {
                 this.execute("showAlbumImage", file.index, imageData);
             });
         }
+    }
+
+    reload() {
+        this.webContents.reloadIgnoringCache();
     }
 
     execute(method, ...args) {
