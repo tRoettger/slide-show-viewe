@@ -1,5 +1,6 @@
 const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
 const ROOT = document.getElementById("root");
+const CSS_ROOT = getComputedStyle(document.querySelector(":root"));
 
 var slideshow = {
     count: 0, 
@@ -8,14 +9,14 @@ var slideshow = {
     interval: setInterval(() => {}, 5000),
     config: {
         viewDuration: 1000,
-        animationDuration: 1000
+        transitionDuration: 1000
     }
 };
 
 const openAlbum = (imgCount) => {
     slideshow.count = imgCount;
     while(ROOT.firstChild != null) ROOT.removeChild(ROOT.lastChild);
-    for(var i = 0; i < imgCount; i++) {
+    for(var i = imgCount; i >= 0; i--) {
         var image = document.createElement("img");
         image.id = "album-image-" + i;
         image.className = "album-image";
@@ -31,13 +32,22 @@ const showAlbumImage = (index, data) => {
 const swapInterval = () => {
     console.log("Swapping");
     slideshow.current = (slideshow.current + 1) % slideshow.count;
-    var child = ROOT.firstChild;
+    var child = ROOT.lastChild;
     ROOT.removeChild(child);
-    ROOT.appendChild(child);
+    ROOT.insertBefore(child, ROOT.firstChild);
+    createTransition();
 };
 
+const toCssDuration = (millis) => {
+    var seconds = millis / 1000;
+    return seconds + "s";
+}
+
 const createTransition = () => {
-    
+    var child = ROOT.lastChild;
+    child.style.animationDelay = toCssDuration(slideshow.config.viewDuration);
+    child.style.animationDuration = toCssDuration(slideshow.config.transitionDuration);
+    child.style.animationName = "fade";
 }
 
 const controlSlideshow = (e) => {
@@ -48,8 +58,8 @@ const controlSlideshow = (e) => {
     } else if(slideshow.count > 1) {
         slideshow.running = true;
         BTN_SLIDESHOW.innerHTML = "stop";
-        var swapDuration = slideshow.config.viewDuration + slideshow.config.animationDuration;
-        slideshow.interval = setInterval(() => swapInterval(), swapDuration);
+        var swapDuration = slideshow.config.viewDuration + slideshow.config.transitionDuration;
+        slideshow.interval = setInterval(swapInterval, swapDuration);
         createTransition();
     } 
 };

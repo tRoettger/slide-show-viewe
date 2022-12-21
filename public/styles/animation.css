@@ -1,0 +1,9 @@
+:root {
+    --transition-duration: 1000;
+    --view-duration: 1000;
+}
+
+@keyframes fade {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
