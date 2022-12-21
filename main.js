@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const isDev = require("electron-is-dev");
 const path = require('path');
 const fs = require('fs');
+const { controller } = require("./electron/controller.js");
 require('./electron/menu.js');
 
 const DEFAULT_WINDOW_PROPERTIES = { width: 800, height: 600 };
@@ -24,6 +25,7 @@ const createWindow = () => {
   console.log(winProps);
   const mainWindow = new BrowserWindow(winProps);
   mainWindow.loadFile("public/index.html");
+  controller.initialize(mainWindow.webContents);
   if(isDev) {
     applyDevSetup(mainWindow);
   } else {
