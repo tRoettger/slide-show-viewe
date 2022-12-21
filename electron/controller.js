@@ -1,3 +1,17 @@
+const fs = require("fs");
+
+const IMG_EXT = [".JPG", ".PNG", ".GIF"];
+
+const isImage = (file) => {
+    if(file.stat.isFile()) {
+        var extension = file.ext.toUpperCase();
+        console.log("ext: ", extension);
+        return IMG_EXT.includes(extension);
+    } else {
+        return false;
+    }
+};
+
 class Controller {
     constructor() {}
 
@@ -6,7 +20,23 @@ class Controller {
     }
 
     openAlbum(files) {
-        console.log("files: ", files);
+        files = files.filter(isImage);
+        this.execute("openAlbum", files.length);
+        for(var i = 0; i < files.length; i++) {
+            const file = files[i];
+            file.index = i;
+            fs.readFile(file.path, (err, data) => {
+                var imageData = data.toString('base64');
+                this.execute("showAlbumImage", file.index, imageData);
+            });
+        }
+    }
+
+    execute(method, ...args) {
+        args = args.map(arg => typeof arg == "string" ? "\"" + arg + "\"" : arg);
+        var command = method + "(" + args.join(", ") + ");";
+        //console.log("command: ", command);
+        this.webContents.executeJavaScript(command);
     }
 };
 

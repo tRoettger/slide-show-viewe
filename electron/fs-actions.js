@@ -18,7 +18,6 @@ const loadFiles = (folders, onError) => {
             var file = path.parse(filename);
             file.path = path.resolve(folder, filename);
             file.stat = fs.statSync(file.path);
-            console.log("file: ", file);
             files.push(file);
         }
     }
