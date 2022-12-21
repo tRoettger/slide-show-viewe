@@ -2,25 +2,31 @@
   "name": "slide-show-viewer",
   "version": "1.0.0",
   "description": "An application to show a slide show from existing folders.",
-  "main": "public/main.js",
+  "main": "main.js",
   "directories": {
     "doc": "doc"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "electron": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "author": "Tobias Röttger",
   "license": "ISC",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
     "electron": "^22.0.0",
-    "react-is-dev": "^1.0.5",
-    "react-scripts": "^5.0.1"
+    "electron-prebuilt-compile": "8.2.0",
+    "react-is-dev": "^1.0.5"
   },
   "dependencies": {
     "electron-is-dev": "^2.0.0",
-    "react": "^18.2.0"
+    "electron-squirrel-startup": "^1.0.0"
   },
   "browserslist": {
     "production": [
