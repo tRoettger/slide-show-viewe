@@ -2,26 +2,36 @@
   "name": "slide-show-viewer",
   "version": "1.0.0",
   "description": "An application to show a slide show from existing folders.",
-  "main": "main.js",
+  "main": "public/main.js",
   "directories": {
     "doc": "doc"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "electron": "electron ."
   },
   "author": "Tobias Röttger",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^22.0.0"
+    "electron": "^22.0.0",
+    "react-is-dev": "^1.0.5",
+    "react-scripts": "^5.0.1"
   },
   "dependencies": {
-    "concurrently": "^7.6.0",
     "electron-is-dev": "^2.0.0",
-    "wait-on": "^7.0.1"
+    "react": "^18.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
