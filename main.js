@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const isDev = require("electron-is-dev");
 const path = require('path');
 const fs = require('fs');
+require('./electron/menu.js');
 
 const DEFAULT_WINDOW_PROPERTIES = { width: 800, height: 600 };
 
@@ -19,9 +20,10 @@ const saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPat
 
 const createWindow = () => {
   var winProps = readWindowProperties() || DEFAULT_WINDOW_PROPERTIES;
-  winProps.webPreferences = { nodeIntegration: true, contextIsolation: false };
+  winProps.webPreferences = { nodeIntegration: false, contextIsolation: false };
   console.log(winProps);
   const mainWindow = new BrowserWindow(winProps);
+  mainWindow.loadFile("public/index.html");
   if(isDev) {
     applyDevSetup(mainWindow);
   } else {
@@ -32,13 +34,10 @@ const createWindow = () => {
 };
 
 const applyDevSetup = (mainWindow) => {
-    mainWindow.loadURL("http://localhost:3000");
     mainWindow.webContents.openDevTools({ mode: "detach" });
 };
 
-const applyProductionSetup = (mainWindow) => {
-    mainWindow.loadURL(`file://${path.join(__dirname, "../build/index.html")}`);
-};
+const applyProductionSetup = (mainWindow) => {};
 
 const init = () => {
   createWindow();
