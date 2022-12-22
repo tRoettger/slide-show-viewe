@@ -21,7 +21,7 @@ const saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPat
 
 const createWindow = () => {
   var winProps = readWindowProperties() || DEFAULT_WINDOW_PROPERTIES;
-  winProps.webPreferences = { nodeIntegration: false, contextIsolation: false };
+  winProps.webPreferences = { nodeIntegration: true, contextIsolation: false };
   console.log(winProps);
   const mainWindow = new BrowserWindow(winProps);
   mainWindow.loadFile("public/index.html");
