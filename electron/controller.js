@@ -12,8 +12,12 @@ const isImage = (file) => {
 };
 
 const replaceAndWrap = (arg) => {
-    var newArg = arg.replaceAll("\\\\", "\\\\\\\\");
-    return "'" + newArg + "'";
+    if (arg && typeof arg == "string") {
+        var newArg = arg.replace(/\\\\/g, "\\\\\\\\");
+        return "'" + newArg + "'";
+    } else {
+        return arg;
+    }
 }
 
 class Controller {
@@ -43,7 +47,7 @@ class Controller {
     }
 
     execute(method, ...args) {
-        args = args.map(arg => typeof arg == "string" ? replaceAndWrap(arg) : arg);
+        args = args.map(replaceAndWrap);
         var command = method + "(" + args.join(", ") + ");";
         return this.webContents.executeJavaScript(command);
     }
