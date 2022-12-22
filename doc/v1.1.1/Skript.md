@@ -1,9 +1,14 @@
-# Einen Ordner als Album öffnen
+# Intro
+Willkommen zum Video Tutorial des Slide Show Viewers.
+Die aktuelle Version ist 1.1.1.
+In diesem Kapitel geht es um: ...
+
+# Kapitel 1: Einen Ordner als Album öffnen
 1. "Datei" -> "Öffnen" oder alternativ Strg+O
 2. Ordner mit Bildern auswählen. Unterstützt werden aktuell: PNG, JPG und GIF.
 3. Unterer Rand -> Nächstes und Vorheriges zum Navigieren.
 
-# Diashow einstellen und starten
+# Kapitel 2: Diashow einstellen und starten
 1. Einen Ordner als Album öffnen.
 2. "Diashow" -> "Einstellungen" oder alternative Strg+P.
 3. Einstellungen anpassen:
@@ -15,7 +20,7 @@
     b. speichern unter: (Siehe: Einstellungen laden).
 5. Unterer Rand -> "Play"
 
-# Einstellungen laden
+# Kapitel 3: Einstellungen laden
 1. Einstellungen ändern und "speichern unter" auswählen.
 2. Einen Speicherort auswählen.
     a. Die Konfiguration wird verwendet.
