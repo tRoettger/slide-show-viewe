@@ -1,0 +1,9 @@
+:root {
+    /*
+        The values below are set by javascript.
+    */
+    --transition-duration: 0s;
+    --view-duration: 0s;
+    --timing-function: ease-in-out;
+    --screen-background: black;
+}

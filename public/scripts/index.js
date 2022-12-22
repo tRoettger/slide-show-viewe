@@ -36,7 +36,11 @@ const openAlbum = (imgCount) => {
         var image = document.createElement("img");
         image.id = "album-image-" + i;
         image.className = "album-image";
-        ROOT.appendChild(image);
+        
+        var wrapper = document.createElement("div");
+        wrapper.className = "album-image-wrapper";
+        wrapper.appendChild(image);
+        ROOT.appendChild(wrapper);
     }
 };
 
