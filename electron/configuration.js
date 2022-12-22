@@ -1,6 +1,7 @@
-const { ipcMain, BrowserWindow } = require("electron");
+const { app, ipcMain, BrowserWindow } = require("electron");
 const { controller } = require("./controller.js");
-const { saveConfig } = require("./fs-actions.js");
+const { saveConfigAs: saveConfig } = require("./fs-actions.js");
+const path = require("path");
 const isDev = require("electron-is-dev");
 
 const CONFIG_WINDOW_PROPERTIES = {
@@ -19,8 +20,4 @@ exports.configureApp = () => {
     }
 };
 
-ipcMain.on('save-config', (event, arg) => {
-    controller.setConfiguration(arg);
-    event.sender.send("save-config", { successful: true });
-    saveConfig(arg);
-});
+exports.getDefaultSlideShowConfigPath = () => path.join(app.getAppPath(), "./cfg/default-slideshow.json");

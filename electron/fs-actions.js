@@ -2,6 +2,7 @@ const { dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { controller } = require("./controller.js");
+const { getDefaultSlideShowConfigPath } = require("./configuration.js");
 
 const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ] };
 
@@ -27,17 +28,23 @@ const loadFiles = (folders, onError) => {
     return files;
 }
 
-exports.saveConfig = (config) => {
+const saveConfigToFile = (config, filePath) => {
+    fs.writeFile(filePath, JSON.stringify(config), (err) => {
+        if(err) {
+            console.log("Error while saving settings: ", err);
+        }
+    });
+}
+
+exports.saveConfigAs = (config) => {
     dialog.showSaveDialog({ filters: [ JSON_FILTER ] }).then(result => {
         if(!result.canceled) {
-            fs.writeFile(result.filePath, JSON.stringify(config), (err) => {
-                if(err) {
-                    console.log("Error while saving settings: ", err);
-                }
-            });
+            saveConfigToFile(config, result.filePath);
         }
     })
 };
+
+exports.saveConfig = (config) => saveConfigToFile(config, getDefaultSlideShowConfigPath());
 
 exports.loadConfig = () => {
     dialog.showOpenDialog({

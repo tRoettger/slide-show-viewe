@@ -24,7 +24,10 @@
                 <label for="transition-duration" title="Legt die Zeit für den Übergang zum nächsten Bild fest. Die Zeit wird in Sekunden angegeben.">Überganszeit</label>
                 <input type="number" min="0" id="transition-duration" />
             </p>
-            <input class="save-btn" type="submit" value="speichern" />
+            <input id="save-as-btn" class="save-btn" type="button" value="speichern unter" />
+            <input class="save-btn" type="submit" value="speichern" 
+                title="Speichert die aktuell Konfiguration als Standardkonfiguration. Diese wird beim Programstart automatisch geladen." 
+            />
         </form>
     </body>
 </html>

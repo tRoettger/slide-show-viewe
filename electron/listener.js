@@ -1,9 +1,8 @@
-const { app, ipcMain } = require("electron");
-const { controller } = require("./controller.js");
+const { ipcMain } = require("electron");
+const { controller } = require("./controller");
+const { saveConfigAs, saveConfig } = require("./fs-actions");
+const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
-const path = require("path");
-
-const getDefaultSlideShowConfigPath = () => path.join(app.getAppPath(), "./cfg/default-slideshow.json");
 
 ipcMain.on("application-ready", msg => {
     fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -17,4 +16,16 @@ ipcMain.on("application-ready", msg => {
 
 ipcMain.on("configuration-ready", (e, msg) => {
     controller.sendConfiguration(e.sender);
+});
+
+ipcMain.on('save-config', (event, arg) => {
+    controller.setConfiguration(arg);
+    event.sender.send("save-config", { successful: true });
+    saveConfig(arg);
+});
+
+ipcMain.on("save-config-as", (event, arg) => {
+    controller.setConfiguration(arg);
+    event.sender.send("save-config-as", { successful: true });
+    saveConfigAs(arg);
 });

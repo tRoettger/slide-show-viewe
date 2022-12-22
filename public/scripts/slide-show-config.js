@@ -4,6 +4,7 @@ const FORM_CONFIG = document.getElementById("config-form");
 const SELECT_TRANSITION = document.getElementById("transition-timing-function");
 const INPUT_TRANSITION = document.getElementById("transition-duration");
 const INPUT_VIEW = document.getElementById("view-duration");
+const BTN_SAVE_AS = document.getElementById("save-as-btn");
 
 const getConfig = () => {
     return createConfig(
@@ -16,6 +17,10 @@ const getConfig = () => {
 FORM_CONFIG.addEventListener("submit", (e) => {
     e.preventDefault();
     ipcRenderer.send("save-config", getConfig());
+});
+
+BTN_SAVE_AS.addEventListener("click", (e) => {
+    ipcRenderer.send("save-config-as", getConfig());
 });
 
 ipcRenderer.send("configuration-ready", "Configuration window ready.");
