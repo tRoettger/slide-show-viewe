@@ -11,6 +11,11 @@ const isImage = (file) => {
     }
 };
 
+const replaceAndWrap = (arg) => {
+    var newArg = arg.replaceAll("\\\\", "\\\\\\\\");
+    return "'" + newArg + "'";
+}
+
 class Controller {
     constructor() {}
 
@@ -20,15 +25,17 @@ class Controller {
 
     openAlbum(files) {
         files = files.filter(isImage);
-        this.execute("openAlbum", files.length);
-        for(var i = 0; i < files.length; i++) {
-            const file = files[i];
-            file.index = i;
-            fs.readFile(file.path, (err, data) => {
-                var imageData = data.toString('base64');
-                this.execute("showAlbumImage", file.index, imageData);
-            });
-        }
+        this.execute("openAlbum", files.length).then(res => {;
+            for(var i = 0; i < files.length; i++) {
+                const file = files[i];
+                file.index = i;
+                fs.readFile(file.path, (err, data) => {
+                    var fileObject = file;
+                    fileObject.data = data.toString('base64');
+                    this.execute("showAlbumImage", JSON.stringify(fileObject));
+                });
+            }
+        });
     }
 
     reload() {
@@ -36,10 +43,9 @@ class Controller {
     }
 
     execute(method, ...args) {
-        args = args.map(arg => typeof arg == "string" ? "\"" + arg + "\"" : arg);
+        args = args.map(arg => typeof arg == "string" ? replaceAndWrap(arg) : arg);
         var command = method + "(" + args.join(", ") + ");";
-        //console.log("command: ", command);
-        this.webContents.executeJavaScript(command);
+        return this.webContents.executeJavaScript(command);
     }
 };
 
