@@ -3,6 +3,8 @@ const SYMBOL = {
     pause: "&#10073;&#10073;"
 };
 const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
+const BTN_NEXT = document.getElementById("next-btn");
+const BTN_PREVIOUS = document.getElementById("previous-btn");
 const ROOT = document.getElementById("root");
 const CSS_ROOT = document.querySelector(":root").style;
 
@@ -51,18 +53,32 @@ const showAlbumImage = (fileObjectJson) => {
     var file = JSON.parse(fileObjectJson);
     tryToDisplay("album-image-" + file.index, (element) => {
         element.src = "data:image/jpg;base64," + file.data;
-        element.title = file.path;
+        element.alt = file.path;
     });
 };
 
 const swapInterval = () => {
+    showNextImage();
+    createTransition();
+};
+
+const showNextImage = () => {
     slideshow.current = (slideshow.current + 1) % slideshow.count;
     var child = ROOT.lastChild;
     child.style.animationName = "none";
     ROOT.removeChild(child);
     ROOT.insertBefore(child, ROOT.firstChild);
-    createTransition();
-};
+}
+
+const showPrevious = () => {
+    // "+ slideshow.count" covers the step from first to last image.
+    slideshow.current = (slideshow.current + slideshow.count - 1) % slideshow.count;
+    ROOT.lastChild.style.animationName = "none";
+    var child = ROOT.firstChild;
+    ROOT.removeChild(child);
+    ROOT.appendChild(child);
+}
+
 const createTransition = () => {
     ROOT.lastChild.style.animationName = "fade";
 }
@@ -93,4 +109,24 @@ const controlSlideshow = (e) => {
     } 
 };
 
+const gotoNext = (e) => {
+    goto(showNextImage);
+}
+
+const gotoPrevious = (e) => {
+    goto(showPrevious);
+}
+
+const goto = (stepping) => {
+    if(slideshow.running) {
+        pauseSlideshow();
+        stepping();
+        startSlideshow();
+    } else {
+        stepping();
+    }
+}
+
 BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
+BTN_NEXT.addEventListener("click", gotoNext);
+BTN_PREVIOUS.addEventListener("click", gotoPrevious);
