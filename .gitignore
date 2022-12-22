@@ -1,4 +1,4 @@
-doc/dev.html
+doc/**/*.html
 node_modules/
 out/
 experiments/
