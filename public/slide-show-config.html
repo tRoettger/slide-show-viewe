@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <h1>Diashow Einstellungen</h1>
+        <form>
+            <p>
+                <label for="view-duration" title="Legt die Anzeigedauer eines Bildes während der Diashow fest. Die Zeit wird in Sekunden angegeben.">Anzeigedauer</label>
+                <input type="number" min="0" id="view-duration" />
+            </p>
+            <p>
+                <label for="transition-duration" title="Legt die Zeit für den Übergang zum nächsten Bild fest. Die Zeit wird in Sekunden angegeben.">Überganszeit</label>
+                <input type="number" min="0" id="transition-duration" />
+            </p>
+            <p>
+                <label for="transition-timing-function" title="Legt die Art des Übergangs fest.">Übergangsart</label>
+                <select id="transition-timing-function">
+                    <option value="linear" title="Erzeugt eine gleichbleibende Übergangsgeschwindigkeit.">Linear</option>
+                    <option value="ease" title="Der Übergang beginnt langsam, wird dann schneller und verlangsamt sich zum Ende hin wieder.">Flie&szlig;end</option>
+                    <option value="ease-in" title="Ein langsam beginnender Übergang.">Ausklingend</option>
+                    <option value="ease-out" title="Ein langsam endender Übergang.">Nachhall</option>
+                    <option value="ease-in-out" title="Ein Übergang, der langsam beginnt und endet.">Ausklingend und Nachhall</option>
+                </select>
+            </p>
+            <input type="submit" value="speichern" />
+        </form>
+    </body>
+</html>
