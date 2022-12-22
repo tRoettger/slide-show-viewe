@@ -2,7 +2,7 @@
   "name": "slide-show-viewer",
   "author": "Tobias Röttger",
   "license": "ISC",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "An application to show a slide show from existing folders.",
   "main": "main.js",
   "directories": {
