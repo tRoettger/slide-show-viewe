@@ -1,3 +1,4 @@
+const { ipcRenderer } = require("electron");
 const { createConfig } = require("./scripts/slide-show.js");
 const FORM_CONFIG = document.getElementById("config-form");
 const SELECT_TRANSITION = document.getElementById("transition-timing-function");
@@ -14,6 +15,5 @@ const getConfig = () => {
 
 FORM_CONFIG.addEventListener("submit", (e) => {
     e.preventDefault();
-    const { ipcRenderer } = require("electron");
     ipcRenderer.send("save-config", getConfig());
 });
