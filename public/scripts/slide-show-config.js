@@ -6,8 +6,8 @@ const INPUT_VIEW = document.getElementById("view-duration");
 
 const getConfig = () => {
     return createConfig(
-        INPUT_VIEW.value,
-        INPUT_TRANSITION.value,
+        INPUT_VIEW.value * 1,
+        INPUT_TRANSITION.value * 1,
         SELECT_TRANSITION.value
     );
 };

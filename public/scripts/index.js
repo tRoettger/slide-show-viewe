@@ -4,6 +4,7 @@ const SYMBOL = {
     start: "&#9655;",
     pause: "&#10073;&#10073;"
 };
+const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
 const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
 const BTN_NEXT = document.getElementById("next-btn");
 const BTN_PREVIOUS = document.getElementById("previous-btn");
@@ -21,7 +22,7 @@ var slideshow = {
     current: 0, 
     running: false, 
     interval: setInterval(() => {}, 5000),
-    config: createConfig(2, 5, "ease-in-out")
+    config: DEFAULT_CONFIG
 };
 updateAnimation(slideshow.config);
 
@@ -112,14 +113,14 @@ const controlSlideshow = (e) => {
 };
 
 const gotoNext = (e) => {
-    goto(showNextImage);
+    wrapWithStopAndStart(showNextImage);
 }
 
 const gotoPrevious = (e) => {
-    goto(showPrevious);
+    wrapWithStopAndStart(showPrevious);
 }
 
-const goto = (stepping) => {
+const wrapWithStopAndStart = (stepping) => {
     if(slideshow.running) {
         pauseSlideshow();
         stepping();
@@ -135,6 +136,8 @@ BTN_PREVIOUS.addEventListener("click", gotoPrevious);
 
 ipcRenderer.on('configure-slideshow', (e, arg) => {
     console.log("Received new config: ", arg);
-    slideshow.config = arg;
-    updateAnimation(arg);
+    wrapWithStopAndStart(() => {
+        slideshow.config = arg;
+        updateAnimation(arg);
+    });
 });
