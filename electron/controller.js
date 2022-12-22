@@ -22,10 +22,13 @@ const replaceAndWrap = (arg) => {
 }
 
 class Controller {
-    constructor() {}
+    constructor() {
+        this.fullscreen = false;
+    }
 
-    initialize(webContents) {
-        this.webContents = webContents;
+    initialize(mainWindow) {
+        this.mainWindow = mainWindow;
+        this.webContents = mainWindow.webContents;
     }
 
     openAlbum(files) {
@@ -54,6 +57,12 @@ class Controller {
 
     reload() {
         this.webContents.reloadIgnoringCache();
+    }
+
+    changeScreenMode() {
+        this.fullscreen = !(this.fullscreen);
+        this.mainWindow.setFullScreen(this.fullscreen);
+        this.mainWindow.menuBarVisible = !this.fullscreen;
     }
 
     execute(method, ...args) {

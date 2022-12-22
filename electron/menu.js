@@ -19,7 +19,12 @@ const MENU_TEMPLATE = [
         label: "Diashow",
         submenu: [
             { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: configureApp },
-            { "role": "load-cfg", "label": "Gespeicherte Einstellungen laden", "accelerator": "Ctrl+L", click: loadConfig}
+            { "role": "load-cfg", "label": "Gespeicherte Einstellungen laden", "accelerator": "Ctrl+L", click: loadConfig }
+        ]
+    }, {
+        label: "Ansicht",
+        submenu: [
+            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: () => controller.changeScreenMode() }
         ]
     }
 ];
