@@ -14,3 +14,7 @@ ipcMain.on("application-ready", msg => {
         }
     });
 });
+
+ipcMain.on("configuration-ready", (e, msg) => {
+    controller.sendConfiguration(e.sender);
+});

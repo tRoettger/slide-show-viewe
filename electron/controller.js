@@ -44,7 +44,12 @@ class Controller {
     }
 
     setConfiguration(config) {
-        this.webContents.send("configure-slideshow", config);
+        this.config = config;
+        this.sendConfiguration(this.webContents);
+    }
+
+    sendConfiguration(sender) {
+        sender.send("configure-slideshow", this.config);
     }
 
     reload() {

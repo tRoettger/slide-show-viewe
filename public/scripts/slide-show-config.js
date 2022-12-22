@@ -17,3 +17,11 @@ FORM_CONFIG.addEventListener("submit", (e) => {
     e.preventDefault();
     ipcRenderer.send("save-config", getConfig());
 });
+
+ipcRenderer.send("configuration-ready", "Configuration window ready.");
+
+ipcRenderer.on("configure-slideshow", (e, config) => {
+    INPUT_VIEW.value = config.viewDuration;
+    INPUT_TRANSITION.value = config.transitionDuration;
+    SELECT_TRANSITION.value = config.timingFunction;
+});
