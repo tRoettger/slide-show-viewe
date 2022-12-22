@@ -1,22 +1,19 @@
 {
   "name": "slide-show-viewer",
+  "author": "Tobias Röttger",
+  "license": "ISC",
   "version": "1.1.0",
   "description": "An application to show a slide show from existing folders.",
   "main": "main.js",
   "directories": {
     "doc": "doc"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"
   },
-  "author": "Tobias Röttger",
-  "license": "ISC",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.4",
     "@electron-forge/maker-deb": "^6.0.4",
