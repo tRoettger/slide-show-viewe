@@ -1,3 +1,4 @@
+const { createConfig } = require("./slide-show.js");
 const SYMBOL = {
     start: "&#9655;",
     pause: "&#10073;&#10073;"
@@ -19,11 +20,7 @@ var slideshow = {
     current: 0, 
     running: false, 
     interval: setInterval(() => {}, 5000),
-    config: {
-        viewDuration: 2,
-        transitionDuration: 10,
-        timingFunction: "ease-in-out"
-    }
+    config: createConfig(2, 5, "ease-in-out")
 };
 updateAnimation(slideshow.config);
 
