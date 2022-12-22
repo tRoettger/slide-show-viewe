@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { ipcMain } = require("electron");
 
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
@@ -40,6 +41,10 @@ class Controller {
                 });
             }
         });
+    }
+
+    setConfiguration(config) {
+        this.webContents.send("configure-slideshow", config);
     }
 
     reload() {

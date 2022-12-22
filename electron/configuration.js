@@ -1,4 +1,5 @@
 const { ipcMain, BrowserWindow } = require("electron");
+const { controller } = require("./controller.js");
 const isDev = require("electron-is-dev");
 
 const CONFIG_WINDOW_PROPERTIES = {
@@ -6,6 +7,8 @@ const CONFIG_WINDOW_PROPERTIES = {
     webPreferences: { nodeIntegration: true, contextIsolation: false },
     autoHideMenuBar: true
 };
+
+var saveCallback = () => {};
 
 exports.configureApp = () => {
     const configWindow = new BrowserWindow(CONFIG_WINDOW_PROPERTIES);
@@ -16,5 +19,6 @@ exports.configureApp = () => {
 };
 
 ipcMain.on('save-config', (event, arg) => {
-    console.log("Received:", {event: event, arg: arg});
+    controller.setConfiguration(arg);
+    event.sender.send("save-config", { successful: true });
 });
