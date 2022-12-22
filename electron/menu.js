@@ -1,5 +1,5 @@
 const { Menu } = require('electron');
-const { openFolder } = require('./fs-actions.js');
+const { openFolder, loadConfig } = require('./fs-actions.js');
 const { handleGeneralError } = require("./error-handling.js");
 const { controller } = require("./controller.js");
 const { configureApp } = require("./configuration.js");
@@ -18,7 +18,8 @@ const MENU_TEMPLATE = [
     }, {
         label: "Diashow",
         submenu: [
-            { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: configureApp }
+            { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: configureApp },
+            { "role": "load-cfg", "label": "Gespeicherte Einstellungen laden", "accelerator": "Ctrl+L", click: loadConfig}
         ]
     }
 ];

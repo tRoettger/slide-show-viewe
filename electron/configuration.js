@@ -1,5 +1,6 @@
 const { ipcMain, BrowserWindow } = require("electron");
 const { controller } = require("./controller.js");
+const { saveConfig } = require("./fs-actions.js");
 const isDev = require("electron-is-dev");
 
 const CONFIG_WINDOW_PROPERTIES = {
@@ -21,4 +22,5 @@ exports.configureApp = () => {
 ipcMain.on('save-config', (event, arg) => {
     controller.setConfiguration(arg);
     event.sender.send("save-config", { successful: true });
+    saveConfig(arg);
 });

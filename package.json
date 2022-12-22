@@ -6,6 +6,9 @@
   "directories": {
     "doc": "doc"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",

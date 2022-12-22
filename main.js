@@ -7,7 +7,7 @@ require('./electron/menu.js');
 
 const DEFAULT_WINDOW_PROPERTIES = { width: 800, height: 600 };
 
-const getWindowPropertiesPath = () => path.join(app.getAppPath(), "window-settings.json");
+const getWindowPropertiesPath = () => path.join(app.getAppPath(), "./cfg/window-settings.json");
 
 const readWindowProperties = () => {
   try {
