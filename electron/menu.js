@@ -2,6 +2,7 @@ const { Menu } = require('electron');
 const { openFolder } = require('./fs-actions.js');
 const { handleGeneralError } = require("./error-handling.js");
 const { controller } = require("./controller.js");
+const { configureApp } = require("./configuration.js");
 
 const MENU_TEMPLATE = [
     {
@@ -15,10 +16,9 @@ const MENU_TEMPLATE = [
             { "role": "quit", "label": "Beenden" }
         ]
     }, {
-        label: "Einstellungen",
+        label: "Diashow",
         submenu: [
-            //{ "role": "cfg-app", "label": "Configuration", click: configApp },
-            //{ "role": "cfg-defaults", "label": "Defaults", click: configDefaults }
+            { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: configureApp }
         ]
     }
 ];
