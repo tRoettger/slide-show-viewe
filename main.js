@@ -1,10 +1,11 @@
 if (require('electron-squirrel-startup')) return;
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, webContents } = require('electron');
 const isDev = require("electron-is-dev");
 const path = require('path');
 const fs = require('fs');
 const { controller } = require("./electron/controller.js");
 require('./electron/menu.js');
+require('./electron/listener.js');
 
 const DEFAULT_WINDOW_PROPERTIES = { width: 800, height: 600 };
 

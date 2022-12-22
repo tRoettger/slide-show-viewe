@@ -141,3 +141,5 @@ ipcRenderer.on('configure-slideshow', (e, arg) => {
         updateAnimation(arg);
     });
 });
+
+ipcRenderer.send("application-ready", "Application started.");
