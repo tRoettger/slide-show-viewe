@@ -1,4 +1,5 @@
-const { createConfig } = require("./slide-show.js");
+const { createConfig } = require("./scripts/slide-show.js");
+const { ipcRenderer } = require("electron");
 const SYMBOL = {
     start: "&#9655;",
     pause: "&#10073;&#10073;"
@@ -131,3 +132,9 @@ const goto = (stepping) => {
 BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
 BTN_NEXT.addEventListener("click", gotoNext);
 BTN_PREVIOUS.addEventListener("click", gotoPrevious);
+
+ipcRenderer.on('configure-slideshow', (e, arg) => {
+    console.log("Received new config: ", arg);
+    slideshow.config = arg;
+    updateAnimation(arg);
+});
