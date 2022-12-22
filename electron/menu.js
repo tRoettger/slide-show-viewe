@@ -5,17 +5,17 @@ const { controller } = require("./controller.js");
 
 const MENU_TEMPLATE = [
     {
-        label: "File",
+        label: "Datei",
         submenu: [
-            { "role": "open", "label": "Open", "accelerator": "Ctrl+O", click: () => openFolder(handleGeneralError) },
+            { "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", click: () => openFolder(handleGeneralError) },
             //{ "role": "save", "label": "Save", "accelerator": "Ctrl+S", click: saveFile},
             { "type": "separator" },
-            { "role": "reload", "label": "Reload", click: controller.reload },
+            { "role": "reload", "label": "Neu laden", click: controller.reload },
             { "type": "separator" },
-            { "role": "quit", "label": "Exit" }
+            { "role": "quit", "label": "Beenden" }
         ]
     }, {
-        label: "Settings",
+        label: "Einstellungen",
         submenu: [
             //{ "role": "cfg-app", "label": "Configuration", click: configApp },
             //{ "role": "cfg-defaults", "label": "Defaults", click: configDefaults }
