@@ -5,7 +5,11 @@ module.exports = {
     {
       name: '@electron-forge/maker-zip',
       platforms: [ 'win32', 'win64' ],
-      config: {}
+      config: {
+        ignore: [
+          "cfg/*", "experiments/*"
+        ]
+      }
     }
   ],
 };
