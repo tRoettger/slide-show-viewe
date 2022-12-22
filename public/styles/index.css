@@ -1,25 +1,30 @@
 body {
     margin: 0px;
     padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 div#root {
     width: 100%;
     height: 100%;
     margin: 0px;
     padding: 0px;
-    border: 1px solid black;
 }
 img.album-image {
     position: absolute;
     top: 0px;
     width: 100%;
     height: 100%;
+    animation-delay: var(--view-duration);
+    animation-duration: var(--transition-duration);
+    animation-timing-function: var(--timing-function);
+    animation-fill-mode: forwards;
+    opacity: 1;
 }
 
 div.control-panel-area {
     position: fixed;
     bottom: 0px;
-    height: 200px;
+    height: 100px;
     width: 100%;
 }
 
@@ -29,19 +34,27 @@ div.control-panel-area div.control-panel {
 
 div.control-panel-area:hover div.control-panel {
     display: flex;
+    height: 100%;
     justify-content: center;
-    align-content: center;
+    align-items: center;
+    gap: 5px;
+
 }
 
-a#slideshow-btn {
-    display: inline-block;
-    border: 1px solid black;
-    padding: 5px 10px;
+a.control-btn {
     background: white;
     cursor: pointer;
     user-select: none;
+    display: inline-block;
+    border: 1px solid black;
+    padding: 5px 10px;
+    font-size: 25px;
 }
 
-a#slideshow-btn:hover {
+a#slideshow-btn {
+    
+}
+
+a.control-btn:hover {
     background: grey;
 }

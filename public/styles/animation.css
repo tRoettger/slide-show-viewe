@@ -1,6 +1,10 @@
 :root {
-    --transition-duration: 1000;
-    --view-duration: 1000;
+    /*
+        The values below are set by javascript.
+    */
+    --transition-duration: 0s;
+    --view-duration: 0s;
+    --timing-function: ease-in-out;
 }
 
 @keyframes fade {
