@@ -14,7 +14,6 @@ const getConfig = () => {
 
 FORM_CONFIG.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log("event: ", e);
     const { ipcRenderer } = require("electron");
     ipcRenderer.send("save-config", getConfig());
 });
