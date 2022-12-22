@@ -1,6 +1,6 @@
 module.exports = {
   packagerConfig: {
-    ignore: [ "cfg", "doc", "experiments" ]
+    ignore: [ "doc", "experiments" ]
   },
   rebuildConfig: {},
   makers: [
