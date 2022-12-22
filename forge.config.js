@@ -9,5 +9,5 @@ module.exports = {
       platforms: [ 'win32', 'win64' ],
       config: {}
     }
-  ],
+  ]
 };
