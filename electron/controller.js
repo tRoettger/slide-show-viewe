@@ -9,15 +9,6 @@ const isImage = (file) => {
     }
 };
 
-const replaceAndWrap = (arg) => {
-    if (arg && typeof arg == "string") {
-        var newArg = arg.replace(/\\\\/g, "\\\\\\\\");
-        return "'" + newArg + "'";
-    } else {
-        return arg;
-    }
-}
-
 class Controller {
     constructor() {
         this.fullscreen = false;
@@ -55,12 +46,6 @@ class Controller {
         this.fullscreen = !(this.fullscreen);
         this.mainWindow.setFullScreen(this.fullscreen);
         this.mainWindow.menuBarVisible = !this.fullscreen;
-    }
-
-    execute(method, ...args) {
-        args = args.map(replaceAndWrap);
-        var command = method + "(" + args.join(", ") + ");";
-        return this.webContents.executeJavaScript(command);
     }
 
     openDevTools() {
