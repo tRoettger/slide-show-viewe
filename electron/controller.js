@@ -70,6 +70,10 @@ class Controller {
         var command = method + "(" + args.join(", ") + ");";
         return this.webContents.executeJavaScript(command);
     }
+
+    openDevTools() {
+        this.webContents.openDevTools({ mode: "detach" });
+    }
 };
 
 exports.controller = new Controller();

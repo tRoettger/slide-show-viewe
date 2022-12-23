@@ -26,6 +26,11 @@ const MENU_TEMPLATE = [
         submenu: [
             { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: () => controller.changeScreenMode() }
         ]
+    }, {
+        label: "Entwickler Werkzeuge",
+        submenu: [
+            { "role": "dev-tools", "label": "Chromium Dev Tools", click: controller.openDevTools }
+        ]
     }
 ];
 
