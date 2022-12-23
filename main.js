@@ -28,20 +28,9 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow(winProps);
   mainWindow.loadFile("public/index.html");
   controller.initialize(mainWindow);
-  if(devToolEnabled) {
-    applyDevSetup(mainWindow);
-  } else {
-    applyProductionSetup(mainWindow);
-  }
 
   mainWindow.on("close", () => saveWindowProperties(mainWindow));
 };
-
-const applyDevSetup = (mainWindow) => {
-    mainWindow.webContents.openDevTools({ mode: "detach" });
-};
-
-const applyProductionSetup = (mainWindow) => {};
 
 const init = () => {
   createWindow();
