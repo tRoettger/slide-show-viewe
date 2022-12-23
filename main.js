@@ -1,6 +1,6 @@
 if (require('electron-squirrel-startup')) return;
 const { app, BrowserWindow, webContents } = require('electron');
-const isDev = require("electron-is-dev");
+const devToolEnabled = require("electron-is-dev") || app.commandLine.hasSwitch("devTools");
 const path = require('path');
 const fs = require('fs');
 const { controller } = require("./electron/controller.js");
@@ -28,7 +28,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow(winProps);
   mainWindow.loadFile("public/index.html");
   controller.initialize(mainWindow);
-  if(isDev) {
+  if(devToolEnabled) {
     applyDevSetup(mainWindow);
   } else {
     applyProductionSetup(mainWindow);
