@@ -29,7 +29,7 @@ const MENU_TEMPLATE = [
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
-            { "role": "dev-tools", "label": "Chromium Dev Tools", click: controller.openDevTools }
+            { "role": "dev-tools", "label": "Chromium Dev Tools", click: () => controller.openDevTools() }
         ]
     }
 ];
