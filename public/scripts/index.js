@@ -11,6 +11,8 @@ const BTN_PREVIOUS = document.getElementById("previous-btn");
 const ROOT = document.getElementById("root");
 const CSS_ROOT = document.querySelector(":root").style;
 
+const PRELOAD_IMAGES = 5;
+
 const updateAnimation = (config) => {
     CSS_ROOT.setProperty("--transition-duration", config.transitionDuration + "s");
     CSS_ROOT.setProperty("--view-duration", config.viewDuration + "s");
@@ -22,16 +24,26 @@ var slideshow = {
     current: 0, 
     running: false, 
     interval: setInterval(() => {}, 5000),
-    config: DEFAULT_CONFIG
+    config: DEFAULT_CONFIG,
+    loaded: []
 };
 updateAnimation(slideshow.config);
 
-const openAlbum = (imgCount) => {
+const range = (start, end) => {
+    var arr = [];
+    for(var i = start; i < end; i++) {
+        arr.push(i);
+    }
+    return arr;
+}
+
+ipcRenderer.on("open-album", (event, album) => {
+    console.log("Received album: ", album);
     pauseSlideshow();
     slideshow.current = 0;
-    slideshow.count = imgCount;
+    slideshow.count = album.count;
     while(ROOT.firstChild != null) ROOT.removeChild(ROOT.lastChild);
-    for(var i = imgCount - 1; i >= 0; i--) {
+    for(var i = album.count - 1; i >= 0; i--) {
         var image = document.createElement("img");
         image.id = "album-image-" + i;
         image.className = "album-image";
@@ -41,7 +53,9 @@ const openAlbum = (imgCount) => {
         wrapper.appendChild(image);
         ROOT.appendChild(wrapper);
     }
-};
+    ipcRenderer.send("get-images", range(0, PRELOAD_IMAGES));
+    ipcRenderer.send("get-images", range(slideshow.count - PRELOAD_IMAGES, slideshow.count));
+});
 
 const tryToDisplay = (id, setup) => {
     var element = document.getElementById(id);
@@ -52,12 +66,28 @@ const tryToDisplay = (id, setup) => {
     }
 }
 
-const showAlbumImage = (fileObjectJson) => {
-    var file = JSON.parse(fileObjectJson);
-    tryToDisplay("album-image-" + file.index, (element) => {
-        element.src = "data:image/jpg;base64," + file.data;
-        element.alt = file.path;
+ipcRenderer.on("provide-image", (event, imageContainer) => {
+    console.log("Received image:", imageContainer);
+    slideshow.loaded.push(imageContainer.index * 1);
+    tryToDisplay("album-image-" + imageContainer.index, (element) => {
+        element.src = imageContainer.image.path;
+        element.alt = imageContainer.image.path;
     });
+});
+
+const preloadImages = () => {
+    var shouldLoad = [];
+    var start = (slideshow.current + slideshow.count - PRELOAD_IMAGES) % slideshow.count;
+    var end = (slideshow.current + PRELOAD_IMAGES) % slideshow.count;
+    // The less then does not work in this case.
+    for(var i = start; i != end; i = (i + 1) % slideshow.count) {
+        if(!slideshow.loaded.includes(i)) {
+            shouldLoad.push(i);
+        }
+    }
+    if(shouldLoad.length > 0) {
+        ipcRenderer.send("get-images", shouldLoad);
+    }
 };
 
 const swapInterval = () => {
@@ -71,6 +101,7 @@ const showNextImage = () => {
     child.style.animationName = "none";
     ROOT.removeChild(child);
     ROOT.insertBefore(child, ROOT.firstChild);
+    preloadImages();
 }
 
 const showPrevious = () => {
@@ -80,6 +111,7 @@ const showPrevious = () => {
     var child = ROOT.firstChild;
     ROOT.removeChild(child);
     ROOT.appendChild(child);
+    preloadImages();
 }
 
 const createTransition = () => {

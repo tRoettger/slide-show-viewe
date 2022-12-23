@@ -29,3 +29,9 @@ ipcMain.on("save-config-as", (event, arg) => {
     event.sender.send("save-config-as", { successful: true });
     saveConfigAs(arg);
 });
+
+ipcMain.on("get-images", (event, keys) => {
+    for(var key of keys) {
+        event.sender.send("provide-image", {index: key, image: controller.getFile(key)});
+    }
+});

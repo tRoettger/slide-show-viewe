@@ -1,6 +1,3 @@
-const fs = require("fs");
-const { ipcMain } = require("electron");
-
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
 const isImage = (file) => {
@@ -24,6 +21,7 @@ const replaceAndWrap = (arg) => {
 class Controller {
     constructor() {
         this.fullscreen = false;
+        this.files = [];
     }
 
     initialize(mainWindow) {
@@ -32,18 +30,12 @@ class Controller {
     }
 
     openAlbum(files) {
-        files = files.filter(isImage);
-        this.execute("openAlbum", files.length).then(res => {;
-            for(var i = 0; i < files.length; i++) {
-                const file = files[i];
-                file.index = i;
-                fs.readFile(file.path, (err, data) => {
-                    var fileObject = file;
-                    fileObject.data = data.toString('base64');
-                    this.execute("showAlbumImage", JSON.stringify(fileObject));
-                });
-            }
-        });
+        this.files = files.filter(isImage);
+        this.webContents.send("open-album", {count: this.files.length});
+    }
+
+    getFile(index) {
+        return this.files[index];
     }
 
     setConfiguration(config) {
