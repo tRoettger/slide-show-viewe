@@ -1,7 +1,7 @@
 # Intro
 Willkommen zum Video Tutorial des Slide Show Viewers.
-Die aktuelle Version ist 1.1.1.
-In diesem Kapitel geht es um: ...
+Wir schauen uns jetzt die Version 1.1.1.
+Und in diesem Kapitel geht es darum, wie man ...
 
 # Kapitel 1: Einen Ordner als Album öffnen
 1. "Datei" -> "Öffnen" oder alternativ Strg+O
