@@ -1,6 +1,6 @@
 if (require('electron-squirrel-startup')) return;
 const { app, BrowserWindow } = require('electron');
-const devToolEnabled = require("electron-is-dev") || app.commandLine.hasSwitch("devTools");
+const devToolEnabled = require("electron-is-dev");
 const path = require('path');
 const fs = require('fs');
 const { controller } = require("./electron/controller.js");
