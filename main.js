@@ -24,11 +24,9 @@ const saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPat
 const createWindow = () => {
   var winProps = readWindowProperties() || DEFAULT_WINDOW_PROPERTIES;
   winProps.webPreferences = { fullscreenable: true, nodeIntegration: true, contextIsolation: false };
-  console.log(winProps);
   const mainWindow = new BrowserWindow(winProps);
   mainWindow.loadFile("public/index.html");
   controller.initialize(mainWindow);
-
   mainWindow.on("close", () => saveWindowProperties(mainWindow));
 };
 

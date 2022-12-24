@@ -1,6 +1,4 @@
-const { app, ipcMain, BrowserWindow } = require("electron");
-const { controller } = require("./controller.js");
-const { saveConfigAs: saveConfig } = require("./fs-actions.js");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 
