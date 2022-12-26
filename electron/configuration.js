@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const fs = require("fs");
 const isDev = require("electron-is-dev");
 
 const CONFIG_WINDOW_PROPERTIES = {
