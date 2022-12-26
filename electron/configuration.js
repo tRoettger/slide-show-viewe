@@ -28,11 +28,11 @@ const getCfgPath = () => {
 exports.getDefaultSlideShowConfigPath = () => path.join(getCfgPath(), "./default-slideshow.json");
 exports.getWindowPropertiesPath = () => path.join(getCfgPath(), "./window-settings.json");
 
-exports.saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPath(), JSON.stringify(window.getBounds()));
+exports.saveWindowProperties = (window) => fs.writeFileSync(this.getWindowPropertiesPath(), JSON.stringify(window.getBounds()));
 
 exports.readWindowProperties = () => {
     try {
-        return JSON.parse(fs.readFileSync(getWindowPropertiesPath(), 'utf-8'));
+        return JSON.parse(fs.readFileSync(this.getWindowPropertiesPath(), 'utf-8'));
     } catch (e) {
         console.log("Error while reading window settings: ", e);
     }
