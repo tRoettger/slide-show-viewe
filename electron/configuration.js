@@ -18,11 +18,16 @@ exports.configureApp = () => {
     }
 };
 
-exports.getDefaultSlideShowConfigPath = () => path.join(app.getPath("userData"), "./cfg/default-slideshow.json");
-exports.getWindowPropertiesPath = () => path.join(app.getPath('userData'), "./cfg/window-settings.json");
+const getCfgPath = () => {
+    var cfgPath = path.join(app.getPath("userData"), "./cfg");
+    if(!fs.existsSync(cfgPath)) fs.mkdir(cfgPath);
+    return cfgPath;
+}
+
+exports.getDefaultSlideShowConfigPath = () => path.join(getCfgPath(), "./default-slideshow.json");
+exports.getWindowPropertiesPath = () => path.join(getCfgPath(), "./window-settings.json");
 
 exports.saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPath(), JSON.stringify(window.getBounds()));
-
 
 exports.readWindowProperties = () => {
     try {
