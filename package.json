@@ -32,6 +32,10 @@
     ]
   },
   "build": {
-    "extraFiles": [ "cfg" ]
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
