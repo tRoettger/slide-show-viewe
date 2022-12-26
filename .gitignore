@@ -2,3 +2,7 @@ doc/**/*.html
 node_modules/
 out/
 experiments/
+dist/
+.editorconfig
+yarn.lock
+.yarn/
