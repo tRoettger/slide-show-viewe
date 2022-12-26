@@ -1,0 +1,5 @@
+[Fehlerbehebungen]
+Vertikale Bilder werden jetzt richtig angezeigt.
+
+[Features]
+Es wurde ein Installationsprogramm eingeführt.
