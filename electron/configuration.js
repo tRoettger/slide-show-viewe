@@ -18,4 +18,16 @@ exports.configureApp = () => {
     }
 };
 
-exports.getDefaultSlideShowConfigPath = () => path.join(app.getAppPath(), "./cfg/default-slideshow.json");
+exports.getDefaultSlideShowConfigPath = () => path.join(app.getPath("userData"), "./cfg/default-slideshow.json");
+exports.getWindowPropertiesPath = () => path.join(app.getPath('userData'), "./cfg/window-settings.json");
+
+exports.saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPath(), JSON.stringify(window.getBounds()));
+
+
+exports.readWindowProperties = () => {
+    try {
+        return JSON.parse(fs.readFileSync(getWindowPropertiesPath(), 'utf-8'));
+    } catch (e) {
+        console.log("Error while reading window settings: ", e);
+    }
+};

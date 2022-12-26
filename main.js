@@ -1,25 +1,12 @@
 if (require('electron-squirrel-startup')) return;
 const { app, BrowserWindow } = require('electron');
 const devToolEnabled = require("electron-is-dev");
-const path = require('path');
-const fs = require('fs');
-const { controller } = require("./electron/controller.js");
-require('./electron/menu.js');
-require('./electron/listener.js');
+const { saveWindowProperties, readWindowProperties } = require("./electron/configuration");
+const { controller } = require("./electron/controller");
+require('./electron/menu');
+require('./electron/listener');
 
 const DEFAULT_WINDOW_PROPERTIES = { width: 800, height: 600 };
-
-const getWindowPropertiesPath = () => path.join(app.getAppPath(), "./cfg/window-settings.json");
-
-const readWindowProperties = () => {
-  try {
-    return JSON.parse(fs.readFileSync(getWindowPropertiesPath(), 'utf-8'));
-  } catch (e) {
-    console.log("Error while reading window settings: ", e);
-  }
-};
-
-const saveWindowProperties = (window) => fs.writeFileSync(getWindowPropertiesPath(), JSON.stringify(window.getBounds()));
 
 const createWindow = () => {
   var winProps = readWindowProperties() || DEFAULT_WINDOW_PROPERTIES;
