@@ -21,7 +21,7 @@ exports.configureApp = () => {
 
 const getCfgPath = () => {
     var cfgPath = path.join(app.getPath("userData"), "./cfg");
-    if(!fs.existsSync(cfgPath)) fs.mkdir(cfgPath);
+    if(!fs.existsSync(cfgPath)) fs.mkdirSync(cfgPath);
     return cfgPath;
 }
 
