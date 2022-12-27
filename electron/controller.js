@@ -1,3 +1,5 @@
+const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl } = require("../shared/communication");
+
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
 const isImage = (file) => {
@@ -58,15 +60,15 @@ class Controller {
     }
 
     startSlideShow() {
-        console.log("start slideshow");
+        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.START_STOP);
     }
 
     gotoPreviousImage() {
-        console.log("previous");
+        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.PREVIOUS);
     }
 
     gotoNextImage() {
-        console.log("previous");
+        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.NEXT);
     }
 
 };
