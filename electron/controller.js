@@ -1,4 +1,4 @@
-const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl } = require("../shared/communication");
+const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl, Channel } = require("../shared/communication");
 
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
@@ -30,7 +30,7 @@ class Controller {
 
     openAlbum(files) {
         this.files = files.filter(isImage);
-        this.webContents.send("open-album", {count: this.files.length});
+        this.webContents.send(Channel.OPEN_ALBUM, {count: this.files.length});
     }
 
     getFile(index) {
@@ -43,7 +43,7 @@ class Controller {
     }
 
     sendConfiguration(sender) {
-        sender.send("configure-slideshow", this.config);
+        sender.send(Channel.CONFIGURE_SLIDESHOW, this.config);
     }
 
     reload() {
@@ -62,11 +62,11 @@ class Controller {
         this.webContents.openDevTools({ mode: "detach" });
     }
 
-    startSlideShow() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.START_STOP); }
+    startSlideShow() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.START_STOP); }
 
-    gotoPreviousImage() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.PREVIOUS); }
+    gotoPreviousImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.PREVIOUS); }
 
-    gotoNextImage() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.NEXT); }
+    gotoNextImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.NEXT); }
 
 };
 

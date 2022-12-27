@@ -1,4 +1,8 @@
-exports.SLIDESHOW_CONTROL_CHANNEL = "slideshow-control";
+exports.Channel = {
+    CONFIGURE_SLIDESHOW: "configure-slideshow",
+    CONTROL_SLIDESHOW: "control-slideshow",
+    OPEN_ALBUM: "open-album"
+};
 
 exports.SlideshowControl = {
     START_STOP: "start-stop",
