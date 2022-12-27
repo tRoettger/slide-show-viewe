@@ -1,4 +1,4 @@
-const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl } = require("../shared/communication");
+const { Channel, SlideshowControl } = require("../shared/communication");
 const { createConfig } = require("../shared/slide-show.js");
 const { ipcRenderer } = require("electron");
 const SYMBOL = {
@@ -38,7 +38,7 @@ const range = (start, end) => {
     return arr;
 }
 
-ipcRenderer.on("open-album", (event, album) => {
+ipcRenderer.on(Channel.OPEN_ALBUM, (event, album) => {
     console.log("Received album: ", album);
     pauseSlideshow();
     slideshow.current = 0;
@@ -54,8 +54,8 @@ ipcRenderer.on("open-album", (event, album) => {
         wrapper.appendChild(image);
         ROOT.appendChild(wrapper);
     }
-    ipcRenderer.send("get-images", range(0, PRELOAD_IMAGES));
-    ipcRenderer.send("get-images", range(slideshow.count - PRELOAD_IMAGES, slideshow.count));
+    ipcRenderer.send(Channel.GET_IMAGES, range(0, PRELOAD_IMAGES));
+    ipcRenderer.send(Channel.GET_IMAGES, range(slideshow.count - PRELOAD_IMAGES, slideshow.count));
 });
 
 const tryToDisplay = (id, setup) => {
@@ -67,7 +67,7 @@ const tryToDisplay = (id, setup) => {
     }
 }
 
-ipcRenderer.on("provide-image", (event, imageContainer) => {
+ipcRenderer.on(Channel.PROVIDE_IMAGE, (event, imageContainer) => {
     console.log("Received image:", imageContainer);
     slideshow.loaded.push(imageContainer.index * 1);
     tryToDisplay("album-image-" + imageContainer.index, (element) => {
@@ -87,7 +87,7 @@ const preloadImages = () => {
         }
     }
     if(shouldLoad.length > 0) {
-        ipcRenderer.send("get-images", shouldLoad);
+        ipcRenderer.send(Channel.GET_IMAGES, shouldLoad);
     }
 };
 
@@ -167,7 +167,7 @@ BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
 BTN_NEXT.addEventListener("click", gotoNext);
 BTN_PREVIOUS.addEventListener("click", gotoPrevious);
 
-ipcRenderer.on('configure-slideshow', (e, arg) => {
+ipcRenderer.on(Channel.CONFIGURE_SLIDESHOW, (e, arg) => {
     console.log("Received new config: ", arg);
     wrapWithStopAndStart(() => {
         slideshow.config = arg;
@@ -180,7 +180,7 @@ CONTROL_MAP.set(SlideshowControl.START_STOP, controlSlideshow);
 CONTROL_MAP.set(SlideshowControl.NEXT, gotoNext);
 CONTROL_MAP.set(SlideshowControl.PREVIOUS, gotoPrevious);
 
-ipcRenderer.on(SLIDESHOW_CONTROL_CHANNEL, (event, control) => {
+ipcRenderer.on(Channel.CONTROL_SLIDESHOW, (event, control) => {
     var handler = CONTROL_MAP.get(control);
     if(handler) {
         handler();

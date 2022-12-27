@@ -1,7 +1,9 @@
 exports.Channel = {
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONTROL_SLIDESHOW: "control-slideshow",
-    OPEN_ALBUM: "open-album"
+    GET_IMAGES: "get-images",
+    OPEN_ALBUM: "open-album",
+    PROVIDE_IMAGE: "provide-image"
 };
 
 exports.SlideshowControl = {
