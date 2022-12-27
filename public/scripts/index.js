@@ -1,6 +1,7 @@
 const { Channel, SlideshowControl } = require("../shared/communication");
 const { createConfig } = require("../shared/slide-show.js");
 const { ipcRenderer } = require("electron");
+const { WindowId } = require("../../shared/communication");
 const SYMBOL = {
     start: "&#9655;",
     pause: "&#10073;&#10073;"
@@ -189,4 +190,4 @@ ipcRenderer.on(Channel.CONTROL_SLIDESHOW, (event, control) => {
     }
 });
 
-ipcRenderer.send("application-ready", "Application started.");
+ipcRenderer.send(Channel.APPLICATION_READY, WindowId.MAIN_WINDOW);

@@ -3,8 +3,9 @@ const { controller } = require("./controller");
 const { saveConfigAs, saveConfig } = require("./fs-actions");
 const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
+const { Channel } = require("../shared/communication");
 
-ipcMain.on("application-ready", msg => {
+ipcMain.on(Channel.APPLICATION_READY, msg => {
     fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
         if(err) {
             console.log("Error occured while loading default slideshow configuration: ", err);
@@ -14,24 +15,24 @@ ipcMain.on("application-ready", msg => {
     });
 });
 
-ipcMain.on("configuration-ready", (e, msg) => {
+ipcMain.on(Channel.CONFIGURATION_READY, (e, msg) => {
     controller.sendConfiguration(e.sender);
 });
 
-ipcMain.on('save-config', (event, arg) => {
+ipcMain.on(Channel.SAVE_CONFIG, (event, arg) => {
     controller.setConfiguration(arg);
-    event.sender.send("save-config", { successful: true });
+    event.sender.send(Channel.SAVE_CONFIG, { successful: true });
     saveConfig(arg);
 });
 
-ipcMain.on("save-config-as", (event, arg) => {
+ipcMain.on(Channel.SAVE_CONFIG_AS, (event, arg) => {
     controller.setConfiguration(arg);
-    event.sender.send("save-config-as", { successful: true });
+    event.sender.send(Channel.SAVE_CONFIG_AS, { successful: true });
     saveConfigAs(arg);
 });
 
-ipcMain.on("get-images", (event, keys) => {
+ipcMain.on(Channel.GET_IMAGES, (event, keys) => {
     for(var key of keys) {
-        event.sender.send("provide-image", {index: key, image: controller.getFile(key)});
+        event.sender.send(Channel.PROVIDE_IMAGE, {index: key, image: controller.getFile(key)});
     }
 });

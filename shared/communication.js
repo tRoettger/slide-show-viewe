@@ -1,4 +1,5 @@
 exports.Channel = {
+    APPLICATION_READY: "application-ready",
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONFIGURATION_READY: "configuration-ready",
     CONTROL_SLIDESHOW: "control-slideshow",
