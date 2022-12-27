@@ -15,6 +15,9 @@ class Controller {
         this.files = [];
         this.changeScreenMode = this.changeScreenMode.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
+        this.startSlideShow = this.startSlideShow.bind(this);
+        this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
+        this.gotoNextImage = this.gotoNextImage.bind(this);
     }
 
     initialize(mainWindow) {
@@ -53,6 +56,19 @@ class Controller {
     openDevTools() {
         this.webContents.openDevTools({ mode: "detach" });
     }
+
+    startSlideShow() {
+        console.log("start slideshow");
+    }
+
+    gotoPreviousImage() {
+        console.log("previous");
+    }
+
+    gotoNextImage() {
+        console.log("previous");
+    }
+
 };
 
 exports.controller = new Controller();
