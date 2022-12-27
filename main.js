@@ -1,5 +1,5 @@
 if (require('electron-squirrel-startup')) return;
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, globalShortcut } = require('electron');
 const devToolEnabled = require("electron-is-dev");
 const { saveWindowProperties, readWindowProperties } = require("./electron/configuration");
 const { controller } = require("./electron/controller");
@@ -24,6 +24,7 @@ const init = () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+  globalShortcut.register("Esc", controller.leaveFullscreen)
 };
 
 app.on('window-all-closed', () => {
