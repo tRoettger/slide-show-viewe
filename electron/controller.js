@@ -13,6 +13,8 @@ class Controller {
     constructor() {
         this.fullscreen = false;
         this.files = [];
+        this.changeScreenMode = this.changeScreenMode.bind(this);
+        this.openDevTools = this.openDevTools.bind(this);
     }
 
     initialize(mainWindow) {

@@ -28,12 +28,12 @@ const MENU_TEMPLATE = [
     }, {
         label: "Ansicht",
         submenu: [
-            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: () => controller.changeScreenMode() }
+            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: controller.changeScreenMode }
         ]
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
-            { "role": "dev-tools", "label": "Chromium Dev Tools", click: () => controller.openDevTools() }
+            { "role": "dev-tools", "label": "Chromium Dev Tools", click: controller.openDevTools }
         ]
     }
 ];
