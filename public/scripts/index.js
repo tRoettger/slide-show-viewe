@@ -1,4 +1,5 @@
-const { createConfig } = require("./scripts/slide-show.js");
+const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl } = require("../../shared/communication");
+const { createConfig } = require("../shared/slide-show.js");
 const { ipcRenderer } = require("electron");
 const SYMBOL = {
     start: "&#9655;",
@@ -172,6 +173,17 @@ ipcRenderer.on('configure-slideshow', (e, arg) => {
         slideshow.config = arg;
         updateAnimation(arg);
     });
+});
+
+const logControl = (control) => console.log("received control: ", control);
+
+//const CONTROL_MAP = new Map();
+//CONTROL_MAP.set(SlideshowControl.START_STOP, () => {});
+
+console.log("adding control dispatcher");
+
+ipcRenderer.on(SLIDESHOW_CONTROL_CHANNEL, (event, control) => {
+    logControl(control);
 });
 
 ipcRenderer.send("application-ready", "Application started.");

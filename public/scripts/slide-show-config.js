@@ -1,6 +1,5 @@
-const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl } = require("../../shared/communication");
 const { ipcRenderer } = require("electron");
-const { createConfig } = require("./scripts/slide-show");
+const { createConfig } = require("../../shared/slide-show");
 const FORM_CONFIG = document.getElementById("config-form");
 const SELECT_TRANSITION = document.getElementById("transition-timing-function");
 const INPUT_TRANSITION = document.getElementById("transition-duration");
@@ -30,13 +29,4 @@ ipcRenderer.on("configure-slideshow", (e, config) => {
     INPUT_VIEW.value = config.viewDuration;
     INPUT_TRANSITION.value = config.transitionDuration;
     SELECT_TRANSITION.value = config.timingFunction;
-});
-
-const logControl = (control) => console.log("received control: ", control);
-
-const CONTROL_MAP = new Map();
-CONTROL_MAP.set(SlideshowControl.START_STOP, () => {});
-
-ipcRenderer.on(SLIDESHOW_CONTROL_CHANNEL, (event, control) => {
-    logControl(control);
 });
