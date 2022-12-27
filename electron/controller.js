@@ -20,6 +20,7 @@ class Controller {
         this.startSlideShow = this.startSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
         this.gotoNextImage = this.gotoNextImage.bind(this);
+        this.setFullScreenMode = this.setFullScreenMode.bind(this);
     }
 
     initialize(mainWindow) {
@@ -49,8 +50,10 @@ class Controller {
         this.webContents.reloadIgnoringCache();
     }
 
-    changeScreenMode() {
-        this.fullscreen = !(this.fullscreen);
+    changeScreenMode() { this.setFullScreenMode(!this.fullscreen); }
+
+    setFullScreenMode(fullscreenMode) {
+        this.fullscreen = fullscreenMode;
         this.mainWindow.setFullScreen(this.fullscreen);
         this.mainWindow.menuBarVisible = !this.fullscreen;
     }
@@ -59,17 +62,11 @@ class Controller {
         this.webContents.openDevTools({ mode: "detach" });
     }
 
-    startSlideShow() {
-        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.START_STOP);
-    }
+    startSlideShow() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.START_STOP); }
 
-    gotoPreviousImage() {
-        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.PREVIOUS);
-    }
+    gotoPreviousImage() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.PREVIOUS); }
 
-    gotoNextImage() {
-        this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.NEXT);
-    }
+    gotoNextImage() { this.webContents.send(SLIDESHOW_CONTROL_CHANNEL, SlideshowControl.NEXT); }
 
 };
 

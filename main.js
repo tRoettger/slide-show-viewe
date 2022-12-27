@@ -24,7 +24,7 @@ const init = () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-  globalShortcut.register("Esc", controller.leaveFullscreen)
+  globalShortcut.register("Esc", () => controller.setFullScreenMode(false));
 };
 
 app.on('window-all-closed', () => {
