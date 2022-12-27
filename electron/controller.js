@@ -1,4 +1,4 @@
-const { SLIDESHOW_CONTROL_CHANNEL, SlideshowControl, Channel } = require("../shared/communication");
+const { SlideshowControl, Channel } = require("../shared/communication");
 
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
