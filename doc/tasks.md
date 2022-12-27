@@ -1,8 +1,3 @@
-# [Feature] Shortcuts for control buttons
-Add control functions (previous, next, play) to menu and assigne accelerators.
-
-# [Feature] Close fullscreen with Esc
-
 # [Feature] Album selector
 Add a separate window to select a folder from a list of folders.
 Therefore select a top level folder or multiple folders.
