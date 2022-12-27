@@ -1,6 +1,6 @@
 const { ipcRenderer } = require("electron");
-const { Channel, WindowId } = require("../../shared/communication");
-const { createConfig } = require("../../shared/slide-show");
+const { Channel, WindowId } = require("../shared/communication");
+const { createConfig } = require("../shared/slide-show");
 const FORM_CONFIG = document.getElementById("config-form");
 const SELECT_TRANSITION = document.getElementById("transition-timing-function");
 const INPUT_TRANSITION = document.getElementById("transition-duration");

@@ -1,7 +1,7 @@
 const { Channel, SlideshowControl } = require("../shared/communication");
 const { createConfig } = require("../shared/slide-show.js");
 const { ipcRenderer } = require("electron");
-const { WindowId } = require("../../shared/communication");
+const { WindowId } = require("../shared/communication");
 const SYMBOL = {
     start: "&#9655;",
     pause: "&#10073;&#10073;"
