@@ -42,9 +42,10 @@ class Controller {
         this.mainWindow.menuBarVisible = !this.fullscreen;
     }
 
-    startSlideShow() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.START_STOP); }
-    gotoPreviousImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.PREVIOUS); }
-    gotoNextImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.NEXT); }
+    controlSlideShow(control) { this.webContents.send(Channel.CONTROL_SLIDESHOW, control); }
+    startSlideShow() { this.controlSlideShow(SlideshowControl.START_STOP); }
+    gotoPreviousImage() { this.controlSlideShow(SlideshowControl.PREVIOUS); }
+    gotoNextImage() { this.controlSlideShow(SlideshowControl.NEXT); }
     getFile(index) { return this.files[index]; }
     
     openDevTools() { this.webContents.openDevTools({ mode: "detach" }); }
