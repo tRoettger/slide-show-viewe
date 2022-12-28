@@ -8,7 +8,6 @@ const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
 
 class SlideshowController {
     constructor(renderer) {
-        this.preloadCount = 0;
         this.count = 0;
         this.current = 0;
         this.running = false;
@@ -60,7 +59,6 @@ class SlideshowController {
         this.pause();
         this.current = 0;
         this.count = album.count;
-        this.preloadCount = Math.min(album.count, PRELOAD_IMAGES);
         this.loaded = [];
         this.setup();
     }
