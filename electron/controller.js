@@ -2,14 +2,8 @@ const { SlideshowControl, Channel } = require("../shared/communication");
 
 const IMG_EXT = [".JPG", ".PNG", ".GIF"];
 
-const isImage = (file) => {
-    if(file.stat.isFile()) {
-        var extension = file.ext.toUpperCase();
-        return IMG_EXT.includes(extension);
-    } else {
-        return false;
-    }
-};
+const isImageExtension = (extension) => IMG_EXT.includes(extension.toUpperCase());
+const isImage = (file) => file.stat.isFile() && isImageExtension(file.ext);
 
 class Controller {
     constructor() {
