@@ -27,23 +27,13 @@ class Controller {
         this.webContents.send(Channel.OPEN_ALBUM, {count: this.files.length});
     }
 
-    getFile(index) {
-        return this.files[index];
-    }
-
     setConfiguration(config) {
         this.config = config;
         this.sendConfiguration(this.webContents);
     }
 
-    sendConfiguration(sender) {
-        sender.send(Channel.CONFIGURE_SLIDESHOW, this.config);
-    }
-
-    reload() {
-        this.webContents.reloadIgnoringCache();
-    }
-
+    sendConfiguration(sender) { sender.send(Channel.CONFIGURE_SLIDESHOW, this.config); }
+    reload() { this.webContents.reloadIgnoringCache(); }
     changeScreenMode() { this.setFullScreenMode(!this.fullscreen); }
 
     setFullScreenMode(fullscreenMode) {
@@ -52,15 +42,12 @@ class Controller {
         this.mainWindow.menuBarVisible = !this.fullscreen;
     }
 
-    openDevTools() {
-        this.webContents.openDevTools({ mode: "detach" });
-    }
-
     startSlideShow() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.START_STOP); }
-
     gotoPreviousImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.PREVIOUS); }
-
     gotoNextImage() { this.webContents.send(Channel.CONTROL_SLIDESHOW, SlideshowControl.NEXT); }
+    getFile(index) { return this.files[index]; }
+    
+    openDevTools() { this.webContents.openDevTools({ mode: "detach" }); }
 
 };
 
