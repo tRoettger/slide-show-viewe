@@ -1,5 +1,5 @@
-const { createConfig } = require("../shared/slide-show.js");
-const { slideshowRenderer } = require("./scripts/slideshow-renderer");
+const { createConfig } = require("../../shared/slide-show.js");
+const { slideshowRenderer } = require("./slideshow-renderer");
 const { ipcRenderer } = require("electron");
 const { Channel } = require("../../shared/communication.js");
 
@@ -8,6 +8,7 @@ const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
 
 class SlideshowController {
     constructor(renderer) {
+        this.preloadCount = 0;
         this.count = 0;
         this.current = 0;
         this.running = false;
@@ -18,17 +19,24 @@ class SlideshowController {
         this.showPrevious = this.showPrevious.bind(this);
     }
 
+    isLoaded(index) {
+        return this.loaded.includes(index);
+    }
+
+    normalizeIndex(i) {
+        return (i < 0) ? (i + this.count) : (i % this.count);
+    }
+
     calculatePreloadIndices() {
-        var shouldLoad = [];
-        var start = (this.current + this.count - PRELOAD_IMAGES) % this.count;
-        var end = (this.current + PRELOAD_IMAGES) % this.count;
-        // The less then does not work in this case.
-        for(var i = start; i != end; i = (i + 1) % this.count) {
-            if(!this.loaded.includes(i)) {
-                shouldLoad.push(i);
-            }
+        var shouldLoad = [this.current];
+        var start = this.current - PRELOAD_IMAGES;
+        var end = this.current + PRELOAD_IMAGES;
+        for(var i = start; i <= end; i++) {
+            var index = this.normalizeIndex(i);
+            if(!shouldLoad.includes(index)) shouldLoad.push(index);
         }
-        return shouldLoad;
+
+        return shouldLoad.filter(index => !this.isLoaded(index));
     }
 
     configure(config) {
@@ -52,6 +60,7 @@ class SlideshowController {
         this.pause();
         this.current = 0;
         this.count = album.count;
+        this.preloadCount = Math.min(album.count, PRELOAD_IMAGES);
         this.loaded = [];
         this.setup();
     }
@@ -62,7 +71,7 @@ class SlideshowController {
     }
 
     pause() {
-        slideshow.running = false;
+        this.running = false;
         this.renderer.stopTransition();
     }
 

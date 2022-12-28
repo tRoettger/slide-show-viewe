@@ -26,7 +26,7 @@ class SlideshowRenderer {
     }
 
     addImageElements(count) {
-        this.createImageElements(count).forEach(this.display.appendChild);
+        this.createImageElements(count).forEach(c => this.display.appendChild(c));
     }
 
     updateAnimation(config) {
@@ -79,7 +79,7 @@ class SlideshowRenderer {
     }
 
     startTransition(swapDuration, onFinish) {
-        playBtn.innerHTML = SYMBOL.pause;
+        this.playBtn.innerHTML = SYMBOL.pause;
         this.interval = setInterval(() => this.swapInterval(onFinish), swapDuration * 1000);
     }
 
@@ -89,7 +89,7 @@ class SlideshowRenderer {
     };
 
     stopTransition() {
-        playBtn.innerHTML =  SYMBOL.start;
+        this.playBtn.innerHTML =  SYMBOL.start;
         clearInterval(this.interval);
         if(this.display.firstChild) {
             this.display.lastChild.style.animationName = "none";
