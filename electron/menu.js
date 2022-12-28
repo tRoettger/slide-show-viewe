@@ -9,7 +9,6 @@ const MENU_TEMPLATE = [
         label: "Datei",
         submenu: [
             { "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", click: () => openFolder(handleGeneralError) },
-            //{ "role": "save", "label": "Save", "accelerator": "Ctrl+S", click: saveFile},
             { "type": "separator" },
             { "role": "reload", "label": "Neu laden", click: controller.reload },
             { "type": "separator" },
