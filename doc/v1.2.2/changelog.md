@@ -6,3 +6,4 @@ Find a list of house keeping changes below:
 - Move default configuration to configuration.js
 - Add shortcut for dev tools
 - Remove windows-squirrel-start
+- Move providing of image to controller
