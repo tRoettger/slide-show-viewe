@@ -7,6 +7,16 @@ const SYMBOL = {
     pause: "&#10073;&#10073;"
 };
 
+const tryToDisplay = (id, setup) => {
+    var element = document.getElementById(id);
+    if(element) {
+        setup(element);
+    } else {
+        // retry 100 ms later
+        setTimeout(() => tryToDisplay(id, setup), 100);
+    }
+}
+
 class SlideshowRenderer {
     constructor(cssRoot, display, playBtn) {
         this.cssRoot = cssRoot;
@@ -80,6 +90,13 @@ class SlideshowRenderer {
         if(this.display.firstChild) {
             this.display.lastChild.style.animationName = "none";
         }
+    }
+
+    renderImage(image, index) {
+        tryToDisplay("album-image-" + index, (element) => {
+            element.src = image.path;
+            element.alt = image.path;
+        });
     }
 }
 
