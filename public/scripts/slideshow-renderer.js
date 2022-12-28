@@ -29,12 +29,6 @@ class SlideshowRenderer {
         this.createImageElements(count).forEach(c => this.display.appendChild(c));
     }
 
-    updateAnimation(config) {
-        this.cssRoot.setProperty("--transition-duration", config.transitionDuration + "s");
-        this.cssRoot.setProperty("--view-duration", config.viewDuration + "s");
-        this.cssRoot.setProperty("--timing-function", config.timingFunction);
-    }
-
     createImageElements(count) {
         var imageElements = [];
         for(var i = count - 1; i >= 0; i--) {
@@ -49,12 +43,28 @@ class SlideshowRenderer {
         }
         return imageElements;
     };
+    
+    createTransition() {
+        this.display.lastChild.style.animationName = "fade";
+    }
 
     removeImageElements() { 
         while(this.display.firstChild != null) {
             this.display.removeChild(this.display.lastChild); 
         }
     };
+
+    renderImage(image, index) {
+        tryToDisplay("album-image-" + index, (element) => {
+            element.src = image.path;
+            element.alt = image.path;
+        });
+    }
+
+    setup(count) {
+        this.removeImageElements();
+        this.addImageElements(count);
+    }
 
     showNext() {
         var child = this.display.lastChild;
@@ -69,24 +79,11 @@ class SlideshowRenderer {
         this.display.removeChild(child);
         this.display.appendChild(child);
     }
-    
-    createTransition() {
-        this.display.lastChild.style.animationName = "fade";
-    }
-    setup(count) {
-        this.removeImageElements();
-        this.addImageElements(count);
-    }
 
     startTransition(swapDuration, onFinish) {
         this.playBtn.innerHTML = SYMBOL.pause;
         this.interval = setInterval(() => this.swapInterval(onFinish), swapDuration * 1000);
     }
-
-    swapInterval(onFinish) {
-        onFinish();
-        createTransition();
-    };
 
     stopTransition() {
         this.playBtn.innerHTML =  SYMBOL.start;
@@ -96,11 +93,15 @@ class SlideshowRenderer {
         }
     }
 
-    renderImage(image, index) {
-        tryToDisplay("album-image-" + index, (element) => {
-            element.src = image.path;
-            element.alt = image.path;
-        });
+    swapInterval(onFinish) {
+        onFinish();
+        createTransition();
+    };
+
+    updateAnimation(config) {
+        this.cssRoot.setProperty("--transition-duration", config.transitionDuration + "s");
+        this.cssRoot.setProperty("--view-duration", config.viewDuration + "s");
+        this.cssRoot.setProperty("--timing-function", config.timingFunction);
     }
 }
 
