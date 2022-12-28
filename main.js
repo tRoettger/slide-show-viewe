@@ -1,4 +1,3 @@
-if (require('electron-squirrel-startup')) return;
 const { app, BrowserWindow, globalShortcut } = require('electron');
 const { saveWindowProperties, readWindowProperties } = require("./electron/configuration");
 const { controller } = require("./electron/controller");
