@@ -28,17 +28,13 @@ const loadFiles = (folders) => {
 
 const saveConfigToFile = (config, filePath) => {
     fs.writeFile(filePath, JSON.stringify(config), (err) => {
-        if(err) {
-            console.log("Error while saving settings: ", err);
-        }
+        if(err) { console.log("Error while saving settings: ", err); }
     });
 }
 
 exports.saveConfigAs = (config) => {
     dialog.showSaveDialog({ filters: [ JSON_FILTER ] }).then(result => {
-        if(!result.canceled) {
-            saveConfigToFile(config, result.filePath);
-        }
+        if(!result.canceled) { saveConfigToFile(config, result.filePath); }
     })
 };
 
