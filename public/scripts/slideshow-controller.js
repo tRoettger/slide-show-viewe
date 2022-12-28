@@ -20,21 +20,6 @@ class Slideshow {
         this.count = album.count;
     }
 
-    createImageElements() {
-        var imageElements = [];
-        for(var i = this.count - 1; i >= 0; i--) {
-            var image = document.createElement("img");
-            image.id = "album-image-" + i;
-            image.className = "album-image";
-            
-            var wrapper = document.createElement("div");
-            wrapper.className = "album-image-wrapper";
-            wrapper.appendChild(image);
-            imageElements.push(wrapper);
-        }
-        return imageElements;
-    };
-
     calculatePreloadIndices() {
         var shouldLoad = [];
         var start = (this.current + this.count - PRELOAD_IMAGES) % this.count;
