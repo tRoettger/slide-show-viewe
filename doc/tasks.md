@@ -12,4 +12,4 @@ Make it possible to show additional image information such as:
 - original size
 - dpi
 - camera refactorer & model
-- location data
+- location data (nice to have: add link to maps.google.com)
