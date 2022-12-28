@@ -1,6 +1,5 @@
 if (require('electron-squirrel-startup')) return;
 const { app, BrowserWindow, globalShortcut } = require('electron');
-const devToolEnabled = require("electron-is-dev");
 const { saveWindowProperties, readWindowProperties } = require("./electron/configuration");
 const { controller } = require("./electron/controller");
 require('./electron/menu');
