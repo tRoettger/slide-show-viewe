@@ -22,10 +22,8 @@ const init = () => {
   globalShortcut.register("Esc", () => controller.setFullScreenMode(false));
 };
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
+if(process.platform !== 'darwin') {
+  app.on('window-all-closed', app.quit);
+}
 
 app.whenReady().then(init);
