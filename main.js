@@ -6,9 +6,7 @@ require('./electron/menu');
 require('./electron/listener');
 
 const createWindow = () => {
-  var winProps = readWindowProperties();
-  winProps.webPreferences = { fullscreenable: true, nodeIntegration: true, contextIsolation: false, webSecurity: false };
-  const mainWindow = new BrowserWindow(winProps);
+  const mainWindow = new BrowserWindow(readWindowProperties());
   mainWindow.loadFile("public/index.html");
   controller.initialize(mainWindow);
   mainWindow.on("close", () => saveWindowProperties(mainWindow));
