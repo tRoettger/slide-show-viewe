@@ -46,7 +46,13 @@ class Controller {
     startSlideShow() { this.controlSlideShow(SlideshowControl.START_STOP); }
     gotoPreviousImage() { this.controlSlideShow(SlideshowControl.PREVIOUS); }
     gotoNextImage() { this.controlSlideShow(SlideshowControl.NEXT); }
-    getFile(index) { return this.files[index]; }
+    
+    provideFile(index) { 
+        this.webContents.send(Channel.PROVIDE_IMAGE, {
+            index: index, 
+            image: this.files[index]
+        });
+    }
     
     openDevTools() { this.webContents.openDevTools({ mode: "detach" }); }
 

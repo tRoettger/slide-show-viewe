@@ -33,6 +33,6 @@ ipcMain.on(Channel.SAVE_CONFIG_AS, (event, arg) => {
 
 ipcMain.on(Channel.GET_IMAGES, (event, keys) => {
     for(var key of keys) {
-        event.sender.send(Channel.PROVIDE_IMAGE, {index: key, image: controller.getFile(key)});
+        controller.provideFile(key);
     }
 });
