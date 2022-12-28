@@ -1,23 +1,19 @@
 const { createConfig } = require("../shared/slide-show.js");
 const { slideshowRenderer } = require("./scripts/slideshow-renderer");
+const { ipcRenderer } = require("electron");
 
-const EMPTY_INTERVAL = setInterval(() => {}, 5000);
 const PRELOAD_IMAGES = 5;
 const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
 
-class Slideshow {
-    constructor() {
+class SlideshowController {
+    constructor(renderer) {
         this.count = 0;
         this.current = 0;
         this.running = false;
-        this.interval = EMPTY_INTERVAL;
         this.config = DEFAULT_CONFIG;
         this.loaded = [];
-    }
-
-    loadAlbum(album) {
-        this.current = 0;
-        this.count = album.count;
+        this.renderer = renderer;
+        this.showNext = this.showNext.bind(this);
     }
 
     calculatePreloadIndices() {
@@ -32,6 +28,42 @@ class Slideshow {
         }
         return shouldLoad;
     }
+
+    loadAlbum(album) {
+        this.current = 0;
+        this.count = album.count;
+        this.loaded = [];
+    }
+
+    setup() {
+        this.renderer.removeImageElements();
+        this.renderer.addImageElements(this.count);
+        ipcRenderer.send(Channel.GET_IMAGES, this.calculatePreloadIndices());
+    }
+
+    showNext() {
+        this.current = (this.current + 1) % this.count;
+        this.renderer.showNext();
+        preloadImages();
+    }
+
+    showPrevious() {
+        // "+ slideshow.count" covers the step from first to last image.
+        this.current = (this.current + this.count - 1) % this.count;
+        this.renderer.showPrevious();
+        preloadImages();
+    }
+
+    start() {
+        this.running = true;
+        var swapDuration = this.config.viewDuration + this.config.transitionDuration;
+        this.renderer.startTransition(swapDuration, this.showNext);
+    }
+
+    pause() {
+        slideshow.running = false;
+        this.renderer.stopTransition();
+    }
 }
 
-exports.slideshow = new Slideshow(slideshowRenderer);
+exports.slideshow = new SlideshowController(slideshowRenderer);
