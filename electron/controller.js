@@ -15,6 +15,7 @@ class Controller {
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
         this.gotoNextImage = this.gotoNextImage.bind(this);
         this.setFullScreenMode = this.setFullScreenMode.bind(this);
+        this.openAlbum = this.openAlbum.bind(this);
     }
 
     initialize(mainWindow) {
