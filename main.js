@@ -12,7 +12,11 @@ const createWindow = () => {
   mainWindow.on("close", () => saveWindowProperties(mainWindow));
 };
 
-const init = () => {
+if(process.platform !== 'darwin') {
+  app.on('window-all-closed', app.quit);
+}
+
+app.whenReady().then(() => {
   createWindow();
   app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
@@ -20,10 +24,4 @@ const init = () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
   globalShortcut.register("Esc", () => controller.setFullScreenMode(false));
-};
-
-if(process.platform !== 'darwin') {
-  app.on('window-all-closed', app.quit);
-}
-
-app.whenReady().then(init);
+});
