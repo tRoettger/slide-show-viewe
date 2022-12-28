@@ -39,13 +39,9 @@ const range = (start, end) => {
     return arr;
 }
 
-ipcRenderer.on(Channel.OPEN_ALBUM, (event, album) => {
-    console.log("Received album: ", album);
-    pauseSlideshow();
-    slideshow.current = 0;
-    slideshow.count = album.count;
-    while(ROOT.firstChild != null) ROOT.removeChild(ROOT.lastChild);
-    for(var i = album.count - 1; i >= 0; i--) {
+const createImageElements = (imageCount) => {
+    var imageElements = [];
+    for(var i = imageCount - 1; i >= 0; i--) {
         var image = document.createElement("img");
         image.id = "album-image-" + i;
         image.className = "album-image";
@@ -53,10 +49,30 @@ ipcRenderer.on(Channel.OPEN_ALBUM, (event, album) => {
         var wrapper = document.createElement("div");
         wrapper.className = "album-image-wrapper";
         wrapper.appendChild(image);
-        ROOT.appendChild(wrapper);
+        imageElements.push(wrapper);
     }
+    return imageElements;
+};
+
+const removeImageElements = () => { while(ROOT.firstChild != null) ROOT.removeChild(ROOT.lastChild); };
+
+const clearSlideShow = () => {
+    slideshow.current = 0;
+    removeImageElements();
+}
+
+const setupSlideShow = (imageCount) => {
+    slideshow.count = imageCount;
+    createImageElements(imageCount).forEach(ROOT.appendChild);
     ipcRenderer.send(Channel.GET_IMAGES, range(0, PRELOAD_IMAGES));
     ipcRenderer.send(Channel.GET_IMAGES, range(slideshow.count - PRELOAD_IMAGES, slideshow.count));
+}
+
+ipcRenderer.on(Channel.OPEN_ALBUM, (event, album) => {
+    console.log("Received album: ", album);
+    pauseSlideshow();
+    clearSlideShow();
+    setupSlideShow(album.count);
 });
 
 const tryToDisplay = (id, setup) => {
