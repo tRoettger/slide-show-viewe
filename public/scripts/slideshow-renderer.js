@@ -73,6 +73,10 @@ class SlideshowRenderer {
     createTransition() {
         this.display.lastChild.style.animationName = "fade";
     }
+    setup(count) {
+        this.removeImageElements();
+        this.addImageElements(count);
+    }
 
     startTransition(swapDuration, onFinish) {
         playBtn.innerHTML = SYMBOL.pause;

@@ -1,180 +1,37 @@
 const { Channel, SlideshowControl } = require("../shared/communication");
-const { createConfig } = require("../shared/slide-show.js");
 const { ipcRenderer } = require("electron");
 const { WindowId } = require("../shared/communication");
-const SYMBOL = {
-    start: "&#9655;",
-    pause: "&#10073;&#10073;"
-};
-const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
+const { slideshowController } = require("./scripts/slideshow-controller");
 const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
 const BTN_NEXT = document.getElementById("next-btn");
 const BTN_PREVIOUS = document.getElementById("previous-btn");
-const ROOT = document.getElementById("root");
-const CSS_ROOT = document.querySelector(":root").style;
-
-const PRELOAD_IMAGES = 5;
-
-const updateAnimation = (config) => {
-    CSS_ROOT.setProperty("--transition-duration", config.transitionDuration + "s");
-    CSS_ROOT.setProperty("--view-duration", config.viewDuration + "s");
-    CSS_ROOT.setProperty("--timing-function", config.timingFunction);
-};
-
-var slideshow = {
-    count: 0, 
-    current: 0, 
-    running: false, 
-    interval: setInterval(() => {}, 5000),
-    config: DEFAULT_CONFIG,
-    loaded: []
-};
-updateAnimation(slideshow.config);
-
-const range = (start, end) => {
-    var arr = [];
-    for(var i = start; i < end; i++) {
-        arr.push(i);
-    }
-    return arr;
-}
-
-const createImageElements = (imageCount) => {
-    var imageElements = [];
-    for(var i = imageCount - 1; i >= 0; i--) {
-        var image = document.createElement("img");
-        image.id = "album-image-" + i;
-        image.className = "album-image";
-        
-        var wrapper = document.createElement("div");
-        wrapper.className = "album-image-wrapper";
-        wrapper.appendChild(image);
-        imageElements.push(wrapper);
-    }
-    return imageElements;
-};
-
-const removeImageElements = () => { while(ROOT.firstChild != null) ROOT.removeChild(ROOT.lastChild); };
-
-const clearSlideShow = () => {
-    slideshow.current = 0;
-    removeImageElements();
-}
-
-const setupSlideShow = (imageCount) => {
-    slideshow.count = imageCount;
-    createImageElements(imageCount).forEach(ROOT.appendChild);
-    ipcRenderer.send(Channel.GET_IMAGES, range(0, PRELOAD_IMAGES));
-    ipcRenderer.send(Channel.GET_IMAGES, range(slideshow.count - PRELOAD_IMAGES, slideshow.count));
-}
 
 ipcRenderer.on(Channel.OPEN_ALBUM, (event, album) => {
     console.log("Received album: ", album);
-    pauseSlideshow();
-    clearSlideShow();
-    setupSlideShow(album.count);
+    slideshowController.loadAlbum(album);
 });
-
-const tryToDisplay = (id, setup) => {
-    var element = document.getElementById(id);
-    if(element) {
-        setup(element);
-    } else {
-        setTimeout(() => tryToDisplay(id, setup), 100);
-    }
-}
 
 ipcRenderer.on(Channel.PROVIDE_IMAGE, (event, imageContainer) => {
     console.log("Received image:", imageContainer);
-    slideshow.loaded.push(imageContainer.index * 1);
-    tryToDisplay("album-image-" + imageContainer.index, (element) => {
-        element.src = imageContainer.image.path;
-        element.alt = imageContainer.image.path;
-    });
+    slideshowController.notifyImage(imageContainer);
 });
 
-const preloadImages = () => {
-    var shouldLoad = [];
-    var start = (slideshow.current + slideshow.count - PRELOAD_IMAGES) % slideshow.count;
-    var end = (slideshow.current + PRELOAD_IMAGES) % slideshow.count;
-    // The less then does not work in this case.
-    for(var i = start; i != end; i = (i + 1) % slideshow.count) {
-        if(!slideshow.loaded.includes(i)) {
-            shouldLoad.push(i);
-        }
-    }
-    if(shouldLoad.length > 0) {
-        ipcRenderer.send(Channel.GET_IMAGES, shouldLoad);
-    }
-};
-
-const swapInterval = () => {
-    showNextImage();
-    createTransition();
-};
-
-const showNextImage = () => {
-    slideshow.current = (slideshow.current + 1) % slideshow.count;
-    var child = ROOT.lastChild;
-    child.style.animationName = "none";
-    ROOT.removeChild(child);
-    ROOT.insertBefore(child, ROOT.firstChild);
-    preloadImages();
-}
-
-const showPrevious = () => {
-    // "+ slideshow.count" covers the step from first to last image.
-    slideshow.current = (slideshow.current + slideshow.count - 1) % slideshow.count;
-    ROOT.lastChild.style.animationName = "none";
-    var child = ROOT.firstChild;
-    ROOT.removeChild(child);
-    ROOT.appendChild(child);
-    preloadImages();
-}
-
-const createTransition = () => {
-    ROOT.lastChild.style.animationName = "fade";
-}
-
-const startSlideshow = () => {
-    slideshow.running = true;
-    BTN_SLIDESHOW.innerHTML = SYMBOL.pause;
-    var swapDuration = slideshow.config.viewDuration + slideshow.config.transitionDuration;
-    createTransition();
-    slideshow.interval = setInterval(swapInterval, swapDuration * 1000);
-}
-
-const pauseSlideshow = () => {
-    slideshow.running = false;
-    BTN_SLIDESHOW.innerHTML =  SYMBOL.start;
-    clearInterval(slideshow.interval);
-    if(ROOT.firstChild) {
-        var style = ROOT.lastChild.style;
-        style.animationName = "none";
-    }
-}
-
 const controlSlideshow = (e) => {
-    if(slideshow.running) {
-        pauseSlideshow();
-    } else if(slideshow.count > 1) {
-        startSlideshow();
+    if(slideshowController.isRunning()) {
+        slideshowController.pause();
+    } else if(slideshowController.getCount() > 1) {
+        slideshowController.start();
     } 
 };
 
-const gotoNext = (e) => {
-    wrapWithStopAndStart(showNextImage);
-}
-
-const gotoPrevious = (e) => {
-    wrapWithStopAndStart(showPrevious);
-}
+const gotoNext = (e) => wrapWithStopAndStart(slideshowController.showNext);
+const gotoPrevious = (e) => wrapWithStopAndStart(slideshowController.showPrevious);
 
 const wrapWithStopAndStart = (stepping) => {
-    if(slideshow.running) {
-        pauseSlideshow();
+    if(slideshowController.isRunning()) {
+        slideshowController.pause();
         stepping();
-        startSlideshow();
+        slideshowController.start();
     } else {
         stepping();
     }
@@ -186,10 +43,7 @@ BTN_PREVIOUS.addEventListener("click", gotoPrevious);
 
 ipcRenderer.on(Channel.CONFIGURE_SLIDESHOW, (e, arg) => {
     console.log("Received new config: ", arg);
-    wrapWithStopAndStart(() => {
-        slideshow.config = arg;
-        updateAnimation(arg);
-    });
+    wrapWithStopAndStart(() => slideshowController.configure(arg));
 });
 
 const CONTROL_MAP = new Map();

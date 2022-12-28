@@ -15,6 +15,7 @@ class SlideshowController {
         this.loaded = [];
         this.renderer = renderer;
         this.showNext = this.showNext.bind(this);
+        this.showPrevious = this.showPrevious.bind(this);
     }
 
     calculatePreloadIndices() {
@@ -48,9 +49,11 @@ class SlideshowController {
     }
 
     loadAlbum(album) {
+        this.pause();
         this.current = 0;
         this.count = album.count;
         this.loaded = [];
+        this.setup();
     }
 
     notifyImage(container) {
@@ -71,8 +74,7 @@ class SlideshowController {
     }
 
     setup() {
-        this.renderer.removeImageElements();
-        this.renderer.addImageElements(this.count);
+        this.renderer.setup(this.count);
         ipcRenderer.send(Channel.GET_IMAGES, this.calculatePreloadIndices());
     }
 
