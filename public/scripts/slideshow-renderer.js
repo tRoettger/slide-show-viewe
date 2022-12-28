@@ -82,6 +82,7 @@ class SlideshowRenderer {
 
     startTransition(swapDuration, onFinish) {
         this.playBtn.innerHTML = SYMBOL.pause;
+        this.createTransition();
         this.interval = setInterval(() => this.swapInterval(onFinish), swapDuration * 1000);
     }
 
@@ -95,7 +96,7 @@ class SlideshowRenderer {
 
     swapInterval(onFinish) {
         onFinish();
-        createTransition();
+        this.createTransition();
     };
 
     updateAnimation(config) {
