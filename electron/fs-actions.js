@@ -6,15 +6,15 @@ const { getDefaultSlideShowConfigPath } = require("./configuration.js");
 
 const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ] };
 
-exports.openFolder = (onError) => {
+exports.openFolder = () => {
     dialog.showOpenDialog({
         properties: [ 'openDirectory' ]
     }).then(result => {
-        controller.openAlbum(loadFiles(result.filePaths, onError));
+        controller.openAlbum(loadFiles(result.filePaths));
     });
 };
 
-const loadFiles = (folders, onError) => {
+const loadFiles = (folders) => {
     var files = [];
     for(var folder of folders) {
         for (var filename of fs.readdirSync(folder)) {
