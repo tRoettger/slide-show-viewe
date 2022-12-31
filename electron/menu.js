@@ -1,15 +1,15 @@
 const { Menu } = require('electron');
-const { openFolder, loadConfig } = require('./fs-actions.js');
-const { controller } = require("./controller.js");
-const { configureApp } = require("./configuration.js");
+const { openFolder, loadConfig } = require('./fs-actions');
+const { controller } = require("./controller");
+const { configureApp } = require("./configuration");
+const { selector } = require("./selector");
 
 const MENU_TEMPLATE = [
     {
         label: "Datei",
         submenu: [
             { "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", click: openFolder },
-            { "role": ""}
-            { "type": "separator" },
+            { "role": "album-selection", "label": "Album Auswahl", "accelerator": "Alt+A", click: selector.openWindow },
             { "type": "separator" },
             { "role": "quit", "label": "Beenden" }
         ]
