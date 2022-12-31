@@ -1,0 +1,19 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+.root {
+    display: flex;
+    margin: 0px;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.search-order-bar, .albums, .navigation-bar {
+    border: 1px solid black;
+}
+
+.albums {
+    flex-grow: 1;
+}
