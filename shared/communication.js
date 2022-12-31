@@ -5,6 +5,7 @@ exports.Channel = {
     CONTROL_SLIDESHOW: "control-slideshow",
     GET_IMAGES: "get-images",
     NOTIFY_ALBUM: "notify-album",
+    NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image",
     SAVE_CONFIG: "save-config",

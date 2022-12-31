@@ -51,9 +51,19 @@ class AlbumSelector {
         };
     }
 
+    #createPageInfo() {
+        return {
+            count: Math.ceil(this.albums.length / this.coversPerPage),
+            current: Math.floor(this.start / this.coversPerPage)
+        };
+    }
+
     loadPage(page) {
         this.start = page * this.coversPerPage;
         this.end = this.start + this.coversPerPage;
+        for(var i = this.start; i < this.end; i++) {
+            this.#notifyAlbum(this.albums[i]);
+        }
     }
 
     #loadFolders() {
@@ -61,6 +71,7 @@ class AlbumSelector {
         for(var folder of this.folders) {
             current += this.#analyseFolder(folder, current);
         }
+        this.#notifyPageInfo();
     }
 
     #loadWindow(folders) {
@@ -73,8 +84,11 @@ class AlbumSelector {
     }
 
     #notifyAlbum(album) {
-        console.log("album: ", album);
         this.window.webContents.send(Channel.NOTIFY_ALBUM, album);
+    }
+
+    #notifyPageInfo() {
+        this.window.webContents.send(Channel.NOTIFY_PAGE_INFO, this.#createPageInfo());
     }
     
     openWindow() {
