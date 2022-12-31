@@ -88,7 +88,9 @@ class AlbumSelector {
     }
 
     #notifyPageInfo() {
-        this.window.webContents.send(Channel.NOTIFY_PAGE_INFO, this.#createPageInfo());
+        var pageInfo = this.#createPageInfo();
+        console.log("Sending pageInfo: ", pageInfo);
+        this.window.webContents.send(Channel.NOTIFY_PAGE_INFO, pageInfo);
     }
     
     openWindow() {
