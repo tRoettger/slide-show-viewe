@@ -3,3 +3,5 @@ exports.createConfig = (viewDuration, transitionDuration, timingFunction) => ({
     transitionDuration: transitionDuration, 
     timingFunction: timingFunction
 });
+
+exports.IMG_EXT = [".JPG", ".PNG", ".GIF"];
