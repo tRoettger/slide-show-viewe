@@ -5,9 +5,65 @@
     </head>
     <body>
         <div class="root">
-            <div class="search-order-bar"></div>
-            <div class="albums"></div>
-            <div class="navigation-bar"></div>
+            <div class="search-order-bar">
+                <select id="order">
+                    <option>Name: A - Z</option>
+                    <option>Name: Z - A</option>
+                    <option>Datum: Neu - Alt</option>
+                    <option>Datum: Alt - Neu</option>
+                </select>
+                <div class="filter">
+                    <input type="checkbox" id="live-checkbox" />
+                    <label class="checkbox-label" for="live-checkbox" title="Wendet die Suche w&auml;hrend des Tippens an.">
+                        Live
+                    </label>
+                    <input id="filter-input" type="text" placeholder="suchen" />
+                </div>
+            </div>
+            <div class="albums">
+                <div class="album">
+                    <img id="album-1" src="D:/Data/Pictures/McSh4d0w5.png" />
+                    <label for="album-1">Mein Profilebild</label>
+                </div>
+                <div class="album">2</div>
+                <div class="album">3</div>
+                <div class="album">4</div>
+                <div class="album">5</div>
+                <div class="album">6</div>
+                <div class="album">7</div>
+                <div class="album">8</div>
+                <div class="album">9</div>
+                <div class="album">10</div>
+                <div class="album">11</div>
+                <div class="album">12</div>
+                <div class="album">13</div>
+                <div class="album">14</div>
+                <div class="album">15</div>
+                <div class="album">16</div>
+                <div class="album">17</div>
+                <div class="album">18</div>
+                <div class="album">19</div>
+                <div class="album">20</div>
+                <div class="album">21</div>
+                <div class="album">22</div>
+                <div class="album">23</div>
+                <div class="album">24</div>
+                <div class="album">25</div>
+                <div class="album">26</div>
+                <div class="album">27</div>
+                <div class="album">28</div>
+            </div>
+            <div class="navigation-bar">
+                <a class="page-item" href="#">1</a>
+                <div class="page-separator">...</div>
+                <a class="page-item" href="#">5</a>
+                <a class="page-item" href="#">6</a>
+                <div class="page-item">7</div>
+                <a class="page-item" href="#">8</a>
+                <a class="page-item" href="#">9</a>
+                <div class="page-separator">...</div>
+                <a class="page-item" href="#">20</a>
+            </div>
         </div>
     </body>
 </html>

@@ -1,6 +1,10 @@
 body {
     margin: 0px;
     padding: 0px;
+    background-color: black;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+
 }
 .root {
     display: flex;
@@ -11,9 +15,118 @@ body {
 }
 
 .search-order-bar, .albums, .navigation-bar {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
 }
 
 .albums {
     flex-grow: 1;
+    overflow-y: scroll;
+    display: flex;
+    gap: 2.47vw 4vw;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.albums::-webkit-scrollbar {
+    width: 15px;
+}
+
+.albums::-webkit-scrollbar-thumb {
+    border: 1px solid white;
+}
+
+.albums::-webkit-scrollbar-track {
+    border: 1px solid grey;
+}
+
+.search-order-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 5px;
+}
+
+.navigation-bar {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    padding: 5px;
+}
+
+.album {
+    width: 20vw;
+    height: 12.36vw;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.album img {
+    flex-grow: 1;
+}
+
+.album label {
+    padding: 5px;
+}
+
+.page-item, .page-separator {
+    display: inline-block;
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    user-select: none;
+}
+
+a.page-item {
+    cursor: pointer;
+    padding: 6px;
+}
+
+div.page-item, a.page-item:hover {
+    border: 1px solid white;
+    padding: 5px;
+}
+
+#order {
+    background: black;
+    color: white;
+    padding: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#filter-input {
+    background: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.filter {
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    align-items: stretch;
+}
+
+.checkbox-label {
+    cursor: pointer;
+    color: grey;
+    border: none;
+    padding: 5px 10px;
+    border: 1px solid grey;
+    border-right: none;
+    user-select: none;
+}
+
+input[type="checkbox"]:checked + .checkbox-label {
+    color: white;
+    border-color: white;
+}
+
+#live-checkbox {
+    display: none;
 }
