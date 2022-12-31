@@ -60,6 +60,7 @@ class AlbumSelector {
     loadPage(page) {
         this.start = page * this.coversPerPage;
         this.end = this.start + this.coversPerPage;
+        console.log("Notifying albums: ", {start: this.start, end: this.end});
         for(var i = this.start; i < this.end; i++) {
             this.#notifyAlbum(this.albums[i]);
         }

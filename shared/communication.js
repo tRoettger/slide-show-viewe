@@ -23,3 +23,11 @@ exports.WindowId = {
     CONFIGURATION_WINDOW: "configuration-window",
     MAIN_WINDOW: "main-window"
 };
+
+exports.AlbumRequestType = {
+    PAGE: "page"
+};
+
+exports.AlbumRequest = {
+    page: (page) => ({type: this.AlbumRequestType.PAGE, page: page})
+};

@@ -3,7 +3,7 @@ const { controller } = require("./controller");
 const { saveConfigAs, saveConfig } = require("./fs-actions");
 const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
-const { Channel } = require("../shared/communication");
+const { Channel, AlbumRequestType } = require("../shared/communication");
 const { selector } = require("./selector");
 
 ipcMain.on(Channel.APPLICATION_READY, msg => {
@@ -39,7 +39,8 @@ ipcMain.on(Channel.GET_IMAGES, (event, keys) => {
 });
 
 ipcMain.on(Channel.REQUEST_ALBUMS, (event, request) => {
-    if(request.page) {
+    console.log("Received album request: ", request);
+    if(request.type == AlbumRequestType.PAGE) {
         selector.loadPage(request.page);
     }
 });
