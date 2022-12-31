@@ -8,11 +8,11 @@ const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ]
 
 exports.openFolder = () => {
     dialog.showOpenDialog({ properties: [ 'openDirectory' ]})
-        .then(result => loadFiles(result.filePaths))
+        .then(result => this.loadFiles(result.filePaths))
         .then(controller.openAlbum);
 };
 
-const loadFiles = (folders) => {
+exports.loadFiles = (folders) => {
     var files = [];
     for(var folder of folders) {
         for (var filename of fs.readdirSync(folder)) {
