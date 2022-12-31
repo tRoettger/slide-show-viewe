@@ -1,5 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
+const { IMG_EXT } = require("../shared/slide-show");
+const { loadFiles } = require("./fs-actions");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 640, height: 480,
@@ -22,6 +24,15 @@ class AlbumSelector {
             if(album.count > 0) albums.push(album);
         }
         return albums;
+    }
+
+    #convertToAlbum(dir) {
+        var files = loadFiles([dir]).filter(IMG_EXT);
+        return {
+            files: files,
+            count: files.length,
+            name: dir.name
+        };
     }
 
     #loadWindow(folders) {
