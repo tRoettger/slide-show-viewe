@@ -14,7 +14,7 @@ const SELECTOR_WINDOW_PROPERTIES = {
 class AlbumSelector {
     constructor() {
         this.openWindow = this.openWindow.bind(this);
-        this.test = "my test";
+        this.openDevTools = this.openDevTools.bind(this);
     }
 
     #analyseFolder(folder) {
