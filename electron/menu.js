@@ -8,8 +8,8 @@ const MENU_TEMPLATE = [
         label: "Datei",
         submenu: [
             { "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", click: openFolder },
+            { "role": ""}
             { "type": "separator" },
-            { "role": "reload", "label": "Neu laden", click: controller.reload },
             { "type": "separator" },
             { "role": "quit", "label": "Beenden" }
         ]
@@ -31,6 +31,7 @@ const MENU_TEMPLATE = [
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
+            { "role": "reload", "label": "Neu laden", click: controller.reload },
             { "role": "dev-tools", "label": "Chromium Dev Tools", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools }
         ]
     }
