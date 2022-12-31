@@ -4,6 +4,7 @@ exports.Channel = {
     CONFIGURATION_READY: "configuration-ready",
     CONTROL_SLIDESHOW: "control-slideshow",
     GET_IMAGES: "get-images",
+    LOAD_ALBUM: "load-album",
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",

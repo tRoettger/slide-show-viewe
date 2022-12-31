@@ -1,9 +1,12 @@
+const { ipcRenderer } = require("electron");
+
 const ALBUMS_DISPLAY = document.getElementById("albums");
 
 class AlbumRenderer {
     constructor(display) {
         this.display = display;
         this.render = this.render.bind(this);
+        this.openAlbum = this.loadAlbum.bind(this);
     }
 
     clearDisplay() {
@@ -18,6 +21,7 @@ class AlbumRenderer {
         element.appendChild(this.#createCover(album));
         element.appendChild(this.#createLabel(album));
         element.title = `Enthält ${album.count} Bilder`;
+        element.addEventListener("click", e => this.loadAlbum(album));
         return element;
     }
 
@@ -36,6 +40,10 @@ class AlbumRenderer {
 
     render(album) {
         this.display.appendChild(this.#createAlbumElement(album));
+    }
+
+    loadAlbum(album) {
+        ipcRenderer.send(Channel.LOAD_ALBUM, album.folder);
     }
 }
 

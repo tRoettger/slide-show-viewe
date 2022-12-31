@@ -42,11 +42,13 @@ class AlbumSelector {
     }
 
     #convertToAlbum(folder, subDir) {
-        var files = loadFiles([path.join(folder, subDir.name)])
+        var albumFolder = path.join(folder, subDir.name);
+        var files = loadFiles([albumFolder])
             .filter(isImage);
         return {
             cover: files[0],
             count: files.length,
+            folder: albumFolder,
             name: subDir.name
         };
     }
