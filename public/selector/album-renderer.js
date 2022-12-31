@@ -17,7 +17,7 @@ class AlbumRenderer {
         element.className = "album";
         element.appendChild(this.#createCover(album));
         element.appendChild(this.#createLabel(album));
-        element.title = `Enth&auml;lt ${album.count} Bilder`;
+        element.title = `Enthält ${album.count} Bilder`;
         return element;
     }
 
