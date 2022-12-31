@@ -4,6 +4,7 @@ const { saveConfigAs, saveConfig } = require("./fs-actions");
 const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
 const { Channel } = require("../shared/communication");
+const { selector } = require("./selector");
 
 ipcMain.on(Channel.APPLICATION_READY, msg => {
     fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -34,5 +35,11 @@ ipcMain.on(Channel.SAVE_CONFIG_AS, (event, arg) => {
 ipcMain.on(Channel.GET_IMAGES, (event, keys) => {
     for(var key of keys) {
         controller.provideFile(key);
+    }
+});
+
+ipcMain.on(Channel.REQUEST_ALBUMS, (event, request) => {
+    if(request.page) {
+        selector.loadPage(request.page);
     }
 });
