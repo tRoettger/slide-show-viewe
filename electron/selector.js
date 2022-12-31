@@ -53,8 +53,7 @@ class AlbumSelector {
 
     #createPageInfo() {
         return {
-            count: Math.ceil(this.albums.length / this.coversPerPage),
-            current: Math.floor(this.start / this.coversPerPage)
+            count: Math.ceil(this.albums.length / this.coversPerPage)
         };
     }
 
@@ -94,6 +93,10 @@ class AlbumSelector {
     }
     
     openWindow() {
+        this.albums = [];
+        this.start = 0;
+        this.end = this.coversPerPage;
+        this.folders = [];
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadWindow(result.filePaths));
     }
