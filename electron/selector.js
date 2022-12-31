@@ -59,6 +59,10 @@ class AlbumSelector {
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadWindow(result.filePaths));
     }
+
+    openDevTools() {
+        this.window.webContents.openDevTools({ mode: "detach" });
+    }
 }
 
 exports.selector = new AlbumSelector();

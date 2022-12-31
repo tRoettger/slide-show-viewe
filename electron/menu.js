@@ -32,7 +32,8 @@ const MENU_TEMPLATE = [
         label: "Entwickler Werkzeuge",
         submenu: [
             { "role": "reload", "label": "Neu laden", click: controller.reload },
-            { "role": "dev-tools", "label": "Chromium Dev Tools", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools }
+            { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools },
+            { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools }
         ]
     }
 ];
