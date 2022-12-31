@@ -1,3 +1,6 @@
+const { ipcRenderer } = require("electron");
+const { Channel } = require("../../shared/communication");
+
 const PAGINATION_DISPLAY = document.getElementById("pagination");
 
 class PaginationRenderer {
@@ -8,6 +11,7 @@ class PaginationRenderer {
         this.after = after;
         this.current = 0;
         this.render = this.render.bind(this);
+        this.gotoPage = this.gotoPage.bind(this);
     }
 
     #clearDisplay() {
@@ -18,7 +22,8 @@ class PaginationRenderer {
     #createPageItem(page) {
         var item = document.createElement(this.current == page ? "div" : "a");
         item.className = "page-item";
-        item.appendChild(document.createTextNode(page));
+        item.appendChild(document.createTextNode(page + offset));
+        item.addEventListener("click", (e)=> this.gotoPage(page));
         return item;
     }
 
@@ -39,10 +44,14 @@ class PaginationRenderer {
         // add first and last page if they are not contained.
         if(!visiblePages.includes(0)) visiblePages.unshift(0);
         if(!visiblePages.includes(pageInfo.count - 1)) visiblePages.push(pageInfo.count - 1);
-        
-        visiblePages.map(i => i + this.offset);
 
         return visiblePages;
+    }
+
+    gotoPage(page) {
+        this.#clearDisplay();
+        this.current = page;
+        ipcRenderer.send(Channel.REQUEST_ALBUMS, {page: page});
     }
 
     #isSeparatorRequired(index, visiblePages) {

@@ -8,6 +8,7 @@ exports.Channel = {
     NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image",
+    REQUEST_ALBUMS: "request-albums",
     SAVE_CONFIG: "save-config",
     SAVE_CONFIG_AS: "save-config-as"
 };
