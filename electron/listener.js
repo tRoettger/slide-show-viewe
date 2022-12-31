@@ -1,6 +1,6 @@
 const { ipcMain } = require("electron");
 const { controller } = require("./controller");
-const { saveConfigAs, saveConfig } = require("./fs-actions");
+const { saveConfigAs, saveConfig, loadFiles } = require("./fs-actions");
 const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
 const { Channel, AlbumRequestType } = require("../shared/communication");
@@ -43,4 +43,8 @@ ipcMain.on(Channel.REQUEST_ALBUMS, (event, request) => {
     if(request.type == AlbumRequestType.PAGE) {
         selector.loadPage(request.page);
     }
+});
+
+ipcMain.on(Channel.LOAD_ALBUM, (event, folder) => {
+    controller.openAlbum(loadFiles([folder]));
 });
