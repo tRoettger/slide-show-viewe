@@ -6,7 +6,7 @@ class AlbumRenderer {
         this.render = this.render.bind(this);
     }
 
-    #clearDisplay() {
+    clearDisplay() {
         while(this.display.firstChild) {
             this.display.removeChild(this.display.lastChild);
         }

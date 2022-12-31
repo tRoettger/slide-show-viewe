@@ -4,7 +4,6 @@ const { albumRenderer } = require("./album-renderer");
 const { paginationRenderer } = require("./pagination-renderer");
 
 ipcRenderer.on(Channel.NOTIFY_ALBUM, (event, album) => {
-    console.log("album: ", album);
     albumRenderer.render(album);
 });
 
