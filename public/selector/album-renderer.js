@@ -33,11 +33,8 @@ class AlbumRenderer {
         return label;
     }
 
-    render(albums) {
-        this.#clearDisplay();
-        for(var album of albums) {
-            this.display.appendChild(this.#createAlbumElement(album));
-        }
+    render(album) {
+        this.display.appendChild(this.#createAlbumElement(album));
     }
 }
 

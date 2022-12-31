@@ -4,6 +4,7 @@ const path = require("path");
 const { Channel } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
+const { COVERS_PER_PAGE } = require("../shared/constants");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -12,20 +13,32 @@ const SELECTOR_WINDOW_PROPERTIES = {
 };
 
 class AlbumSelector {
-    constructor() {
+    constructor(coversPerPage) {
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
+        this.start = 0;
+        this.end = coversPerPage;
+        this.coversPerPage = coversPerPage;
+        this.folders = [];
+        this.albums = [];
     }
 
-    #analyseFolder(folder) {
+    #analyseFolder(folder, current) {
         var subDirs = fs.readdirSync(folder, { withFileTypes: true })
             .filter(f => f.isDirectory());
-        var albums = [];
+        var index = current;
         for(var dir of subDirs) {
             var album = this.#convertToAlbum(folder, dir);
-            if(album.count > 0) albums.push(album);
+            if(album.count > 0) {
+                this.#processAlbum(album, index++);
+            }
         }
-        return albums;
+    }
+
+    #processAlbum(album, index) {
+        this.albums.push(album);
+        if(index >= this.start && index < this.end)
+            this.#notifyAlbum(album);
     }
 
     #convertToAlbum(folder, subDir) {
@@ -38,22 +51,30 @@ class AlbumSelector {
         };
     }
 
+    loadPage(page) {
+        this.start = page * this.coversPerPage;
+        this.end = this.start + this.coversPerPage;
+    }
+
+    #loadFolders() {
+        var current = 0;
+        for(var folder of this.folders) {
+            current += this.#analyseFolder(folder, current);
+        }
+    }
+
     #loadWindow(folders) {
         this.folders = folders;
         this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
         this.window.title = "Album Auswahl";
-        this.window.loadFile("public/selector/view.html").then(() => {
-            this.albums = [];
-            for(var folder of this.folders) {
-                this.#analyseFolder(folder).forEach(album => this.albums.push(album));
-            }
-            this.#notifyAlbums();
-        });
+        this.folders = folders;
+        this.window.loadFile("public/selector/view.html")
+            .then(() => this.#loadFolders());
     }
 
-    #notifyAlbums() {
-        console.log("albums: ", this.albums);
-        this.window.webContents.send(Channel.NOTIFY_ALBUMS, this.albums);
+    #notifyAlbum(album) {
+        console.log("album: ", album);
+        this.window.webContents.send(Channel.NOTIFY_ALBUM, album);
     }
     
     openWindow() {
@@ -66,4 +87,4 @@ class AlbumSelector {
     }
 }
 
-exports.selector = new AlbumSelector();
+exports.selector = new AlbumSelector(COVERS_PER_PAGE);
