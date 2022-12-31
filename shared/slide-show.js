@@ -4,4 +4,7 @@ exports.createConfig = (viewDuration, transitionDuration, timingFunction) => ({
     timingFunction: timingFunction
 });
 
-exports.IMG_EXT = [".JPG", ".PNG", ".GIF"];
+const IMG_EXT = [".JPG", ".PNG", ".GIF"];
+const isImageExtension = (extension) => IMG_EXT.includes(extension.toUpperCase());
+
+exports.isImage = (file) => file.stat.isFile() && isImageExtension(file.ext);

@@ -1,8 +1,5 @@
 const { SlideshowControl, Channel } = require("../shared/communication");
-const { IMG_EXT } = require("../shared/slide-show");
-
-const isImageExtension = (extension) => IMG_EXT.includes(extension.toUpperCase());
-const isImage = (file) => file.stat.isFile() && isImageExtension(file.ext);
+const { isImage } = require("../shared/slide-show");
 
 class Controller {
     constructor() {

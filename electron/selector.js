@@ -1,6 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
-const { IMG_EXT } = require("../shared/slide-show");
+const path = require("path");
+const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
 
 const SELECTOR_WINDOW_PROPERTIES = {
@@ -20,14 +21,15 @@ class AlbumSelector {
             .filter(f => f.isDirectory());
         var albums = [];
         for(var dir of subDirs) {
-            var album = this.#convertToAlbum(dir);
+            var album = this.#convertToAlbum(path.resolve(folder, dir.name));
             if(album.count > 0) albums.push(album);
         }
         return albums;
     }
 
     #convertToAlbum(dir) {
-        var files = loadFiles([dir]).filter(IMG_EXT);
+        console.log("dir: ", dir);
+        var files = loadFiles(dir).filter(isImage);
         return {
             files: files,
             count: files.length,
