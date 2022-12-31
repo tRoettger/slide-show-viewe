@@ -1,4 +1,4 @@
-const { BrowserWindow } = require("electron");
+const { BrowserWindow, dialog } = require("electron");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 640, height: 480,
@@ -12,11 +12,29 @@ class AlbumSelector {
         this.test = "my test";
     }
 
-    openWindow() {
+    #analyseFolder(folder) {
+
+    }
+
+    #loadWindow(folders) {
+        this.folders = folders;
         this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
         this.window.title = "Album Auswahl";
         this.window.loadFile("public/selector/view.html");
-        console.log("Open selector window: ", this.test);
+        this.albums = [];
+        for(var folder of this.folders) {
+            this.#analyseFolder(folder).forEach(this.albums.push);
+        }
+        this.#notifyAlbums();
+    }
+
+    #notifyAlbums() {
+        console.log("albums: ", this.albums);
+    }
+    
+    openWindow() {
+        dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
+            .then(result => this.#loadWindow(result.filePaths));
     }
 }
 
