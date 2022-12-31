@@ -1,6 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
+const { Channel } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
 
@@ -21,19 +22,19 @@ class AlbumSelector {
             .filter(f => f.isDirectory());
         var albums = [];
         for(var dir of subDirs) {
-            var album = this.#convertToAlbum(path.resolve(folder, dir.name));
+            var album = this.#convertToAlbum(folder, dir);
             if(album.count > 0) albums.push(album);
         }
         return albums;
     }
 
-    #convertToAlbum(dir) {
-        console.log("dir: ", dir);
-        var files = loadFiles(dir).filter(isImage);
+    #convertToAlbum(folder, subDir) {
+        var files = loadFiles([path.join(folder, subDir.name)])
+            .filter(isImage);
         return {
             files: files,
             count: files.length,
-            name: dir.name
+            name: subDir.name
         };
     }
 
@@ -44,13 +45,14 @@ class AlbumSelector {
         this.window.loadFile("public/selector/view.html");
         this.albums = [];
         for(var folder of this.folders) {
-            this.#analyseFolder(folder).forEach(this.albums.push);
+            this.#analyseFolder(folder).forEach(album => this.albums.push(album));
         }
         this.#notifyAlbums();
     }
 
     #notifyAlbums() {
         console.log("albums: ", this.albums);
+        this.window.webContents.send(Channel.NOTIFY_ALBUMS, this.albums);
     }
     
     openWindow() {
