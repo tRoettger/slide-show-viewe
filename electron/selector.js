@@ -1,4 +1,5 @@
 const { BrowserWindow, dialog } = require("electron");
+const fs = require("fs");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 640, height: 480,
@@ -13,7 +14,14 @@ class AlbumSelector {
     }
 
     #analyseFolder(folder) {
-
+        var subDirs = fs.readdirSync(folder, { withFileTypes: true })
+            .filter(f => f.isDirectory());
+        var albums = [];
+        for(var dir of subDirs) {
+            var album = this.#convertToAlbum(dir);
+            if(album.count > 0) albums.push(album);
+        }
+        return albums;
     }
 
     #loadWindow(folders) {
