@@ -14,6 +14,7 @@ class AlbumSelector {
 
     openWindow() {
         this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
+        this.window.title = "Album Auswahl";
         this.window.loadFile("public/selector/view.html");
         console.log("Open selector window: ", this.test);
     }
