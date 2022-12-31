@@ -45,7 +45,7 @@ class AlbumSelector {
         var files = loadFiles([path.join(folder, subDir.name)])
             .filter(isImage);
         return {
-            files: files,
+            cover: files[0],
             count: files.length,
             name: subDir.name
         };

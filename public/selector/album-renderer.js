@@ -23,7 +23,8 @@ class AlbumRenderer {
 
     #createCover(album) {
         var img = document.createElement("img");
-        img.src = album.files[0].path;
+        img.src = album.cover.path;
+        img.alt = album.cover.path;
         return img;
     }
 
