@@ -6,7 +6,7 @@ const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
 
 const SELECTOR_WINDOW_PROPERTIES = {
-    width: 640, height: 480,
+    width: 1080, height: 720,
     webPreferences: { nodeIntegration: true, contextIsolation: false },
     autoHideMenuBar: true
 };
@@ -42,12 +42,13 @@ class AlbumSelector {
         this.folders = folders;
         this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
         this.window.title = "Album Auswahl";
-        this.window.loadFile("public/selector/view.html");
-        this.albums = [];
-        for(var folder of this.folders) {
-            this.#analyseFolder(folder).forEach(album => this.albums.push(album));
-        }
-        this.#notifyAlbums();
+        this.window.loadFile("public/selector/view.html").then(() => {
+            this.albums = [];
+            for(var folder of this.folders) {
+                this.#analyseFolder(folder).forEach(album => this.albums.push(album));
+            }
+            this.#notifyAlbums();
+        });
     }
 
     #notifyAlbums() {
