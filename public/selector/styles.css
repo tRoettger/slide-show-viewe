@@ -67,10 +67,12 @@ body {
 
 .album img {
     flex-grow: 1;
+    min-height: 0;
 }
 
 .album label {
     padding: 5px;
+    text-align: center;
 }
 
 .page-item, .page-separator {
