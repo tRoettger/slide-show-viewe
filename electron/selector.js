@@ -23,33 +23,14 @@ class AlbumSelector {
         this.albums = [];
     }
 
-    #analyseFolder(folder, current) {
-        var subDirs = fs.readdirSync(folder, { withFileTypes: true })
-            .filter(f => f.isDirectory());
-        var index = current;
-        for(var dir of subDirs) {
-            var album = this.#convertToAlbum(folder, dir);
-            if(album.count > 0) {
-                this.#processAlbum(album, index++);
-            }
-        }
-    }
-
-    #processAlbum(album, index) {
-        this.albums.push(album);
-        if(index >= this.start && index < this.end)
-            this.#notifyAlbum(album);
-    }
-
-    #convertToAlbum(folder, subDir) {
-        var albumFolder = path.join(folder, subDir.name);
-        var files = loadFiles([albumFolder])
+    #createAlbum(name, folder) {
+        var files = loadFiles([folder])
             .filter(isImage);
         return {
             cover: files[0],
             count: files.length,
-            folder: albumFolder,
-            name: subDir.name
+            folder: folder,
+            name: name
         };
     }
 
@@ -69,11 +50,34 @@ class AlbumSelector {
     }
 
     #loadFolders() {
-        var current = 0;
-        for(var folder of this.folders) {
-            current += this.#analyseFolder(folder, current);
-        }
+        this.#processFolders(this.folders);
         this.#notifyPageInfo();
+    }
+
+    #processAlbum(album) {
+        if(album.count > 0) {
+            this.albums.push(album);
+            if(this.albums.length < this.end) {
+                this.#notifyAlbum(album);
+            }
+        }
+    }
+
+    #getSubFolders(folder) {
+        return fs.readdirSync(folder, { withFileTypes: true })
+            .filter(f => f.isDirectory())
+            .map(f => path.join(folder, f.name));
+    }
+
+    #processFolders(folders) {
+        var toProcess = [...folders];
+        while(toProcess.length > 0) {
+            var folder = toProcess.shift();
+            var albumName = path.basename(folder);
+            console.log("albumName: ", albumName);
+            this.#processAlbum(this.#createAlbum(albumName, folder));
+            this.#getSubFolders(folder).forEach(f => toProcess.push(f));
+        }
     }
 
     #loadWindow(folders) {
