@@ -14,10 +14,6 @@ body {
     flex-direction: column;
 }
 
-.search-order-bar, .albums, .navigation-bar {
-    /*border: 1px solid black;*/
-}
-
 .albums {
     flex-grow: 1;
     overflow-y: scroll;
@@ -130,5 +126,9 @@ input[type="checkbox"]:checked + .checkbox-label {
 }
 
 #live-checkbox {
+    display: none;
+}
+
+.search-order-bar {
     display: none;
 }
