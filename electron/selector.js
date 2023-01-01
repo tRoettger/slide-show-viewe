@@ -52,7 +52,7 @@ class AlbumSelector {
     }
 
     #loadWindow(folders) {
-        if(folder.length > 0) {
+        if(folders.length > 0) {
             this.folders = folders;
             this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
             this.window.title = "Album Auswahl";
