@@ -73,9 +73,7 @@ class AlbumSelector {
         var toProcess = [...folders];
         while(toProcess.length > 0) {
             var folder = toProcess.shift();
-            var albumName = path.basename(folder);
-            console.log("albumName: ", albumName);
-            this.#processAlbum(this.#createAlbum(albumName, folder));
+            this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
             this.#getSubFolders(folder).forEach(f => toProcess.push(f));
         }
     }
