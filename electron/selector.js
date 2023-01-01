@@ -40,42 +40,15 @@ class AlbumSelector {
         };
     }
 
-    loadPage(page) {
-        this.start = page * this.coversPerPage;
-        this.end = this.start + this.coversPerPage;
-        console.log("Notifying albums: ", {start: this.start, end: this.end});
-        for(var i = this.start; i < this.end; i++) {
-            this.#notifyAlbum(this.albums[i]);
-        }
-    }
-
-    #loadFolders() {
-        this.#processFolders(this.folders);
-        this.#notifyPageInfo();
-    }
-
-    #processAlbum(album) {
-        if(album.count > 0) {
-            this.albums.push(album);
-            if(this.albums.length < this.end) {
-                this.#notifyAlbum(album);
-            }
-        }
-    }
-
     #getSubFolders(folder) {
         return fs.readdirSync(folder, { withFileTypes: true })
             .filter(f => f.isDirectory())
             .map(f => path.join(folder, f.name));
     }
 
-    #processFolders(folders) {
-        var toProcess = [...folders];
-        while(toProcess.length > 0) {
-            var folder = toProcess.shift();
-            this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
-            this.#getSubFolders(folder).forEach(f => toProcess.push(f));
-        }
+    #loadFolders() {
+        this.#processFolders(this.folders);
+        this.#notifyPageInfo();
     }
 
     #loadWindow(folders) {
@@ -96,6 +69,39 @@ class AlbumSelector {
         console.log("Sending pageInfo: ", pageInfo);
         this.window.webContents.send(Channel.NOTIFY_PAGE_INFO, pageInfo);
     }
+
+    #processAlbum(album) {
+        if(album.count > 0) {
+            this.albums.push(album);
+            if(this.albums.length < this.end) {
+                this.#notifyAlbum(album);
+            }
+        }
+    }
+
+    #processFolders(folders) {
+        var toProcess = [...folders];
+        while(toProcess.length > 0) {
+            var folder = toProcess.shift();
+            this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
+            this.#getSubFolders(folder).forEach(f => toProcess.push(f));
+        }
+    }
+
+    // Public methods
+
+    loadPage(page) {
+        this.start = page * this.coversPerPage;
+        this.end = this.start + this.coversPerPage;
+        console.log("Notifying albums: ", {start: this.start, end: this.end});
+        for(var i = this.start; i < this.end; i++) {
+            this.#notifyAlbum(this.albums[i]);
+        }
+    }
+
+    openDevTools() {
+        this.window.webContents.openDevTools({ mode: "detach" });
+    }
     
     openWindow() {
         this.albums = [];
@@ -104,10 +110,6 @@ class AlbumSelector {
         this.folders = [];
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadWindow(result.filePaths));
-    }
-
-    openDevTools() {
-        this.window.webContents.openDevTools({ mode: "detach" });
     }
 }
 
