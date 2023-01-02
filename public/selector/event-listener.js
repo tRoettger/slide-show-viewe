@@ -1,6 +1,7 @@
 const { ipcRenderer } = require("electron");
 const { Channel, FilterType } = require("../../shared/communication");
 const { albumRenderer } = require("./album-renderer");
+const { paginationRenderer } = require("./pagination-renderer");
 
 const FORM_FILTER = document.getElementById("filter-form");
 const INPUT_FILTER = document.getElementById("filter-input");
@@ -26,5 +27,6 @@ BTN_CLEAR.addEventListener("click", e => {
 });
 
 SELECT_ORDER.addEventListener("change", e => {
+    albumRenderer.clearDisplay();
     ipcRenderer.send(Channel.CHANGE_ALBUM_ORDER, SELECT_ORDER.value);
 })
