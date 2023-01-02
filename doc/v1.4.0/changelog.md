@@ -73,4 +73,6 @@ When an option is selected the albums are sorted by the given option.
 
 ## [Feature] Search for album name in album selection
 Add a search field to the album selection.
-No live search!
+On hitting the ENTER key the content of this field is applied as filter.
+The filter applied to the album names.
+Only albums whose name **contains** the field content are displayed.
