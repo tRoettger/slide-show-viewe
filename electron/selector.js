@@ -14,7 +14,7 @@ const SELECTOR_WINDOW_PROPERTIES = {
 
 const compareFolder = (a1, a2) => a1.folder.localeCompare(a2.folder);
 const compareName = (a1, a2) => a1.name.localeCompare(a2.name);
-const compareDate = (a1, a2) => 0;
+const compareDate = (a1, a2) => a1.created.localeCompate(a2.created);
 const compareSize = (a1, a2) => a1.count - a2.count;
 
 const DEFAULT_COMPARATOR = compareFolder;
@@ -46,10 +46,12 @@ class AlbumSelector {
     #createAlbum(name, folder) {
         var files = loadFiles([folder])
             .filter(isImage);
+        var stats = fs.statSync(folder);
         return {
             cover: files[0],
             count: files.length,
             folder: folder,
+            created: stats.ctime,
             name: name
         };
     }
