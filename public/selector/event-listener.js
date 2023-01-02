@@ -5,12 +5,21 @@ const { albumRenderer } = require("./album-renderer");
 const FORM_FILTER = document.getElementById("filter-form");
 const INPUT_FILTER = document.getElementById("filter-input");
 const SELECT_ORDER = document.getElementById("order");
+const BTN_CLEAR = document.getElementById("filter-input-clear-btn");
 
-FORM_FILTER.addEventListener("submit", e => {
-    e.preventDefault();
+const requestFilteredAlbums = (value) => {
     albumRenderer.clearDisplay();
     ipcRenderer.send(Channel.FILTER_ALBUMS, {
         type: FilterType.NAME,
-        value: INPUT_FILTER.value
+        value: value
     });
+};
+
+FORM_FILTER.addEventListener("submit", e => {
+    e.preventDefault();
+    requestFilteredAlbums(INPUT_FILTER.value);
+});
+
+BTN_CLEAR.addEventListener("click", e => {
+    requestFilteredAlbums("");
 });
