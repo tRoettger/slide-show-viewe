@@ -34,7 +34,7 @@ exports.FilterType = {
     NAME: "name"
 };
 
-exports.AlbumSorters = {
+exports.AlbumSorter = {
     PATH_ASC: "path-asc",
     PATH_DESC: "path-desc",
     NAME_ASC: "name-asc",
