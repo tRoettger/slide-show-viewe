@@ -21,5 +21,6 @@ FORM_FILTER.addEventListener("submit", e => {
 });
 
 BTN_CLEAR.addEventListener("click", e => {
+    INPUT_FILTER.value = "";
     requestFilteredAlbums("");
 });
