@@ -34,6 +34,17 @@ exports.FilterType = {
     NAME: "name"
 };
 
+exports.AlbumSorters = {
+    PATH_ASC: "path-asc",
+    PATH_DESC: "path-desc",
+    NAME_ASC: "name-asc",
+    NAME_DESC: "name-desc",
+    DATE_ASC: "date_asc",
+    DATE_DESC: "date_desc",
+    SIZE_ASC: "size_asc",
+    SIZE_DESC: "size-desc"
+};
+
 exports.AlbumRequest = {
     page: (page) => ({type: this.AlbumRequestType.PAGE, page: page})
 };
