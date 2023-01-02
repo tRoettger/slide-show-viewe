@@ -49,6 +49,7 @@ class AlbumSelector {
             this.albums = this.allAlbums
                 .filter(album => album.name.includes(name));
         }
+        this.#notifyPageInfo();
         this.loadPage(0);
     }
 
