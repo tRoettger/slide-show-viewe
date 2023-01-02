@@ -2,6 +2,15 @@ const { ipcRenderer } = require("electron");
 
 const ALBUMS_DISPLAY = document.getElementById("albums");
 
+const DATE_OPTIONS = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+};
+
 class AlbumRenderer {
     constructor(display) {
         this.display = display;
@@ -21,7 +30,7 @@ class AlbumRenderer {
         element.appendChild(this.#createCover(album));
         element.appendChild(this.#createLabel(album));
         element.title = album.folder + "\n" 
-            + `Erstellt: ${album.created}` + "\n"
+            + `Erstellt am ${album.created.toLocaleDateString('de-DE', DATE_OPTIONS)} ` + "\n"
             + `Enthält ${album.count} Bilder`;
         element.addEventListener("click", e => this.loadAlbum(album));
         return element;
