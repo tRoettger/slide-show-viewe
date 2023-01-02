@@ -48,3 +48,7 @@ ipcMain.on(Channel.REQUEST_ALBUMS, (event, request) => {
 ipcMain.on(Channel.LOAD_ALBUM, (event, folder) => {
     controller.openAlbum(loadFiles([folder]));
 });
+
+ipcMain.on(Channel.FILTER_ALBUMS, (event, filter) => {
+    selector.filterAlbums(filter);
+});

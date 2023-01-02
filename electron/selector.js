@@ -1,7 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const { Channel } = require("../shared/communication");
+const { Channel, FilterType } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
 const { COVERS_PER_PAGE } = require("../shared/constants");
@@ -14,6 +14,7 @@ const SELECTOR_WINDOW_PROPERTIES = {
 
 class AlbumSelector {
     constructor(coversPerPage) {
+        this.filterAlbums = this.filterAlbums.bind(this);
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
         this.start = 0;
@@ -21,6 +22,7 @@ class AlbumSelector {
         this.coversPerPage = coversPerPage;
         this.folders = [];
         this.albums = [];
+        this.allAlbums = [];
     }
 
     #createAlbum(name, folder) {
@@ -38,6 +40,16 @@ class AlbumSelector {
         return {
             count: Math.ceil(this.albums.length / this.coversPerPage)
         };
+    }
+
+    #filterByName(name) {
+        if(name.length == 0) {
+            this.albums = [...this.allAlbums];
+        } else {
+            this.albums = this.allAlbums
+                .filter(album => album.name.includes(name));
+        }
+        this.loadPage(0);
     }
 
     #getSubFolders(folder) {
@@ -88,14 +100,20 @@ class AlbumSelector {
             this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
             this.#getSubFolders(folder).forEach(f => toProcess.push(f));
         }
+        this.allAlbums = [...this.albums];
     }
 
     // Public methods
 
+    filterAlbums(filter) {
+        if(filter.type == FilterType.NAME) {
+            this.#filterByName(filter.value);
+        }
+    }
+
     loadPage(page) {
         this.start = page * this.coversPerPage;
         this.end = this.start + this.coversPerPage;
-        console.log("Notifying albums: ", {start: this.start, end: this.end});
         for(var i = this.start; i < this.end; i++) {
             this.#notifyAlbum(this.albums[i]);
         }
