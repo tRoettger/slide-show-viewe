@@ -1,7 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const { Channel, FilterType } = require("../shared/communication");
+const { Channel, FilterType, AlbumSorter } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
 const { loadFiles } = require("./fs-actions");
 const { COVERS_PER_PAGE } = require("../shared/constants");
@@ -12,11 +12,29 @@ const SELECTOR_WINDOW_PROPERTIES = {
     autoHideMenuBar: true
 };
 
+const compareFolder = (a1, a2) => a1.folder.localeCompare(a2.folder);
+const compareName = (a1, a2) => a1.name.localeCompare(a2.name);
+const compareDate = (a1, a2) => 0;
+const compareSize = (a1, a2) => a1.count - a2.count;
+
+const DEFAULT_COMPARATOR = compareFolder;
+
+const COMPARATORS = new Map();
+COMPARATORS.set(AlbumSorter.PATH_ASC, compareFolder);
+COMPARATORS.set(AlbumSorter.PATH_DESC,  (a1, a2) => compareFolder(a2, a1));
+COMPARATORS.set(AlbumSorter.NAME_ASC, compareName);
+COMPARATORS.set(AlbumSorter.NAME_DESC,  (a1, a2) => compareName(a2, a1));
+COMPARATORS.set(AlbumSorter.DATE_ASC, compareDate);
+COMPARATORS.set(AlbumSorter.DATE_DESC,  (a1, a2) => compareDate(a2, a1));
+COMPARATORS.set(AlbumSorter.SIZE_ASC, compareSize);
+COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
+
 class AlbumSelector {
     constructor(coversPerPage) {
         this.filterAlbums = this.filterAlbums.bind(this);
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
+        this.sortAlbums = this.sortAlbums.bind(this);
         this.start = 0;
         this.end = coversPerPage;
         this.coversPerPage = coversPerPage;
@@ -131,6 +149,14 @@ class AlbumSelector {
         this.folders = [];
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadWindow(result.filePaths));
+    }
+
+    sortAlbums(order) {
+        var sorter = COMPARATORS.get(order) || DEFAULT_COMPARATOR;
+        this.albums.sort(sorter)
+        this.allAlbums.sort(sorter);
+        this.#notifyPageInfo();
+        this.loadPage(0);
     }
 }
 

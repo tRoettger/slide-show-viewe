@@ -52,3 +52,7 @@ ipcMain.on(Channel.LOAD_ALBUM, (event, folder) => {
 ipcMain.on(Channel.FILTER_ALBUMS, (event, filter) => {
     selector.filterAlbums(filter);
 });
+
+ipcMain.on(Channel.CHANGE_ALBUM_ORDER, (event, order) => {
+    selector.sortAlbums(order);
+});
