@@ -128,7 +128,3 @@ input[type="checkbox"]:checked + .checkbox-label {
 #live-checkbox {
     display: none;
 }
-
-.search-order-bar {
-    display: none;
-}
