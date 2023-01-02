@@ -20,7 +20,7 @@ class AlbumRenderer {
         element.className = "album";
         element.appendChild(this.#createCover(album));
         element.appendChild(this.#createLabel(album));
-        element.title = `Enthält ${album.count} Bilder`;
+        element.title = album.folder + "\n" + `Enthält ${album.count} Bilder`;
         element.addEventListener("click", e => this.loadAlbum(album));
         return element;
     }
