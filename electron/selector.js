@@ -47,7 +47,6 @@ class AlbumSelector {
         var files = loadFiles([folder])
             .filter(isImage);
         var stats = fs.statSync(folder);
-        console.log(`${name} was created: `, stats.ctime);
         return {
             cover: files[0],
             count: files.length,
