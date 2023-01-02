@@ -24,3 +24,7 @@ BTN_CLEAR.addEventListener("click", e => {
     INPUT_FILTER.value = "";
     requestFilteredAlbums("");
 });
+
+SELECT_ORDER.addEventListener("change", e => {
+    ipcRenderer.send(Channel.CHANGE_ALBUM_ORDER, SELECT_ORDER.value);
+})
