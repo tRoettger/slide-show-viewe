@@ -4,6 +4,7 @@ exports.Channel = {
     CONFIGURATION_READY: "configuration-ready",
     CONTROL_SLIDESHOW: "control-slideshow",
     GET_IMAGES: "get-images",
+    FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_PAGE_INFO: "notify-page-info",
@@ -27,6 +28,10 @@ exports.WindowId = {
 
 exports.AlbumRequestType = {
     PAGE: "page"
+};
+
+exports.FilterType = {
+    NAME: "name"
 };
 
 exports.AlbumRequest = {
