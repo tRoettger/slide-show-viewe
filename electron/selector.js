@@ -45,7 +45,7 @@ class AlbumSelector {
         this.allAlbums = [];
     }
 
-    #computeProperties(folder, files) {
+    #computeProperties(folder, files, pictureFiles) {
         var propsFile = files.filter(isAlbumProperties)[0];
         if(propsFile) {
             var result = fs.readFileSync(propsFile.path, { encoding: "utf-8" });
@@ -55,14 +55,14 @@ class AlbumSelector {
             }
             return props;
         } else {
-            return { cover: files[0] };
+            return { cover: pictureFiles[0] };
         }
     }
 
     #createAlbum(name, folder) {
         var files = loadFiles([folder]);
         var pictureFiles = files.filter(isImage);
-        var albumProperties = this.#computeProperties(folder, files);
+        var albumProperties = this.#computeProperties(folder, files, pictureFiles);
         var stats = fs.statSync(folder);
         return {
             cover: albumProperties.cover,
