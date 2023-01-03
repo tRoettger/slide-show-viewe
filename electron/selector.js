@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const { Channel, FilterType, AlbumSorter } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
-const { loadFiles, parseFilePath } = require("./fs-actions");
-const { COVERS_PER_PAGE, ALBUM_PROPERTIES_FILE } = require("../shared/constants");
+const { loadFiles, parseFilePath, loadAlbumProps } = require("./fs-actions");
+const { COVERS_PER_PAGE } = require("../shared/constants");
 const { albumPopup } = require("./album-popup");
 
 const SELECTOR_WINDOW_PROPERTIES = {
@@ -30,8 +30,6 @@ COMPARATORS.set(AlbumSorter.DATE_DESC,  (a1, a2) => compareDate(a2, a1));
 COMPARATORS.set(AlbumSorter.SIZE_ASC, compareSize);
 COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
 
-const isAlbumProperties = (file) => file.stat.isFile() && file.base == ALBUM_PROPERTIES_FILE;
-
 class AlbumSelector {
     constructor(coversPerPage, albumPopup) {
         this.filterAlbums = this.filterAlbums.bind(this);
@@ -49,13 +47,9 @@ class AlbumSelector {
     }
 
     #computeProperties(folder, files, pictureFiles) {
-        var propsFile = files.filter(isAlbumProperties)[0];
-        if(propsFile) {
-            var result = fs.readFileSync(propsFile.path, { encoding: "utf-8" });
-            var props = JSON.parse(result);
-            if (props && props.cover) {
-                props.cover = parseFilePath(folder, props.cover);
-            }
+        var props = loadAlbumProps(folder, files);
+        if (props && props.cover) {
+            props.cover = parseFilePath(folder, props.cover);
             return props;
         } else {
             return { cover: pictureFiles[0] };
@@ -173,7 +167,6 @@ class AlbumSelector {
     }
 
     showAlbumPopup(options) {
-        console.log("showing album popup: ", options);
         this.popup.popup(options, this.window);
     }
 

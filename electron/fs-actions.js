@@ -3,8 +3,11 @@ const fs = require("fs");
 const path = require("path");
 const { controller } = require("./controller.js");
 const { getDefaultSlideShowConfigPath } = require("./configuration.js");
+const { ALBUM_PROPERTIES_FILE } = require("../shared/constants");
 
 const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ] };
+
+const isAlbumProperties = (file) => file.stat.isFile() && file.base == ALBUM_PROPERTIES_FILE;
 
 exports.openFolder = () => {
     dialog.showOpenDialog({ properties: [ 'openDirectory' ]})
@@ -59,5 +62,14 @@ const readConfigFormFile = (err, data) => {
     } else {
         var config = JSON.parse(data);
         controller.setConfiguration(config);
+    }
+};
+
+exports.loadAlbumProps = (folder, files) => {
+    if(!files) files = this.loadFiles([folder]);
+    var propsFile = files.filter(isAlbumProperties)[0];
+    if(propsFile) {
+        var result = fs.readFileSync(propsFile.path, { encoding: "utf-8" });
+        return JSON.parse(result);
     }
 };
