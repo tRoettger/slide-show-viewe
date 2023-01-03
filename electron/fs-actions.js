@@ -72,10 +72,14 @@ exports.loadAlbumProps = (folder, files) => {
     }
 };
 
-exports.selectImage = (dialogTitle) => {
-    return dialog.showOpenDialog({ 
+exports.selectImage = (dialogTitle, defaultPath) => {
+    var options = { 
         properties: ['openFile'], 
         filters: [ IMAGE_FILTER ],
         title: dialogTitle
-    });
+    };
+    if(defaultPath) {
+        options.defaultPath = defaultPath;
+    }
+    return dialog.showOpenDialog(options);
 };

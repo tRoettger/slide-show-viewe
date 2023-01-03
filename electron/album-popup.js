@@ -11,7 +11,7 @@ class AlbumPopup {
     }
 
     #changeCover() {
-        selectImage("Neues Cover auswählen").then(result => {
+        selectImage("Neues Cover auswählen", this.album.folder).then(result => {
             console.log("result: ", result);
             var props = loadAlbumProps(this.album.folder);
             props ??= {};
