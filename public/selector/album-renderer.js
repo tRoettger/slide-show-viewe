@@ -65,6 +65,7 @@ class AlbumRenderer {
     }
 
     render(album) {
+        console.log("render: ", album);
         var element = this.#createAlbumElement(album);
         this.albums.set(album.folder, element);
         this.display.appendChild(element);
@@ -76,10 +77,12 @@ class AlbumRenderer {
 
     updateAlbum(album) {
         var old = this.albums.get(album.folder);
+        console.log("old: ", old);
+        console.log("album: ", album);
         if(old) {
             var element = this.#createAlbumElement(album);
             this.albums.set(album.folder, element);
-            this.display.insertBefore(old, element);
+            this.display.insertBefore(element, old);
             this.display.removeChild(old);
         }
     }

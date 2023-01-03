@@ -76,7 +76,9 @@ exports.loadAlbumProps = (folder) => {
 
 exports.storeAlbumProps = (folder, props) => {
     var cfgPath = getAlbumCfgPath(folder);
-    fs.writeFile(cfgPath, JSON.stringify(props));
+    fs.writeFile(cfgPath, JSON.stringify(props), (err) => {
+        if(err) { console.log("Error while saving album properties: ", err); }
+    });
 };
 
 exports.selectImage = (dialogTitle, defaultPath) => {
