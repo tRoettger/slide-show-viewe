@@ -1,5 +1,7 @@
 const { Menu, dialog } = require("electron");
-const { loadAlbumProps, selectImage } = require("./fs-actions");
+const path = require("path");
+const { Channel } = require("../shared/communication");
+const { loadAlbumProps, selectImage, storeAlbumProps } = require("./fs-actions");
 
 class AlbumPopup {
     constructor() {}
@@ -24,7 +26,7 @@ class AlbumPopup {
     }
 
     #notifyAlbumUpdate() {
-        this.window.webContents.send(Channel.NOTIFY_COVER_CHANGED, this.album)
+        this.window.webContents.send(Channel.NOTIFY_ALBUM_CHANGED, this.album)
     }
 
     popup(options, window) {
