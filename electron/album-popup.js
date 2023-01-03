@@ -1,5 +1,5 @@
-const { Menu } = require("electron");
-const { loadAlbumProps } = require("./fs-actions");
+const { Menu, dialog } = require("electron");
+const { loadAlbumProps, selectImage } = require("./fs-actions");
 
 class AlbumPopup {
     constructor() {}
@@ -11,10 +11,12 @@ class AlbumPopup {
     }
 
     #changeCover() {
-        var props = loadAlbumProps(this.album.folder);
-        props ??= {};
-        
-        console.log("props: ", props);
+        selectImage("Neues Cover auswählen").then(result => {
+            console.log("result: ", result);
+            var props = loadAlbumProps(this.album.folder);
+            props ??= {};
+
+        });
     }
 
     popup(options, window) {

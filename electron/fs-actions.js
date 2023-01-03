@@ -4,10 +4,9 @@ const path = require("path");
 const { controller } = require("./controller.js");
 const { getDefaultSlideShowConfigPath } = require("./configuration.js");
 const { ALBUM_PROPERTIES_FILE } = require("../shared/constants");
+const { IMAGE_FILTER } = require("../shared/slide-show.js");
 
 const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ] };
-
-const isAlbumProperties = (file) => file.stat.isFile() && file.base == ALBUM_PROPERTIES_FILE;
 
 exports.openFolder = () => {
     dialog.showOpenDialog({ properties: [ 'openDirectory' ]})
@@ -71,4 +70,12 @@ exports.loadAlbumProps = (folder, files) => {
         var result = fs.readFileSync(cfgPath, { encoding: "utf-8" });
         return JSON.parse(result);
     }
+};
+
+exports.selectImage = (dialogTitle) => {
+    return dialog.showOpenDialog({ 
+        properties: ['openFile'], 
+        filters: [ IMAGE_FILTER ],
+        title: dialogTitle
+    });
 };
