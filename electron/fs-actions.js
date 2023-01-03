@@ -64,12 +64,19 @@ const readConfigFormFile = (err, data) => {
     }
 };
 
-exports.loadAlbumProps = (folder, files) => {
-    var cfgPath = path.join(folder, ALBUM_PROPERTIES_FILE);
+const getAlbumCfgPath = (folder) => path.join(folder, ALBUM_PROPERTIES_FILE);
+
+exports.loadAlbumProps = (folder) => {
+    var cfgPath = getAlbumCfgPath(folder);
     if(fs.existsSync(cfgPath)) {
         var result = fs.readFileSync(cfgPath, { encoding: "utf-8" });
         return JSON.parse(result);
     }
+};
+
+exports.storeAlbumProps = (folder, props) => {
+    var cfgPath = getAlbumCfgPath(folder);
+    fs.writeFile(cfgPath, JSON.stringify(props));
 };
 
 exports.selectImage = (dialogTitle, defaultPath) => {

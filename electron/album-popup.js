@@ -12,10 +12,12 @@ class AlbumPopup {
 
     #changeCover() {
         selectImage("Neues Cover auswählen", this.album.folder).then(result => {
-            console.log("result: ", result);
-            var props = loadAlbumProps(this.album.folder);
-            props ??= {};
-
+            if(!result.canceled) {
+                var props = loadAlbumProps(this.album.folder);
+                props ??= {};
+                props.cover = path.relative(this.album.folder, result.filePaths[0]);
+                storeAlbumProps(this.album.folder, props);
+            }
         });
     }
 
