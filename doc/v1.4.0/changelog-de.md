@@ -35,3 +35,9 @@ Sortieroptionen:
   > Games, Selfies, Mai, Pflanzen, April, Februar
 - **Größe: Groß - Klein** Sortiert die Alben basierend auf der Anzahl der enthaltenen Bilder von groß nach klein:
   > Februar, April, Pflanzen, Mai, Selfies, Games
+
+Wenn eine dieser Optionen ausgewählt wird, werden die Alben entsprechend sortiert.
+
+## [Feature] Alben in Album Auswahl suchen
+Es wird ein Suchfeld hinzugefügt.
+Wird in diesem Suchfeld die ENTER Taste gedrückt, so werden nur Alben angezeigt, deren Name den aktuellen Inhalt des Suchfelds **enthält**.
