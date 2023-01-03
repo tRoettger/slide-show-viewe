@@ -46,8 +46,8 @@ class AlbumSelector {
         this.popup = albumPopup;
     }
 
-    #computeProperties(folder, files, pictureFiles) {
-        var props = loadAlbumProps(folder, files);
+    #computeProperties(folder, pictureFiles) {
+        var props = loadAlbumProps(folder);
         if (props && props.cover) {
             props.cover = parseFilePath(folder, props.cover);
             return props;
@@ -59,7 +59,7 @@ class AlbumSelector {
     #createAlbum(name, folder) {
         var files = loadFiles([folder]);
         var pictureFiles = files.filter(isImage);
-        var albumProperties = this.#computeProperties(folder, files, pictureFiles);
+        var albumProperties = this.#computeProperties(folder, pictureFiles);
         var stats = fs.statSync(folder);
         return {
             cover: albumProperties.cover,

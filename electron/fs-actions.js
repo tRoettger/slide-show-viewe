@@ -66,10 +66,9 @@ const readConfigFormFile = (err, data) => {
 };
 
 exports.loadAlbumProps = (folder, files) => {
-    if(!files) files = this.loadFiles([folder]);
-    var propsFile = files.filter(isAlbumProperties)[0];
-    if(propsFile) {
-        var result = fs.readFileSync(propsFile.path, { encoding: "utf-8" });
+    var cfgPath = path.join(folder, ALBUM_PROPERTIES_FILE);
+    if(fs.existsSync(cfgPath)) {
+        var result = fs.readFileSync(cfgPath, { encoding: "utf-8" });
         return JSON.parse(result);
     }
 };
