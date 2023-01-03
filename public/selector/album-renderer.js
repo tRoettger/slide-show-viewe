@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { Channel } = require("../../shared/communication");
 
 const ALBUMS_DISPLAY = document.getElementById("albums");
 
@@ -33,6 +34,14 @@ class AlbumRenderer {
             + `Erstellt am ${album.created.toLocaleDateString('de-DE', DATE_OPTIONS)} ` + "\n"
             + `Enthält ${album.count} Bilder`;
         element.addEventListener("click", e => this.loadAlbum(album));
+        element.addEventListener("contextmenu", e => {
+            e.preventDefault();
+            this.#showAlbumPopup({
+                album: album,
+                x: e.x,
+                y: e.y
+            });
+        });
         return element;
     }
 
@@ -47,6 +56,10 @@ class AlbumRenderer {
         var label = document.createElement("label");
         label.appendChild(document.createTextNode(album.name));
         return label;
+    }
+
+    #showAlbumPopup(options) {
+        ipcRenderer.send(Channel.SHOW_ALBUM_POPUP, options);
     }
 
     render(album) {

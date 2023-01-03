@@ -13,7 +13,8 @@ exports.Channel = {
     PROVIDE_IMAGE: "provide-image",
     REQUEST_ALBUMS: "request-albums",
     SAVE_CONFIG: "save-config",
-    SAVE_CONFIG_AS: "save-config-as"
+    SAVE_CONFIG_AS: "save-config-as",
+    SHOW_ALBUM_POPUP: "show-album-popup"
 };
 
 exports.SlideshowControl = {
