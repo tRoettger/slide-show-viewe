@@ -70,3 +70,7 @@ ipcRenderer.on(Channel.NOTIFY_ALBUM, (event, album) => {
 ipcRenderer.on(Channel.NOTIFY_PAGE_INFO, (event, pageInfo) => {
     paginationRenderer.render(pageInfo);
 });
+
+ipcRenderer.on(Channel.NOTIFY_COVER_CHANGED, (event, album) => {
+    albumRenderer.updateAlbum(album);
+});

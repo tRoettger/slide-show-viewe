@@ -17,9 +17,11 @@ class AlbumRenderer {
         this.display = display;
         this.render = this.render.bind(this);
         this.openAlbum = this.loadAlbum.bind(this);
+        this.albums = new Map();
     }
 
     clearDisplay() {
+        this.albums.clear();
         while(this.display.firstChild) {
             this.display.removeChild(this.display.lastChild);
         }
@@ -63,11 +65,23 @@ class AlbumRenderer {
     }
 
     render(album) {
-        this.display.appendChild(this.#createAlbumElement(album));
+        var element = this.#createAlbumElement(album);
+        this.albums.set(album.folder, element);
+        this.display.appendChild(element);
     }
 
     loadAlbum(album) {
         ipcRenderer.send(Channel.LOAD_ALBUM, album.folder);
+    }
+
+    updateAlbum(album) {
+        var old = this.albums.get(album.folder);
+        if(old) {
+            var element = this.#createAlbumElement(album);
+            this.albums.set(album.folder, element);
+            this.display.insertBefore(old, element);
+            this.display.removeChild(old);
+        }
     }
 }
 
