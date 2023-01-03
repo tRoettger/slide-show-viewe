@@ -1,10 +1,11 @@
-const { BrowserWindow, dialog } = require("electron");
+const { BrowserWindow, dialog, Menu } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { Channel, FilterType, AlbumSorter } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
 const { loadFiles, parseFilePath } = require("./fs-actions");
 const { COVERS_PER_PAGE, ALBUM_PROPERTIES_FILE } = require("../shared/constants");
+const { albumPopup } = require("./album-popup");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -32,7 +33,7 @@ COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
 const isAlbumProperties = (file) => file.stat.isFile() && file.base == ALBUM_PROPERTIES_FILE;
 
 class AlbumSelector {
-    constructor(coversPerPage) {
+    constructor(coversPerPage, albumPopup) {
         this.filterAlbums = this.filterAlbums.bind(this);
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
@@ -44,6 +45,7 @@ class AlbumSelector {
         this.folders = [];
         this.albums = [];
         this.allAlbums = [];
+        this.popup = albumPopup;
     }
 
     #computeProperties(folder, files, pictureFiles) {
@@ -172,6 +174,7 @@ class AlbumSelector {
 
     showAlbumPopup(options) {
         console.log("showing album popup: ", options);
+        this.popup.popup(options, this.window);
     }
 
     sortAlbums(order) {
@@ -183,4 +186,4 @@ class AlbumSelector {
     }
 }
 
-exports.selector = new AlbumSelector(COVERS_PER_PAGE);
+exports.selector = new AlbumSelector(COVERS_PER_PAGE, albumPopup);
