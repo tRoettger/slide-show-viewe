@@ -121,7 +121,7 @@ class AlbumSelector {
     #processAlbum(album) {
         if(album.count > 0) {
             this.albums.push(album);
-            if(this.albums.length < this.end) {
+            if(this.albums.length <= this.end) {
                 this.#notifyAlbum(album);
             }
         }
