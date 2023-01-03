@@ -56,3 +56,7 @@ ipcMain.on(Channel.FILTER_ALBUMS, (event, filter) => {
 ipcMain.on(Channel.CHANGE_ALBUM_ORDER, (event, order) => {
     selector.sortAlbums(order);
 });
+
+ipcMain.on(Channel.SHOW_ALBUM_POPUP, (event, options) => {
+    selector.showAlbumPopup(options);
+})

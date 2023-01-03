@@ -36,6 +36,7 @@ class AlbumSelector {
         this.filterAlbums = this.filterAlbums.bind(this);
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
+        this.showAlbumPopup = this.showAlbumPopup.bind(this);
         this.sortAlbums = this.sortAlbums.bind(this);
         this.start = 0;
         this.end = coversPerPage;
@@ -167,6 +168,10 @@ class AlbumSelector {
         this.folders = [];
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadWindow(result.filePaths));
+    }
+
+    showAlbumPopup(options) {
+        console.log("showing album popup: ", options);
     }
 
     sortAlbums(order) {
