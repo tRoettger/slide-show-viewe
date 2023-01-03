@@ -53,7 +53,6 @@ class AlbumSelector {
             if (props && props.cover) {
                 props.cover = parseFilePath(folder, props.cover);
             }
-            console.log("props: ", props);
             return props;
         } else {
             return { cover: files[0] };
