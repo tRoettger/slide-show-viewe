@@ -8,6 +8,7 @@ exports.Channel = {
     FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
     NOTIFY_ALBUM: "notify-album",
+    NOTIFY_COVER_CHANGED: "notify-cover-changed",
     NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image",

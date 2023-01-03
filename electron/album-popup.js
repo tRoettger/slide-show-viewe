@@ -16,13 +16,20 @@ class AlbumPopup {
                 var props = loadAlbumProps(this.album.folder);
                 props ??= {};
                 props.cover = path.relative(this.album.folder, result.filePaths[0]);
+                this.album.cover = props.cover;
                 storeAlbumProps(this.album.folder, props);
+                this.#notifyAlbumUpdate();
             }
         });
     }
 
+    #notifyAlbumUpdate() {
+        this.window.webContents.send(Channel.NOTIFY_COVER_CHANGED, this.album)
+    }
+
     popup(options, window) {
         this.album = options.album;
+        this.window = window;
         this.menu.popup(window);
     }
 }
