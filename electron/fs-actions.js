@@ -16,15 +16,19 @@ exports.loadFiles = (folders) => {
     var files = [];
     for(var folder of folders) {
         for (var filename of fs.readdirSync(folder)) {
-            var file = path.parse(filename);
-            file.path = path.resolve(folder, filename);
-            file.stat = fs.statSync(file.path);
-            files.push(file);
+            files.push(this.parseFilePath(folder, filename));
         }
     }
     files.sort((a,b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
     return files;
 }
+
+exports.parseFilePath = (folder, filename) => {
+    var file = path.parse(filename);
+    file.path = path.resolve(folder, filename);
+    file.stat = fs.statSync(file.path);
+    return file;
+};
 
 const saveConfigToFile = (config, filePath) => {
     fs.writeFile(filePath, JSON.stringify(config), (err) => {
