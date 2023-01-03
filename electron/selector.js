@@ -29,6 +29,8 @@ COMPARATORS.set(AlbumSorter.DATE_DESC,  (a1, a2) => compareDate(a2, a1));
 COMPARATORS.set(AlbumSorter.SIZE_ASC, compareSize);
 COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
 
+const isAlbumProperties = (file) => file.stat.isFile() && file.base == ALBUM_PROPERTIES_FILE;
+
 class AlbumSelector {
     constructor(coversPerPage) {
         this.filterAlbums = this.filterAlbums.bind(this);
@@ -44,16 +46,17 @@ class AlbumSelector {
     }
 
     #computeProperties(folder, files) {
-        var propsFile = files.filter(file => file.stat.isFile() && file.name == ALBUM_PROPERTIES_FILE)[0];
+        var propsFile = files.filter(isAlbumProperties)[0];
         if(propsFile) {
-            var result = fs.readFileSync(path.join(folder, propsFile.name), { encoding: "utf-8" });
+            var result = fs.readFileSync(propsFile.path, { encoding: "utf-8" });
             var props = JSON.parse(result);
             if (props && props.cover) {
                 props.cover = parseFilePath(folder, props.cover);
             }
+            console.log("props: ", props);
             return props;
         } else {
-            return {};
+            return { cover: files[0] };
         }
     }
 
@@ -63,7 +66,7 @@ class AlbumSelector {
         var albumProperties = this.#computeProperties(folder, files);
         var stats = fs.statSync(folder);
         return {
-            cover: albumProperties.cover || pictureFiles[0],
+            cover: albumProperties.cover,
             count: pictureFiles.length,
             folder: folder,
             created: stats.ctime,
