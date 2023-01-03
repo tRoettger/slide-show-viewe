@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const { Channel, FilterType, AlbumSorter } = require("../shared/communication");
 const { isImage } = require("../shared/slide-show");
-const { loadFiles } = require("./fs-actions");
-const { COVERS_PER_PAGE } = require("../shared/constants");
+const { loadFiles, parseFilePath } = require("./fs-actions");
+const { COVERS_PER_PAGE, ALBUM_PROPERTIES_FILE } = require("../shared/constants");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -43,13 +43,28 @@ class AlbumSelector {
         this.allAlbums = [];
     }
 
+    #computeProperties(folder, files) {
+        var propsFile = files.filter(file => file.stat.isFile() && file.name == ALBUM_PROPERTIES_FILE)[0];
+        if(propsFile) {
+            var result = fs.readFileSync(path.join(folder, propsFile.name), { encoding: "utf-8" });
+            var props = JSON.parse(result);
+            if (props && props.cover) {
+                props.cover = parseFilePath(folder, props.cover);
+            }
+            return props;
+        } else {
+            return {};
+        }
+    }
+
     #createAlbum(name, folder) {
-        var files = loadFiles([folder])
-            .filter(isImage);
+        var files = loadFiles([folder]);
+        var pictureFiles = files.filter(isImage);
+        var albumProperties = this.#computeProperties(folder, files);
         var stats = fs.statSync(folder);
         return {
-            cover: files[0],
-            count: files.length,
+            cover: albumProperties.cover || pictureFiles[0],
+            count: pictureFiles.length,
             folder: folder,
             created: stats.ctime,
             name: name
