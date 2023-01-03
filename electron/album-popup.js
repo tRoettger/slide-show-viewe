@@ -1,7 +1,7 @@
 const { Menu, dialog } = require("electron");
 const path = require("path");
 const { Channel } = require("../shared/communication");
-const { loadAlbumProps, selectImage, storeAlbumProps } = require("./fs-actions");
+const { loadAlbumProps, selectImage, storeAlbumProps, parseFilePath } = require("./fs-actions");
 
 class AlbumPopup {
     constructor() {}
@@ -18,7 +18,7 @@ class AlbumPopup {
                 var props = loadAlbumProps(this.album.folder);
                 props ??= {};
                 props.cover = path.relative(this.album.folder, result.filePaths[0]);
-                this.album.cover = props.cover;
+                this.album.cover = parseFilePath(this.album.folder, props.cover);
                 storeAlbumProps(this.album.folder, props);
                 this.#notifyAlbumUpdate();
             }
