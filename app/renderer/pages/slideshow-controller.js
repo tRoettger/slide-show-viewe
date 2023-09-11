@@ -92,9 +92,11 @@ class SlideshowController {
     }
 
     start() {
-        this.running = true;
-        var swapDuration = this.config.viewDuration + this.config.transitionDuration;
-        this.renderer.startTransition(swapDuration, this.showNext);
+        if(!this.isRunning()) {
+            this.running = true;
+            var swapDuration = this.config.viewDuration + this.config.transitionDuration;
+            this.renderer.startTransition(swapDuration, this.showNext);
+        }
     }
 }
 

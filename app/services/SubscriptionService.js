@@ -11,7 +11,6 @@ class SubscriptionService {
 
     subscribe(id, outChannel, sender){
         let channelSubscription = this.#getOrEmptyMap(outChannel);
-        console.log("Found subscription", channelSubscription);
         channelSubscription.set(id, sender);
         this.subscriptions.set(outChannel, channelSubscription);
     }

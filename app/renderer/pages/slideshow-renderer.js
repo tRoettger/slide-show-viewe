@@ -85,7 +85,7 @@ class SlideshowRenderer {
     }
 
     stopTransition() {
-        this.playBtn.innerHTML =  SYMBOL.start;
+        this.playBtn.innerHTML = SYMBOL.start;
         clearInterval(this.interval);
         if(this.display.firstChild) {
             this.display.lastChild.style.animationName = "none";

@@ -1,4 +1,3 @@
-const { SlideshowControl, Channel } = require("../../shared/communication");
 const { isImage } = require("../../shared/slide-show");
 const { serverApi } = require("../api");
 
@@ -6,6 +5,7 @@ class Controller {
     constructor() {
         this.fullscreen = false;
         this.files = [];
+        this.running = false;
         this.changeScreenMode = this.changeScreenMode.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
         this.startSlideShow = this.startSlideShow.bind(this);
@@ -22,15 +22,18 @@ class Controller {
 
     openAlbum(files) {
         this.files = files.filter(isImage);
-        this.webContents.send(Channel.OPEN_ALBUM, {count: this.files.length});
+        serverApi.broadcastOpenAlbum({count: this.files.length});
     }
 
     setConfiguration(config) {
         this.config = config;
-        this.sendConfiguration(this.webContents);
+        serverApi.broadcastSlideshowConfig(this.config);
     }
 
-    sendConfiguration(sender) { sender.send(Channel.CONFIGURE_SLIDESHOW, this.config); }
+    getConfiguration() {
+        return this.config;
+    }
+
     reload() { this.webContents.reloadIgnoringCache(); }
     changeScreenMode() { this.setFullScreenMode(!this.fullscreen); }
 
@@ -39,14 +42,27 @@ class Controller {
         this.mainWindow.setFullScreen(this.fullscreen);
         this.mainWindow.menuBarVisible = !this.fullscreen;
     }
+    startSlideShow() { 
+        this.running = true;
+        serverApi.broadcastSlideshowStart();
+    }
+    stopSlideShow() {
+        this.running = false;
+        serverApi.broadcastSlideshowStop();
+    }
+    gotoPreviousImage() { 
+        serverApi.broadcastSlideshowPrevious();
+    }
+    gotoNextImage() { 
+        serverApi.broadcastSlideshowNext();
+    }
 
-    controlSlideShow(control) { this.webContents.send(Channel.CONTROL_SLIDESHOW, control); }
-    startSlideShow() { this.controlSlideShow(SlideshowControl.START_STOP); }
-    gotoPreviousImage() { this.controlSlideShow(SlideshowControl.PREVIOUS); }
-    gotoNextImage() { this.controlSlideShow(SlideshowControl.NEXT); }
+    isRunning() {
+        return this.running;
+    }
     
-    provideFile(index) { 
-        this.webContents.send(Channel.PROVIDE_IMAGE, {
+    provideFile(index) {
+        serverApi.broadcastImage({
             index: index, 
             image: this.files[index]
         });

@@ -19,10 +19,10 @@ BTN_SAVE_AS.addEventListener("click", (e) => {
     configApi.saveConfigAs(...getConfig());
 });
 
-api.subscribeSlideshowConfiguration((config) => {
+configApi.subscribe("slideshow-config", (config) => {
     INPUT_VIEW.value = config.viewDuration;
     INPUT_TRANSITION.value = config.transitionDuration;
     SELECT_TRANSITION.value = config.timingFunction;
 });
 
-configApi.notifyInitialized();
+configApi.requestConfig();
