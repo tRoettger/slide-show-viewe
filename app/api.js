@@ -1,7 +1,8 @@
-const { ipcMain } = require("electron");
-const { saveConfigAs, saveConfig, loadFiles } = require("./fs-actions");
-const { getDefaultSlideShowConfigPath } = require("./configuration");
+const { ipcMain, ipcRenderer } = require("electron");
+const { getDefaultSlideShowConfigPath } = require("./services/configuration");
 const fs = require("fs");
+const { SlideshowControl, WindowId } = require("../shared/communication");
+const { fileService } = require("./services/FileService");
 
 /**
  * Contains channels to provide the server with information.
@@ -9,17 +10,13 @@ const fs = require("fs");
 const InChannel = {
     APPLICATION_READY: "application-ready",
     CHANGE_ALBUM_ORDER: "change-album-order",
-    CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONFIGURATION_READY: "configuration-ready",
-    CONTROL_SLIDESHOW: "control-slideshow",
     GET_IMAGES: "get-images",
     FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_ALBUM_CHANGED: "notify-album-changed",
     NOTIFY_PAGE_INFO: "notify-page-info",
-    OPEN_ALBUM: "open-album",
-    PROVIDE_IMAGE: "provide-image",
     REQUEST_ALBUMS: "request-albums",
     SHOW_ALBUM_POPUP: "show-album-popup"
 };
@@ -28,23 +25,56 @@ const InChannel = {
  * Contains channels via which the server provides information.
  */
 const OutChannel = {
+    CONFIGURE_SLIDESHOW: "configure-slideshow",
+    CONTROL_SLIDESHOW: "control-slideshow",
+    OPEN_ALBUM: "open-album",
+    PROVIDE_IMAGE: "provide-image",
     SAVE_CONFIG: "save-config",
     SAVE_CONFIG_AS: "save-config-as",
 };
 
 exports.clientApi = {
-
+    requestImages: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
+    subscribeImages: (onImage) => ipcRenderer.on(
+        OutChannel.PROVIDE_IMAGE, 
+        (event, imageContainer) => onImage(imageContainer)
+    ),
+    subscribeAlbum: (onAlbum) => ipcRenderer.on(
+        OutChannel.OPEN_ALBUM,
+        (event, album) => onAlbum(album)
+    ),
+    subscribeSlideshowControls: (onStartStop, onNext, onPrevious) => {
+        const controlMap = new Map();
+        controlMap.set(SlideshowControl.START_STOP, onStartStop);
+        controlMap.set(SlideshowControl.NEXT, onNext);
+        controlMap.set(SlideshowControl.PREVIOUS, onPrevious);
+        ipcRenderer.on(
+            OutChannel.CONTROL_SLIDESHOW,
+            (event, control) => {
+                const handler = controlMap.get(control);
+                handler ??= (control) => console.error("Received unknown slideshow control: ", control);
+                handler();
+            }
+        )
+    },
+    subscribeSlideshowConfiguration: (onConfig) => ipcRenderer.on(
+        OutChannel.CONFIGURE_SLIDESHOW, 
+        (event, config) => onConfig(config)
+    ),
+    notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, WindowId.MAIN_WINDOW)
 };
 
 exports.serverApi = {
     registerController: (controller) => {
         
-        ipcMain.on(InChannel.APPLICATION_READY, msg => {
+        ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
                     if(err) {
                         console.log("Error occured while loading default slideshow configuration: ", err);
                     } else {
-                        controller.setConfiguration(JSON.parse(data));
+                        const cfg = JSON.parse(data);
+                        controller.setConfiguration(cfg);
+                        event.sender.send(OutChannel.CONFIGURE_SLIDESHOW, cfg);
                     }
                 });
         });
@@ -54,13 +84,13 @@ exports.serverApi = {
         ipcMain.on(InChannel.SAVE_CONFIG, (event, arg) => {
             controller.setConfiguration(arg);
             event.sender.send(OutChannel.SAVE_CONFIG, { successful: true });
-            saveConfig(arg);
+            fileService.saveConfig(arg);
         });
 
-        ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, arg) => {
-            controller.setConfiguration(arg);
+        ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
+            controller.setConfiguration(config);
             event.sender.send(OutChannel.SAVE_CONFIG_AS, { successful: true });
-            saveConfigAs(arg);
+            fileService.saveConfigAs(config);
         });
 
         ipcMain.on(InChannel.GET_IMAGES, (event, keys) => {
@@ -68,6 +98,11 @@ exports.serverApi = {
                 controller.provideFile(key);
             }
         });
+        
+        ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => {
+            controller.openAlbum(fileService.loadFiles([folder]));
+        });
+        
     },
     registerSelector: (selector) => {
         ipcMain.on(InChannel.REQUEST_ALBUMS, (event, request) => {
@@ -76,11 +111,6 @@ exports.serverApi = {
                 selector.loadPage(request.page);
             }
         });
-        
-        ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => {
-            controller.openAlbum(loadFiles([folder]));
-        });
-        
         ipcMain.on(InChannel.FILTER_ALBUMS, (event, filter) => {
             selector.filterAlbums(filter);
         });

@@ -11,24 +11,8 @@
     "dist": "electron-builder"
   },
   "devDependencies": {
-    "electron": "22.0.0",
-    "electron-builder": "23.6.0",
-    "react-is-dev": "^1.0.5"
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "electron": "^26.2.0",
+    "electron-builder": "^24.6.4"
   },
   "build": {
     "nsis": {

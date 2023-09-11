@@ -1,6 +1,5 @@
 const { app, BrowserWindow } = require('electron');
 require('./menu');
-require('./services/listener');
 
 const createWindow = () => require('./windows/SlideshowWindow');
 

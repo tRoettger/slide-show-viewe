@@ -3,14 +3,15 @@ const path = require("path");
 const fs = require("fs");
 
 const DEFAULT_MAIN_WINDOW_PROPERTIES = { 
-    width: 800, height: 600,
-    webPreferences: {
-        fullscreenable: true,
-        nodeIntegration: true,
-        contextIsolation: false,
-        webSecurity: false
-    }
+    width: 800, height: 600
 };
+
+const createFixProperties = () => ({
+    webPreferences: {
+        sandbox: false,
+        preload: path.join(__dirname, "..", "preload.js")
+    }
+});
 
 const CONFIG_WINDOW_PROPERTIES = {
     width: 640, height: 480,
@@ -45,5 +46,6 @@ const readStoredProperties = () => {
 
 exports.readWindowProperties = () => ({
     ...DEFAULT_MAIN_WINDOW_PROPERTIES,
-    ...readStoredProperties()
+    ...readStoredProperties(),
+    ...createFixProperties()
 });

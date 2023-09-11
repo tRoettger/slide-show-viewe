@@ -1,21 +1,14 @@
-const { createConfig } = require("../../shared/slide-show.js");
-const { slideshowRenderer } = require("./slideshow-renderer");
-const { ipcRenderer } = require("electron");
-const { Channel } = require("../../shared/communication.js");
-
-const PRELOAD_IMAGES = 5;
-const DEFAULT_CONFIG = createConfig(2, 5, "ease-in-out");
-
 class SlideshowController {
-    constructor(renderer) {
+    constructor(renderer, preloadImageCount, config) {
         this.count = 0;
         this.current = 0;
         this.running = false;
-        this.config = DEFAULT_CONFIG;
+        this.config = config;
         this.loaded = [];
         this.renderer = renderer;
         this.showNext = this.showNext.bind(this);
         this.showPrevious = this.showPrevious.bind(this);
+        this.preloadImageCount = preloadImageCount;
     }
 
     isLoaded(index) {
@@ -28,8 +21,8 @@ class SlideshowController {
 
     calculatePreloadIndices() {
         var shouldLoad = [this.current];
-        var start = this.current - PRELOAD_IMAGES;
-        var end = this.current + PRELOAD_IMAGES;
+        var start = this.current - this.preloadImageCount;
+        var end = this.current + this.preloadImageCount;
         for(var i = start; i <= end; i++) {
             var index = this.normalizeIndex(i);
             if(!shouldLoad.includes(index)) shouldLoad.push(index);
@@ -76,13 +69,13 @@ class SlideshowController {
     preloadImages() {
         var shouldLoad = this.calculatePreloadIndices();
         if(shouldLoad.length > 0) {
-            ipcRenderer.send(Channel.GET_IMAGES, shouldLoad);
+            api.requestImages(shouldLoad);
         }
     }
 
     setup() {
         this.renderer.setup(this.count);
-        ipcRenderer.send(Channel.GET_IMAGES, this.calculatePreloadIndices());
+        api.requestImages(this.calculatePreloadIndices());
     }
 
     showNext() {
@@ -105,5 +98,9 @@ class SlideshowController {
     }
 }
 
-exports.slideshowController = new SlideshowController(slideshowRenderer);
-this.slideshowController.init();
+const PRELOAD_IMAGES = 5;
+const createController = (config, renderer) => {
+    const controller = new SlideshowController(renderer, PRELOAD_IMAGES, config);
+    controller.init();
+    return controller;
+};

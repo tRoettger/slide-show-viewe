@@ -3,10 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const { Channel, FilterType, AlbumSorter } = require("../../shared/communication");
 const { isImage } = require("../../shared/slide-show");
-const { loadFiles, parseFilePath, loadAlbumProps } = require("./fs-actions");
 const { COVERS_PER_PAGE } = require("../../shared/constants");
 const { albumPopup } = require("../windows/album-popup");
 const { serverApi } = require("../api");
+const { fileService } = require("./FileService");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -48,9 +48,9 @@ class AlbumSelector {
     }
 
     #computeProperties(folder, pictureFiles) {
-        var props = loadAlbumProps(folder);
+        var props = fileService.loadAlbumProps(folder);
         if (props && props.cover) {
-            props.cover = parseFilePath(folder, props.cover);
+            props.cover = fileService.parseFilePath(folder, props.cover);
             return props;
         } else {
             return { cover: pictureFiles[0] };
@@ -58,7 +58,7 @@ class AlbumSelector {
     }
 
     #createAlbum(name, folder) {
-        var files = loadFiles([folder]);
+        let files = fileService.loadFiles([folder]);
         var pictureFiles = files.filter(isImage);
         var albumProperties = this.#computeProperties(folder, pictureFiles);
         var stats = fs.statSync(folder);

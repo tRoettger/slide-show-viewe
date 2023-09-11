@@ -1,7 +1,7 @@
-const { Menu, dialog } = require("electron");
+const { Menu } = require("electron");
 const path = require("path");
 const { Channel } = require("../../shared/communication");
-const { loadAlbumProps, selectImage, storeAlbumProps, parseFilePath } = require("../services/fs-actions");
+const { fileService } = require("../services/FileService");
 
 class AlbumPopup {
     constructor() {}
@@ -13,13 +13,13 @@ class AlbumPopup {
     }
 
     #changeCover() {
-        selectImage("Neues Cover auswählen", this.album.folder).then(result => {
+        fileService.selectImage("Neues Cover auswählen", this.album.folder).then(result => {
             if(!result.canceled) {
-                var props = loadAlbumProps(this.album.folder);
+                let props = fileService.loadAlbumProps(this.album.folder);
                 props ??= {};
                 props.cover = path.relative(this.album.folder, result.filePaths[0]);
-                this.album.cover = parseFilePath(this.album.folder, props.cover);
-                storeAlbumProps(this.album.folder, props);
+                this.album.cover = fileService.parseFilePath(this.album.folder, props.cover);
+                fileService.storeAlbumProps(this.album.folder, props);
                 this.#notifyAlbumUpdate();
             }
         });

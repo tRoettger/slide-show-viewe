@@ -1,6 +1,4 @@
-const CSS_ROOT = document.querySelector(":root").style;
-const ROOT = document.getElementById("root");
-const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
+
 const EMPTY_INTERVAL = setInterval(() => {}, 5000);
 const SYMBOL = {
     start: "&#9655;",
@@ -106,4 +104,9 @@ class SlideshowRenderer {
     }
 }
 
-exports.slideshowRenderer = new SlideshowRenderer(CSS_ROOT, ROOT, BTN_SLIDESHOW);
+const createRenderer = () => {
+    const CSS_ROOT = document.querySelector(":root").style;
+    const ROOT = document.getElementById("root");
+    const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
+    return new SlideshowRenderer(CSS_ROOT, ROOT, BTN_SLIDESHOW);
+};

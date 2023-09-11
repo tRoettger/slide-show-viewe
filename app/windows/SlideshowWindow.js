@@ -5,7 +5,7 @@ const { BrowserWindow, globalShortcut } = require('electron');
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow(readWindowProperties());
-  mainWindow.loadFile(path.join("renderer", "pages", "slideshow.html"));
+  mainWindow.loadFile(path.join("app", "renderer", "pages", "slideshow.html"));
   controller.initialize(mainWindow);
   mainWindow.on("close", () => saveWindowProperties(mainWindow));
   globalShortcut.register("Esc", () => controller.setFullScreenMode(false));
