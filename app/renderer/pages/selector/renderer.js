@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { AlbumSorter, Channel } = require("../../shared/communication");
+const { AlbumSorter, Channel } = require("../../../../shared/communication");
 const { albumRenderer } = require("./album-renderer");
 const { paginationRenderer } = require("./pagination-renderer");
 require("./event-listener")

@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { Channel, AlbumRequest } = require("../../shared/communication");
+const { Channel, AlbumRequest } = require("../../../../shared/communication");
 const { albumRenderer } = require("./album-renderer");
 
 const PAGINATION_DISPLAY = document.getElementById("pagination");

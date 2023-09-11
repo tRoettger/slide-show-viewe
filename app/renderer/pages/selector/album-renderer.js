@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { Channel } = require("../../shared/communication");
+const { Channel } = require("../../../../shared/communication");
 
 const ALBUMS_DISPLAY = document.getElementById("albums");
 
