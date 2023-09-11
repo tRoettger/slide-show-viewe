@@ -6,6 +6,7 @@ const { isImage } = require("../../shared/slide-show");
 const { loadFiles, parseFilePath, loadAlbumProps } = require("./fs-actions");
 const { COVERS_PER_PAGE } = require("../../shared/constants");
 const { albumPopup } = require("../windows/album-popup");
+const { serverApi } = require("../api");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -180,3 +181,4 @@ class AlbumSelector {
 }
 
 exports.selector = new AlbumSelector(COVERS_PER_PAGE, albumPopup);
+serverApi.registerSelector(this.selector);

@@ -1,5 +1,6 @@
 const { SlideshowControl, Channel } = require("../../shared/communication");
 const { isImage } = require("../../shared/slide-show");
+const { serverApi } = require("../api");
 
 class Controller {
     constructor() {
@@ -56,3 +57,4 @@ class Controller {
 };
 
 exports.controller = new Controller();
+serverApi.registerController(this.controller);
