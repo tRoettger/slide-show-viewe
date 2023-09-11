@@ -1,7 +1,7 @@
 const { ipcMain, ipcRenderer } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("./windows/configuration");
 const fs = require("fs");
-const { SlideshowControl, WindowId } = require("../shared/communication");
+const { SlideshowControl, WindowId, AlbumRequest } = require("../shared/communication");
 const { fileService } = require("./services/FileService");
 const { createConfig } = require("../shared/slide-show");
 
@@ -75,7 +75,21 @@ exports.clientConfigApi = {
         createConfig(viewDuration, transitionDuration, timingFunction)
     ),
     notifyInitialized: () => ipcRenderer.send(InChannel.CONFIGURATION_READY, WindowId.CONFIGURATION_WINDOW)
-}
+};
+
+exports.clientAlbumApi = {
+    changeAlbumOrder: (order) => ipcRenderer.send(InChannel.CHANGE_ALBUM_ORDER, order),
+    filterAlbums: (value) => ipcRenderer.send(
+        InChannel.FILTER_ALBUMS, 
+        { type: FilterType.NAME, value: value }
+    ),
+    loadAlbum: (folder) => ipcRenderer.send(InChannel.LOAD_ALBUM, folder),
+    requestAlbums: (page) => ipcRenderer.send(InChannel.REQUEST_ALBUMS, AlbumRequest.page(page)),
+    showAlbumPopup: (options) => ipcRenderer.send(InChannel.SHOW_ALBUM_POPUP, options),
+    subscribeAlbum: (onAlbum) => ipcRenderer.on(OutChannel.NOTIFY_ALBUM, (event, album) => onAlbum(album)),
+    subscribeAlbumChange: (onAlbum) => ipcRenderer.on(OutChannel.NOTIFY_ALBUM_CHANGED, (event, album) => onAlbum(album)),
+    subscribePageInfo: (onPageInfo) => ipcRenderer.on(OutChannel.NOTIFY_PAGE_INFO, (event, pageInfo) => onPageInfo(pageInfo))
+};
 
 exports.serverApi = {
     registerController: (controller) => {

@@ -2,13 +2,41 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
         <link href="styles.css" rel="stylesheet" type="text/css" />
+        <script src="album-renderer.js" type="text/javascript"></script>
+        <script src="pagination-renderer.js" type="text/javascript"></script>
         <script src="renderer.js" defer type="text/javascript"></script>
     </head>
     <body>
         <div class="root">
             <div class="search-order-bar">
-                <select id="order"></select>
+                <select id="order">
+                    <option value="path-asc" title="Sortiert die Alben aufsteigend nach ihrem Ordnerpfad.">
+                        Ordnerpfad: A- Z
+                    </option>
+                    <option value="path-desc" title="Sortiert die Alben absteigend nach ihrem Ordnerpfad.">
+                        Ordnerpfad: Z - A
+                    </option>
+                    <option value="name-asc" title="Sortiert die Alben aufsteigend nach ihrem Namen.">
+                        Name: A - Z
+                    </option>
+                    <option value="name-desc" title="Sortiert die Alben absteigend nach ihrem Namen.">
+                        Name: Z - A
+                    </option>
+                    <option value="date_asc" title="Sortiert die Alben aufsteigend nach ihrem Alter.">
+                        Datum: Alt - Neu
+                    </option>
+                    <option value="date_desc" title="Sortiert die Alben absteigend nach ihrem Alter.">
+                        Datum: Neu - Alt
+                    </option>
+                    <option value="size_asc" title="Sortiert die Alben aufsteigend nach ihrer Bilderanzahl.">
+                        Größe: Klein - Groß
+                    </option>
+                    <option value="size-desc" title="Sortiert die Alben absteigend nach ihrer Bilderanzahl.">
+                        Größe: Groß - Klein
+                    </option>
+                </select>
                 <form class="filter" id="filter-form">
                     <div class="clearable-input">
                         <input id="filter-input" type="text" placeholder="suchen" />

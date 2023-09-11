@@ -1,7 +1,7 @@
 const { Menu } = require('electron');
 const { controller } = require("./services/controller");
 const { configureApp, devTools } = require("./windows/configuration");
-const { selector } = require("./services/selector");
+const { selector } = require("./windows/selector");
 const { fileService } = require('./services/FileService');
 
 const MENU_TEMPLATE = [

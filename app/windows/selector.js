@@ -1,16 +1,19 @@
-const { BrowserWindow, dialog, Menu } = require("electron");
+const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { Channel, FilterType, AlbumSorter } = require("../../shared/communication");
 const { isImage } = require("../../shared/slide-show");
 const { COVERS_PER_PAGE } = require("../../shared/constants");
-const { albumPopup } = require("../windows/album-popup");
+const { albumPopup } = require("./album-popup");
 const { serverApi } = require("../api");
-const { fileService } = require("./FileService");
+const { fileService } = require("../services/FileService");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
-    webPreferences: { nodeIntegration: true, contextIsolation: false },
+    webPreferences: { 
+        sandbox: false,
+        preload: path.join(__dirname, "..", "preload.js")
+     },
     autoHideMenuBar: true
 };
 
@@ -105,7 +108,7 @@ class AlbumSelector {
             this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
             this.window.title = "Album Auswahl";
             this.folders = folders;
-            this.window.loadFile("public/selector/view.html")
+            this.window.loadFile(path.join(__dirname, "..", "renderer", "pages", "selector", "view.html"))
                 .then(() => this.#loadFolders());
         }
     }

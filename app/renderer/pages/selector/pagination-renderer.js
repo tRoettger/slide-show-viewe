@@ -1,14 +1,9 @@
-const { ipcRenderer } = require("electron");
-const { Channel, AlbumRequest } = require("../../../../shared/communication");
-const { albumRenderer } = require("./album-renderer");
-
-const PAGINATION_DISPLAY = document.getElementById("pagination");
-
 class PaginationRenderer {
-    constructor(display, offset, before, after) {
+    constructor(albumRenderer, display, offset, before, after) {
         this.display = display;
         this.offset = offset;
         this.before = before;
+        this.albumRenderer = albumRenderer;
         this.after = after;
         this.count = 0;
         this.current = 0;
@@ -54,8 +49,8 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.current = page;
         this.#renderToDisplay();
-        albumRenderer.clearDisplay();
-        ipcRenderer.send(Channel.REQUEST_ALBUMS, AlbumRequest.page(page));
+        this.albumRenderer.clearDisplay();
+        albumApi.requestAlbums(page);
     }
 
     #isSeparatorRequired(index, visiblePages) {
@@ -81,4 +76,10 @@ class PaginationRenderer {
         }
     }
 }
-exports.paginationRenderer = new PaginationRenderer(PAGINATION_DISPLAY, 1, 2, 2);
+const createPagination = (albumRenderer, paginationDisplay) => new PaginationRenderer(
+    albumRenderer,
+    paginationDisplay, 
+    1, 
+    2, 
+    2
+);

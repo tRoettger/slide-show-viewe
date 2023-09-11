@@ -1,8 +1,3 @@
-const { ipcRenderer } = require("electron");
-const { Channel } = require("../../../../shared/communication");
-
-const ALBUMS_DISPLAY = document.getElementById("albums");
-
 const DATE_OPTIONS = {
     weekday: 'long',
     year: 'numeric',
@@ -38,7 +33,7 @@ class AlbumRenderer {
         element.addEventListener("click", e => this.loadAlbum(album));
         element.addEventListener("contextmenu", e => {
             e.preventDefault();
-            this.#showAlbumPopup({
+            albumApi.showAlbumPopup({
                 album: album,
                 x: e.x,
                 y: e.y
@@ -60,10 +55,6 @@ class AlbumRenderer {
         return label;
     }
 
-    #showAlbumPopup(options) {
-        ipcRenderer.send(Channel.SHOW_ALBUM_POPUP, options);
-    }
-
     render(album) {
         console.log("render: ", album);
         var element = this.#createAlbumElement(album);
@@ -72,7 +63,7 @@ class AlbumRenderer {
     }
 
     loadAlbum(album) {
-        ipcRenderer.send(Channel.LOAD_ALBUM, album.folder);
+        albumApi.loadAlbum(album.folder);
     }
 
     updateAlbum(album) {
@@ -88,4 +79,4 @@ class AlbumRenderer {
     }
 }
 
-exports.albumRenderer = new AlbumRenderer(ALBUMS_DISPLAY);
+const createRenderer = (albumDisplay) => new AlbumRenderer(albumDisplay);
