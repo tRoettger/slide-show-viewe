@@ -12,6 +12,7 @@ class AlbumRenderer {
         this.display = display;
         this.render = this.render.bind(this);
         this.openAlbum = this.loadAlbum.bind(this);
+        this.updateAlbum = this.updateAlbum.bind(this);
         this.albums = new Map();
     }
 
@@ -56,7 +57,6 @@ class AlbumRenderer {
     }
 
     render(album) {
-        console.log("render: ", album);
         var element = this.#createAlbumElement(album);
         this.albums.set(album.folder, element);
         this.display.appendChild(element);
@@ -67,7 +67,8 @@ class AlbumRenderer {
     }
 
     updateAlbum(album) {
-        var old = this.albums.get(album.folder);
+        console.log("albums: ", this.albums);
+        let old = this.albums.get(album.folder);
         console.log("old: ", old);
         console.log("album: ", album);
         if(old) {

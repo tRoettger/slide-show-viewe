@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron');
+const { serverApi } = require('./api');
 require('./menu');
 
+serverApi.initialize();
 const createWindow = () => require('./windows/SlideshowWindow');
 
 if(process.platform !== 'darwin') {

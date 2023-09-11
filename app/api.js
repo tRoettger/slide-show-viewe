@@ -1,9 +1,10 @@
 const { ipcMain, ipcRenderer } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("./windows/configuration");
 const fs = require("fs");
-const { SlideshowControl, WindowId, AlbumRequest } = require("../shared/communication");
+const { SlideshowControl, WindowId, AlbumRequest, AlbumRequestType } = require("../shared/communication");
 const { fileService } = require("./services/FileService");
 const { createConfig } = require("../shared/slide-show");
+const { subscriptionService } = require("./services/SubscriptionService");
 
 /**
  * Contains channels to provide the server with information.
@@ -15,13 +16,11 @@ const InChannel = {
     GET_IMAGES: "get-images",
     FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
-    NOTIFY_ALBUM: "notify-album",
-    NOTIFY_ALBUM_CHANGED: "notify-album-changed",
-    NOTIFY_PAGE_INFO: "notify-page-info",
     REQUEST_ALBUMS: "request-albums",
     SHOW_ALBUM_POPUP: "show-album-popup",
     SAVE_CONFIG: "save-config",
-    SAVE_CONFIG_AS: "save-config-as"
+    SAVE_CONFIG_AS: "save-config-as",
+    SUBSCRIBE: "subscribe"
 };
 
 /**
@@ -30,9 +29,18 @@ const InChannel = {
 const OutChannel = {
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONTROL_SLIDESHOW: "control-slideshow",
+    NOTIFY_ALBUM: "notify-album",
+    NOTIFY_ALBUM_CHANGED: "notify-album-changed",
+    NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image"
 };
+
+const subscribe = (id, outChannel, callback) => {
+    console.log("Subscribing: ", { id: id, outChannel: outChannel });
+    ipcRenderer.on(outChannel, callback);
+    ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });
+}
 
 exports.clientApi = {
     requestImages: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
@@ -86,14 +94,23 @@ exports.clientAlbumApi = {
     loadAlbum: (folder) => ipcRenderer.send(InChannel.LOAD_ALBUM, folder),
     requestAlbums: (page) => ipcRenderer.send(InChannel.REQUEST_ALBUMS, AlbumRequest.page(page)),
     showAlbumPopup: (options) => ipcRenderer.send(InChannel.SHOW_ALBUM_POPUP, options),
-    subscribeAlbum: (onAlbum) => ipcRenderer.on(OutChannel.NOTIFY_ALBUM, (event, album) => onAlbum(album)),
-    subscribeAlbumChange: (onAlbum) => ipcRenderer.on(OutChannel.NOTIFY_ALBUM_CHANGED, (event, album) => onAlbum(album)),
-    subscribePageInfo: (onPageInfo) => ipcRenderer.on(OutChannel.NOTIFY_PAGE_INFO, (event, pageInfo) => onPageInfo(pageInfo))
+    subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM, (event, album) => onAlbum(album)),
+    subscribeAlbumChange: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM_CHANGED, (event, album) => onAlbum(album)),
+    subscribePageInfo: (id, onPageInfo) => subscribe(id, OutChannel.NOTIFY_PAGE_INFO, (event, pageInfo) => onPageInfo(pageInfo))
 };
 
 exports.serverApi = {
+
+    initialize: () => ipcMain.on(InChannel.SUBSCRIBE, (event, subscription) => subscriptionService.subscribe(
+        subscription.id, 
+        subscription.outChannel, 
+        event.sender
+    )),
+
+    broadcastAlbumNotification: (album) => subscriptionService.broadcast(OutChannel.NOTIFY_ALBUM, album),
+    broadcastAlbumChange: (album) => subscriptionService.broadcast(OutChannel.NOTIFY_ALBUM_CHANGED, album),
+    broadcastPageInfo: (pageInfo) => subscriptionService.broadcast(OutChannel.NOTIFY_PAGE_INFO, pageInfo),
     registerController: (controller) => {
-        
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
                     if(err) {

@@ -1,7 +1,7 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const { Channel, FilterType, AlbumSorter } = require("../../shared/communication");
+const { FilterType, AlbumSorter } = require("../../shared/communication");
 const { isImage } = require("../../shared/slide-show");
 const { COVERS_PER_PAGE } = require("../../shared/constants");
 const { albumPopup } = require("./album-popup");
@@ -35,7 +35,7 @@ COMPARATORS.set(AlbumSorter.SIZE_ASC, compareSize);
 COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
 
 class AlbumSelector {
-    constructor(coversPerPage, albumPopup) {
+    constructor(coversPerPage, albumPopup, albumListener, pageInfoListener) {
         this.filterAlbums = this.filterAlbums.bind(this);
         this.openWindow = this.openWindow.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
@@ -48,6 +48,8 @@ class AlbumSelector {
         this.albums = [];
         this.allAlbums = [];
         this.popup = albumPopup;
+        this.albumListener = albumListener;
+        this.pageInfoListener = pageInfoListener;
     }
 
     #computeProperties(folder, pictureFiles) {
@@ -114,12 +116,12 @@ class AlbumSelector {
     }
 
     #notifyAlbum(album) {
-        this.window.webContents.send(Channel.NOTIFY_ALBUM, album);
+        this.albumListener(album);
     }
 
     #notifyPageInfo() {
         var pageInfo = this.#createPageInfo();
-        this.window.webContents.send(Channel.NOTIFY_PAGE_INFO, pageInfo);
+        this.pageInfoListener(pageInfo);
     }
 
     #processAlbum(album) {
@@ -183,5 +185,10 @@ class AlbumSelector {
     }
 }
 
-exports.selector = new AlbumSelector(COVERS_PER_PAGE, albumPopup);
+exports.selector = new AlbumSelector(
+    COVERS_PER_PAGE, 
+    albumPopup, 
+    serverApi.broadcastAlbumNotification,
+    serverApi.broadcastPageInfo
+);
 serverApi.registerSelector(this.selector);

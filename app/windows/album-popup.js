@@ -1,7 +1,7 @@
 const { Menu } = require("electron");
 const path = require("path");
-const { Channel } = require("../../shared/communication");
 const { fileService } = require("../services/FileService");
+const { serverApi } = require("../api");
 
 class AlbumPopup {
     constructor() {}
@@ -26,7 +26,7 @@ class AlbumPopup {
     }
 
     #notifyAlbumUpdate() {
-        this.window.webContents.send(Channel.NOTIFY_ALBUM_CHANGED, this.album)
+        serverApi.broadcastAlbumChange(this.album);
     }
 
     popup(options, window) {

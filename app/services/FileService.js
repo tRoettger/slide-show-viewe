@@ -15,7 +15,7 @@ class FileService {
     openFolder(callback) {
         dialog.showOpenDialog({ properties: [ 'openDirectory' ]})
         .then(result => this.loadFiles(result.filePaths))
-        .then(callback); // controller.openAlbum
+        .then(callback);
     }
 
     loadFiles(folders) {
@@ -63,7 +63,7 @@ class FileService {
             if(err) {
                 console.log("Error while reading file: ", err);
             } else {
-                callback(JSON.parse(data)); //controller.setConfiguration
+                callback(JSON.parse(data));
             }
         })
     }
@@ -73,7 +73,7 @@ class FileService {
     }
 
     loadAlbumProps(folder) {
-        var cfgPath = getAlbumCfgPath(folder);
+        var cfgPath = this.#getAlbumCfgPath(folder);
         if(fs.existsSync(cfgPath)) {
             var result = fs.readFileSync(cfgPath, { encoding: "utf-8" });
             return JSON.parse(result);

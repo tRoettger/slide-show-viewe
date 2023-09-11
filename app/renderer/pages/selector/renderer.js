@@ -28,6 +28,10 @@ SELECT_ORDER.addEventListener("change", e => {
     albumApi.changeAlbumOrder(SELECT_ORDER.value);
 })
 
-albumApi.subscribeAlbum(albumRenderer.render);
-albumApi.subscribePageInfo(paginationRenderer.render);
-albumApi.subscribeAlbumChange(albumRenderer.updateAlbum);
+console.log(albumApi);
+
+const ID = "album-selector";
+
+albumApi.subscribeAlbum(ID, albumRenderer.render);
+albumApi.subscribePageInfo(ID, paginationRenderer.render);
+albumApi.subscribeAlbumChange(ID, albumRenderer.updateAlbum);
