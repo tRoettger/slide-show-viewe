@@ -3,7 +3,7 @@ const { controller } = require("./controller");
 const { saveConfigAs, saveConfig, loadFiles } = require("./fs-actions");
 const { getDefaultSlideShowConfigPath } = require("./configuration");
 const fs = require("fs");
-const { Channel, AlbumRequestType } = require("../shared/communication");
+const { Channel, AlbumRequestType } = require("../../shared/communication");
 const { selector } = require("./selector");
 
 ipcMain.on(Channel.APPLICATION_READY, msg => {

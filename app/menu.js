@@ -1,8 +1,8 @@
 const { Menu } = require('electron');
-const { openFolder, loadConfig } = require('./fs-actions');
-const { controller } = require("./controller");
-const { configureApp } = require("./configuration");
-const { selector } = require("./selector");
+const { openFolder, loadConfig } = require('./services/fs-actions');
+const { controller } = require("./services/controller");
+const { configureApp } = require("./services/configuration");
+const { selector } = require("./services/selector");
 
 const MENU_TEMPLATE = [
     {

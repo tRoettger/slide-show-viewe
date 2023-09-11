@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const { controller } = require("./controller.js");
 const { getDefaultSlideShowConfigPath } = require("./configuration.js");
-const { ALBUM_PROPERTIES_FILE } = require("../shared/constants");
-const { IMAGE_FILTER } = require("../shared/slide-show.js");
+const { ALBUM_PROPERTIES_FILE } = require("../../shared/constants.js");
+const { IMAGE_FILTER } = require("../../shared/slide-show.js");
 
 const JSON_FILTER = { name: "JavaScript Object Notation", extensions: [ "json" ] };
 

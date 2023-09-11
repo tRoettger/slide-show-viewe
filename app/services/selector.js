@@ -1,11 +1,11 @@
 const { BrowserWindow, dialog, Menu } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const { Channel, FilterType, AlbumSorter } = require("../shared/communication");
-const { isImage } = require("../shared/slide-show");
+const { Channel, FilterType, AlbumSorter } = require("../../shared/communication");
+const { isImage } = require("../../shared/slide-show");
 const { loadFiles, parseFilePath, loadAlbumProps } = require("./fs-actions");
-const { COVERS_PER_PAGE } = require("../shared/constants");
-const { albumPopup } = require("./album-popup");
+const { COVERS_PER_PAGE } = require("../../shared/constants");
+const { albumPopup } = require("../windows/album-popup");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,

@@ -1,7 +1,7 @@
 const { Menu, dialog } = require("electron");
 const path = require("path");
-const { Channel } = require("../shared/communication");
-const { loadAlbumProps, selectImage, storeAlbumProps, parseFilePath } = require("./fs-actions");
+const { Channel } = require("../../shared/communication");
+const { loadAlbumProps, selectImage, storeAlbumProps, parseFilePath } = require("../services/fs-actions");
 
 class AlbumPopup {
     constructor() {}

@@ -4,7 +4,7 @@
   "license": "ISC",
   "version": "1.5.1",
   "description": "An application to show a slide show from existing folders.",
-  "main": "main.js",
+  "main": "app/main.js",
   "scripts": {
     "start": "run electron .",
     "pack": "electron-builder --dir",

@@ -1,5 +1,5 @@
-const { SlideshowControl, Channel } = require("../shared/communication");
-const { isImage } = require("../shared/slide-show");
+const { SlideshowControl, Channel } = require("../../shared/communication");
+const { isImage } = require("../../shared/slide-show");
 
 class Controller {
     constructor() {
