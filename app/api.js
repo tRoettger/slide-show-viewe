@@ -1,8 +1,9 @@
 const { ipcMain, ipcRenderer } = require("electron");
-const { getDefaultSlideShowConfigPath } = require("./services/configuration");
+const { getDefaultSlideShowConfigPath } = require("./windows/configuration");
 const fs = require("fs");
 const { SlideshowControl, WindowId } = require("../shared/communication");
 const { fileService } = require("./services/FileService");
+const { createConfig } = require("../shared/slide-show");
 
 /**
  * Contains channels to provide the server with information.
@@ -18,7 +19,9 @@ const InChannel = {
     NOTIFY_ALBUM_CHANGED: "notify-album-changed",
     NOTIFY_PAGE_INFO: "notify-page-info",
     REQUEST_ALBUMS: "request-albums",
-    SHOW_ALBUM_POPUP: "show-album-popup"
+    SHOW_ALBUM_POPUP: "show-album-popup",
+    SAVE_CONFIG: "save-config",
+    SAVE_CONFIG_AS: "save-config-as"
 };
 
 /**
@@ -28,9 +31,7 @@ const OutChannel = {
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONTROL_SLIDESHOW: "control-slideshow",
     OPEN_ALBUM: "open-album",
-    PROVIDE_IMAGE: "provide-image",
-    SAVE_CONFIG: "save-config",
-    SAVE_CONFIG_AS: "save-config-as",
+    PROVIDE_IMAGE: "provide-image"
 };
 
 exports.clientApi = {
@@ -64,6 +65,18 @@ exports.clientApi = {
     notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, WindowId.MAIN_WINDOW)
 };
 
+exports.clientConfigApi = {
+    saveConfig: (viewDuration, transitionDuration, timingFunction) => ipcRenderer.send(
+        InChannel.SAVE_CONFIG, 
+        createConfig(viewDuration, transitionDuration, timingFunction)
+    ),
+    saveConfigAs: (viewDuration, transitionDuration, timingFunction) => ipcRenderer.send(
+        InChannel.SAVE_CONFIG_AS, 
+        createConfig(viewDuration, transitionDuration, timingFunction)
+    ),
+    notifyInitialized: () => ipcRenderer.send(InChannel.CONFIGURATION_READY, WindowId.CONFIGURATION_WINDOW)
+}
+
 exports.serverApi = {
     registerController: (controller) => {
         
@@ -83,13 +96,13 @@ exports.serverApi = {
 
         ipcMain.on(InChannel.SAVE_CONFIG, (event, arg) => {
             controller.setConfiguration(arg);
-            event.sender.send(OutChannel.SAVE_CONFIG, { successful: true });
+            event.sender.send(InChannel.SAVE_CONFIG, { successful: true });
             fileService.saveConfig(arg);
         });
 
         ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
             controller.setConfiguration(config);
-            event.sender.send(OutChannel.SAVE_CONFIG_AS, { successful: true });
+            event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
             fileService.saveConfigAs(config);
         });
 

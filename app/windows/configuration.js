@@ -13,16 +13,23 @@ const createFixProperties = () => ({
     }
 });
 
-const CONFIG_WINDOW_PROPERTIES = {
+const createConfigWindowProperties = () => ({
     width: 640, height: 480,
-    webPreferences: { nodeIntegration: true, contextIsolation: false },
+    webPreferences: { 
+        sandbox: false,
+        preload: path.join(__dirname, "..", "preload.js")
+     },
     autoHideMenuBar: true
-};
+});
+
+let configWindow;
 
 exports.configureApp = () => {
-    const configWindow = new BrowserWindow(CONFIG_WINDOW_PROPERTIES);
-    configWindow.loadFile("public/slide-show-config.html");
+    configWindow = new BrowserWindow(createConfigWindowProperties());
+    configWindow.loadFile(path.join(__dirname, "..", "renderer", "pages", "slide-show-config.html"));
 };
+
+exports.devTools = () => configWindow.webContents.openDevTools({ mode: "detach" });
 
 const getCfgPath = () => {
     var cfgPath = path.join(app.getPath("userData"), "./cfg");

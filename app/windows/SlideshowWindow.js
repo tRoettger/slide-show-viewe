@@ -1,5 +1,5 @@
 const path = require('path');
-const { saveWindowProperties, readWindowProperties } = require("../services/configuration");
+const { saveWindowProperties, readWindowProperties } = require("./configuration");
 const { controller } = require("../services/controller");
 const { BrowserWindow, globalShortcut } = require('electron');
 

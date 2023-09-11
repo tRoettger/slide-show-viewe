@@ -1,6 +1,6 @@
 const { Menu } = require('electron');
 const { controller } = require("./services/controller");
-const { configureApp } = require("./services/configuration");
+const { configureApp, devTools } = require("./windows/configuration");
 const { selector } = require("./services/selector");
 const { fileService } = require('./services/FileService');
 
@@ -39,7 +39,8 @@ const MENU_TEMPLATE = [
         submenu: [
             { "role": "reload", "label": "Neu laden", click: controller.reload },
             { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools },
-            { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools }
+            { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools },
+            { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: devTools}
         ]
     }
 ];
