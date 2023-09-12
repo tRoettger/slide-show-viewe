@@ -5,6 +5,11 @@ const { fileService } = require('./services/FileService');
 const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow } = require('./model/AppWindow');
 const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
 
+const MenuItemId = {
+    START_SLIDESHOW: "start-slideshow",
+    STOP_SLIDESHOW: "stop-slideshow"
+};
+
 const MENU_TEMPLATE = [
     {
         label: "Datei",
@@ -24,12 +29,12 @@ const MENU_TEMPLATE = [
         label: "Diashow",
         submenu: [
             { 
-                label: "Diashow starten", accelerator: "Space", 
-                click: controller.startSlideShow, enabled: controller.isRunning
+                label: "Diashow starten", accelerator: "Space", registerAccelerator: false,
+                click: controller.startSlideShow, id: MenuItemId.START_SLIDESHOW
             },
             { 
-                label: "Diashow stoppen", accelerator: "Space", 
-                click: controller.stopSlideShow, enabled: () => !controller.isRunning()
+                label: "Diashow stoppen",  accelerator: "Space", registerAccelerator: false,
+                click: controller.stopSlideShow, id: MenuItemId.STOP_SLIDESHOW, enabled: false
             },
             { label: "Einstellungen", accelerator: "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
             { 
@@ -55,5 +60,10 @@ const MENU_TEMPLATE = [
         ]
     }
 ];
+
+controller.subscribeState((running) => {
+    Menu.getApplicationMenu().getMenuItemById(MenuItemId.START_SLIDESHOW).enabled = !running;
+    Menu.getApplicationMenu().getMenuItemById(MenuItemId.STOP_SLIDESHOW).enabled = running;
+});
 
 Menu.setApplicationMenu(Menu.buildFromTemplate(MENU_TEMPLATE));
