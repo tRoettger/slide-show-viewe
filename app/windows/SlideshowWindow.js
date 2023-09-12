@@ -1,5 +1,5 @@
 const path = require('path');
-const { saveWindowProperties, readWindowProperties } = require("../services/SlideshowCnfigurer");
+const { saveWindowProperties, readWindowProperties } = require("../services/SlideshowConfigurer");
 const { BrowserWindow } = require('electron');
 
 const createWindow = () => {

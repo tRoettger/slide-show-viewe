@@ -1,4 +1,4 @@
-const { getDefaultSlideShowConfigPath } = require("./SlideshowCnfigurer");
+const { getDefaultSlideShowConfigPath } = require("./SlideshowConfigurer");
 const fs = require("fs");
 const { dialog } = require("electron");
 const path = require("path");
