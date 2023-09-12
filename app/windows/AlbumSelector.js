@@ -32,10 +32,10 @@ const NOTHING_TO_LOAD_ERROR = "NOTHING_TO_LOAD_ERROR";
 class AlbumSelector {
     constructor(coversPerPage, albumPopup, albumListener, pageInfoListener) {
         this.filterAlbums = this.filterAlbums.bind(this);
-        this.openWindow = this.selectRootFolder.bind(this);
-        this.openDevTools = this.openDevTools.bind(this);
+        this.selectRootFolder = this.selectRootFolder.bind(this);
         this.showAlbumPopup = this.showAlbumPopup.bind(this);
         this.sortAlbums = this.sortAlbums.bind(this);
+        
         this.start = 0;
         this.end = coversPerPage;
         this.coversPerPage = coversPerPage;
@@ -145,10 +145,6 @@ class AlbumSelector {
             this.#notifyAlbum(this.albums[i]);
         }
     }
-
-    openDevTools() {
-        this.window.webContents.openDevTools({ mode: "detach" });
-    }
     
     selectRootFolder(onLoad) {
         this.albums = [];
@@ -167,7 +163,7 @@ class AlbumSelector {
     }
 
     showAlbumPopup(options) {
-        this.popup.popup(options, this.window);
+        this.popup.popup(options);
     }
 
     sortAlbums(order) {

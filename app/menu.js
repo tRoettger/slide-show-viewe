@@ -13,9 +13,10 @@ const MENU_TEMPLATE = [
                 "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", 
                 click: () => fileService.openFolder((folder => controller.openAlbum(folder)))
             },
-            { "role": "album-selection", "label": "Album Auswahl", "accelerator": "Alt+A", click: (event) => {
-                selector.selectRootFolder(albumSelectionAppWindow.show);
-            }},
+            {
+                "role": "album-selection", "label": "Album Auswahl", "accelerator": "Alt+A", 
+                click: (event) => selector.selectRootFolder(albumSelectionAppWindow.show)
+            },
             { "type": "separator" },
             { "role": "quit", "label": "Beenden" }
         ]
@@ -42,7 +43,7 @@ const MENU_TEMPLATE = [
         submenu: [
             { "role": "reload", "label": "Neu laden", click: reloadAll },
             { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
-            { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools },
+            { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: albumSelectionAppWindow.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: devTools}
         ]
     }

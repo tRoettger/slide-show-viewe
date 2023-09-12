@@ -2,9 +2,12 @@ const { Menu } = require("electron");
 const path = require("path");
 const { fileService } = require("../services/FileService");
 const { serverApi } = require("../communication/serverApi");
+const { getOrCreateAlbumSelectionWindow } = require("./AlbumSelectionWindow");
 
 class AlbumPopupMenu {
-    constructor() {}
+    constructor(windowSupplier) {
+        this.windowSupplier = windowSupplier;
+    }
 
     initMenu() {
         this.menu = Menu.buildFromTemplate([
@@ -29,12 +32,11 @@ class AlbumPopupMenu {
         serverApi.broadcastAlbumChange(this.album);
     }
 
-    popup(options, window) {
+    popup(options) {
         this.album = options.album;
-        this.window = window;
-        this.menu.popup(window);
+        this.menu.popup(this.windowSupplier());
     }
 }
 
-exports.albumPopupMenu = new AlbumPopupMenu();
+exports.albumPopupMenu = new AlbumPopupMenu(getOrCreateAlbumSelectionWindow);
 this.albumPopupMenu.initMenu();
