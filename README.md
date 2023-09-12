@@ -26,57 +26,13 @@ So moving the folder to another location does not break the cover configuration.
 
 # Changelogs
 
-<details>
-    <summary>v1.1.1</summary>
-    !INCLUDE "doc/v1.1.1/changelog.md"
-</details>
-
-<details>
-    <summary>v1.1.2</summary>
-    !INCLUDE "doc/v1.1.2/changelog.md"
-</details>
-
-<details>
-    <summary>v1.1.3</summary>
-    !INCLUDE "doc/v1.1.3/changelog.md"
-</details>
-
-<details>
-    <summary>v1.2.0</summary>
-    !INCLUDE "doc/v1.2.0/changelog.md"
-</details>
-
-<details>
-    <summary>v1.2.1</summary>
-    !INCLUDE "doc/v1.2.1/changelog.md"
-</details>
-
-<details>
-    <summary>v1.2.2</summary>
-    !INCLUDE "doc/v1.2.2/changelog.md"
-</details>
-
-<details>
-    <summary>v1.3.0</summary>
-    !INCLUDE "doc/v1.3.0/changelog.md"
-</details>
-
-<details>
-    <summary>v1.4.0</summary>
-    !INCLUDE "doc/v1.4.0/changelog.md"
-</details>
-
-<details>
-    <summary>v1.5.0</summary>
-    !INCLUDE "doc/v1.5.0/changelog.md"
-</details>
-
-<details>
-    <summary>v1.5.1</summary>
-    !INCLUDE "doc/v1.5.1/changelog.md"
-</details>
-
-<details>
-    <summary>v2.0.0</summary>
-    !INCLUDE "doc/v2.0.0/changelog.md"
-</details>
+- [v1.1.2](./doc/v1.1.2/changelog.md)
+- [v1.1.3](./doc/v1.1.3/changelog.md)
+- [v1.2.0](./doc/v1.2.0/changelog.md) ([de](./doc/v1.2.0/changelog-de.md))
+- [v1.2.1](./doc/v1.2.1/changelog.md)
+- [v1.2.2](./doc/v1.2.2/changelog.md)
+- [v1.3.0](./doc/v1.3.0/changelog.md) ([de](./doc/v1.3.0/changelog-de.md))
+- [v1.4.0](./doc/v1.4.0/changelog.md) ([de](./doc/v1.4.0/changelog-de.md))
+- [v1.5.0](./doc/v1.5.0/changelog.md)
+- [v1.5.1](./doc/v1.5.1/changelog.md)
+- [v2.0.0](./doc/v2.0.0/changelog.md)
