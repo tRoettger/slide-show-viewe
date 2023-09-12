@@ -58,3 +58,12 @@ configApi.subscribe(ID, (config) => {
 api.subscribeSlideshowControls(ID, startSlideShow, stopSlideShow, gotoNext, gotoPrevious);
 
 api.notifySlideshowWindowReady();
+
+/* Hide control bar after first hover */
+for(let element of document.getElementsByClassName("control-panel")) {
+    element.addEventListener(
+        "pointerenter", 
+        (e) => {document.documentElement.style.setProperty("--control-bar-visiblity", "none"); console.log("triggered")},
+        { once: true }
+    );
+}

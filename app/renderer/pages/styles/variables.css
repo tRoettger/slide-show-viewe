@@ -6,4 +6,5 @@
     --view-duration: 0s;
     --timing-function: ease-in-out;
     --screen-background: black;
+    --control-bar-visiblity: flex;
 }
