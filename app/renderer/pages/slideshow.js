@@ -60,7 +60,7 @@ api.subscribeSlideshowControls(ID, startSlideShow, stopSlideShow, gotoNext, goto
 api.notifySlideshowWindowReady();
 
 /* Hide control bar after first hover */
-for(let element of document.getElementsByClassName("control-panel")) {
+for(let element of document.getElementsByClassName("control-panel-area")) {
     element.addEventListener(
         "pointerenter", 
         (e) => document.documentElement.style.setProperty("--control-bar-visiblity", "none"),
