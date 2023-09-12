@@ -3,5 +3,5 @@ exports.AlbumRequestType = {
 };
 
 exports.AlbumRequest = {
-    page: (page) => ({type: AlbumRequestType.PAGE, page: page})
+    page: (page) => ({type: this.AlbumRequestType.PAGE, page: page})
 };
