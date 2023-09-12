@@ -50,6 +50,10 @@ div.control-panel-area:hover div.control-panel {
     display: flex;
 }
 
+div.control-panel-area:not(:hover) + div.control-panel {
+    display: flex;
+}
+
 a.control-btn {
     background: white;
     cursor: pointer;
