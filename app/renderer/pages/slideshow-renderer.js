@@ -1,8 +1,8 @@
 
 const EMPTY_INTERVAL = setInterval(() => {}, 5000);
-const SYMBOL = {
-    start: "&#9655;",
-    pause: "&#10073;&#10073;"
+const BUTTON_STATES = {
+    start: { text: "&#9655;", title: "Diashow starten" },
+    pause: { text: "&#10073;&#10073;", title: "Diashow pausieren" }
 };
 
 const tryToDisplay = (id, setup) => {
@@ -78,14 +78,19 @@ class SlideshowRenderer {
         this.display.appendChild(child);
     }
 
+    #setPlayButtonState(state) {
+        this.playBtn.innerHTML = state.text;
+        this.playBtn.title = state.title;
+    }
+
     startTransition(swapDuration, onFinish) {
-        this.playBtn.innerHTML = SYMBOL.pause;
+        this.#setPlayButtonState(BUTTON_STATES.pause);
         this.createTransition();
         this.interval = setInterval(() => this.swapInterval(onFinish), swapDuration * 1000);
     }
 
     stopTransition() {
-        this.playBtn.innerHTML = SYMBOL.start;
+        this.#setPlayButtonState(BUTTON_STATES.start);
         clearInterval(this.interval);
         if(this.display.firstChild) {
             this.display.lastChild.style.animationName = "none";
