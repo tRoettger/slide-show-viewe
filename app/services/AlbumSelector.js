@@ -2,9 +2,9 @@ const { dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { isImage } = require("../model/imageFileHelper");
-const { albumPopupMenu: albumPopup } = require("./AlbumPopupMenu");
+const { albumPopupMenu: albumPopup } = require("../windows/AlbumPopupMenu");
 const { serverApi } = require("../communication/serverApi");
-const { fileService } = require("../services/FileService");
+const { fileService } = require("./FileService");
 const { FilterType } = require("../model/AlbumUtils");
 const { error } = require("console");
 

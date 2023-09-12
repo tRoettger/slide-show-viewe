@@ -1,6 +1,6 @@
 const { Menu } = require('electron');
 const { slideshowController: controller } = require("./services/SlideshowController");
-const { selector } = require("./windows/AlbumSelector");
+const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
 const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow } = require('./model/AppWindow');
 const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
