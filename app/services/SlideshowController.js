@@ -6,9 +6,11 @@ class SlideshowController {
         this.files = [];
         this.running = false;
         this.startSlideShow = this.startSlideShow.bind(this);
+        this.stopSlideShow = this.stopSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
         this.gotoNextImage = this.gotoNextImage.bind(this);
         this.openAlbum = this.openAlbum.bind(this);
+        this.isRunning = this.isRunning.bind(this);
     }
 
     openAlbum(files) {
