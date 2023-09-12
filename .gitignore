@@ -6,3 +6,4 @@ dist/
 .editorconfig
 yarn.lock
 .yarn/
+README.html
