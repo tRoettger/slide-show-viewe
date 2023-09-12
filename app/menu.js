@@ -53,7 +53,7 @@ const MENU_TEMPLATE = [
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
-            { label: "Neu laden", click: reloadAll },
+            { label: "Neu laden", click: reloadAll, accelerator: "Ctrl+R" },
             { label: "Dev Tools (Hauptfenster)", accelerator: "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
             { label: "Dev Tools (Album Auswahl)", click: albumSelectionAppWindow.openDevTools },
             { label: "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools }
