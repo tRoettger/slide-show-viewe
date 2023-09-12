@@ -28,12 +28,13 @@ const MENU_TEMPLATE = [
     }, {
         label: "Diashow",
         submenu: [
+            { label: "Diashow starten/pausieren", visible: false, accelerator: "Space", click: controller.toggleSlideShow },
             { 
                 label: "Diashow starten", accelerator: "Space", registerAccelerator: false,
                 click: controller.startSlideShow, id: MenuItemId.START_SLIDESHOW
             },
             { 
-                label: "Diashow stoppen",  accelerator: "Space", registerAccelerator: false,
+                label: "Diashow pausieren",  accelerator: "Space", registerAccelerator: false,
                 click: controller.stopSlideShow, id: MenuItemId.STOP_SLIDESHOW, enabled: false
             },
             { label: "Einstellungen", accelerator: "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
@@ -48,7 +49,8 @@ const MENU_TEMPLATE = [
     }, {
         label: "Ansicht",
         submenu: [
-            { label: "Vollbild", accelerator: "F11", click: mainAppWindow.toggleFullscreen }
+            { label: "Vollbild", accelerator: "F11", click: mainAppWindow.toggleFullscreen },
+            { label: "Vollbild beenden", visible: false, accelerator: "Esc", click: mainAppWindow.setWindowed },
         ]
     }, {
         label: "Entwickler Werkzeuge",

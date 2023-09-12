@@ -1,4 +1,3 @@
-const { globalShortcut } = require('electron');
 const { mainWindow } = require("../windows/SlideshowWindow");
 const { getOrCreateAlbumSelectionWindow } = require('../windows/AlbumSelectionWindow');
 const { getOrCreateSlideshowConfigurationWindow } = require('../windows/SlideshowConfigWindow');
@@ -65,8 +64,6 @@ class AppWindow {
 exports.mainAppWindow = new AppWindow(() => mainWindow, true, true);
 exports.albumSelectionAppWindow = new AppWindow(getOrCreateAlbumSelectionWindow, false, false);
 exports.slideshowConfigAppWindow = new AppWindow(getOrCreateSlideshowConfigurationWindow, false, false);
-
-globalShortcut.register("Esc", this.mainAppWindow.setWindowed);
 
 exports.reloadAll = () => {
     for(let appWindow of [
