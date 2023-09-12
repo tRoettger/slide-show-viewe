@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 32 32">
+    <linearGradient id="picture-background" x1="100%" x2="0%" y1="0%" y2="100%">
+        <stop offset="0%" style="stop-color: rgb(158, 218, 255)"/>
+        <stop offset="100%" style="stop-color: rgb(45, 97, 255)"/>
+    </linearGradient>
+    <linearGradient id="button-background" x1="100%" x2="0%" y1="0%" y2="0%">
+        <stop offset="0%" style="stop-color: rgb(97, 158, 255)"/>
+        <stop offset="100%" style="stop-color: rgb(45, 97, 255)"/>
+    </linearGradient>
+    <linearGradient id="mountain-front-background" x1="0%" x2="75%" y1="100%" y2="50%">
+        <stop offset="0%" style="stop-color: rgb(0, 37, 97)"/>
+        <stop offset="100%" style="stop-color: rgb(37, 97, 158)"/>
+    </linearGradient>
+    <linearGradient id="mountain-back-background" x1="0%" x2="75%" y1="100%" y2="50%">
+        <stop offset="0%" style="stop-color: rgb(37, 97, 158)"/>
+        <stop offset="100%" style="stop-color: rgb(37, 97, 255)"/>
+    </linearGradient>
+
+    <g id="picture">
+        <g id="background" stroke="black" stroke-width="1" fill="url(#picture-background)">
+            <path d="M 6.08 0 L 25.92 0.00 L 25.92 19.84 L 6.08 19.84 L 6.08 0.00 Z" />
+        </g>
+        <g id="mountain-back" stroke="url(#mountain-back-background)" stroke-width="1" fill="url(#mountain-back-background)" >
+            <path d="
+                M 15.87 18.84
+                L 19.66 11.26
+                L 23.45 18.84
+                Z" 
+            />
+        </g>
+        <g id="mountain-front" stroke="url(#mountain-front-background)" stroke-width="1" fill="url(#mountain-front-background)">
+        <!--7.58-->
+            <path d="
+                M 7.40 18.84 
+                L 13.53 6.58
+                L 19.66 18.84
+                Z"
+            />
+        </g>
+        <g id="sun" stroke="white" stroke-width="0" fill="white">
+            <circle cx="21.66" cy="4.58" r="2" />
+        </g>
+    </g>
+
+    <g id="buttons" stroke-width="1">
+        <g id="play" fill="url(#button-background)" stroke="url(#button-background)">
+            <path d="M 5.84 21.84 L 14.00 25.92 L 5.84 30.00 L 5.84 21.84 Z" />
+        </g>
+
+        <g id="pause" fill="url(#button-background)" stroke="url(#button-background)">
+            <path d="M 18.5536 21.84 L 20.86 21.84 L 20.86 30.00 L 18.55 30.00 L 18.55 21.84 Z" />
+            <path d="M 23.30 21.84 L 25.61 21.84 L 25.61 30.00 L 23.30 30.00 L 23.30 21.84 Z" />
+        </g>
+    </g>
+
+</svg>
