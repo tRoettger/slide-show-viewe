@@ -63,7 +63,7 @@ api.notifySlideshowWindowReady();
 for(let element of document.getElementsByClassName("control-panel")) {
     element.addEventListener(
         "pointerenter", 
-        (e) => {document.documentElement.style.setProperty("--control-bar-visiblity", "none"); console.log("triggered")},
+        (e) => document.documentElement.style.setProperty("--control-bar-visiblity", "none"),
         { once: true }
     );
 }
