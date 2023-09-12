@@ -13,6 +13,17 @@ For an automatic slideshow following parameters can be configured:
 - The duration of the transition to the next image.
 - The transition type.
 
+# Album Selection
+
+Switch between multiple folders can be tedious.  
+Therefore multiple root folders can be selected for the album selection.  
+Those root folders are scanned for folders which contain images.  
+A new window opens and displays each of those folders with a cover and the folder name.  
+
+The cover can be permantantly changed.  
+This configuration is stored with in the folder it belongs to.  
+So moving the folder to another location does not break the cover configuration.
+
 # Changelogs
 
 <details>
@@ -67,5 +78,5 @@ For an automatic slideshow following parameters can be configured:
 
 <details>
     <summary>v2.0.0</summary>
-    !INCLUDE "doc/v1.5.0/changelog.md"
+    !INCLUDE "doc/v2.0.0/changelog.md"
 </details>
