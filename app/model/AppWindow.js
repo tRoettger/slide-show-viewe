@@ -5,27 +5,34 @@ class AppWindow {
     constructor(browserWindow, fullscreenAllowed, menuBarVisible) {
         this.browserWindow = browserWindow;
         this.fullscreen = false;
+        this.fullscreenAllowed = fullscreenAllowed;
+        this.menuBarVisible = menuBarVisible;
 
-        const setScreenMode = (fullscreenAllowed) ? (fullscreenMode) => {
-            this.fullscreen = fullscreenMode;
-            this.browserWindow.setFullScreen(this.fullscreen);
-            
-            /* Hides menubar if window is in fullscreen mode. */
-            this.browserWindow.menuBarVisible = menuBarVisible && !this.fullscreen;
-        } : (fullscreenMode) => {
-            /* Allow to "reset" windowed mode for windows without fullscreen mode. */
-            this.browserWindow.setFullScreen(false);
-            this.browserWindow.menuBarVisible = menuBarVisible;
-        };
-
-        this.changeScreenMode = () => setScreenMode(!this.fullscreen);
-        this.setWindowed = () => setScreenMode(false);
-        this.openDevTools = () => this.webContents.openDevTools({ mode: "detach" });
-
-        this.changeScreenMode = this.changeScreenMode.bind(this);
+        this.toggleFullscreen = this.toggleFullscreen.bind(this);
         this.setWindowed = this.setWindowed.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
         this.reload = this.reload.bind(this);
+    }
+
+    #setScreenMode(fullscreen) {
+        this.fullscreen = this.fullscreenAllowed && fullscreen;
+        this.browserWindow.setFullScreen(this.fullscreen);
+        
+        /* Hides menubar if window is in fullscreen mode. */
+        this.browserWindow.menuBarVisible = this.menuBarVisible && !this.fullscreen;
+
+    }
+
+    toggleFullscreen() {
+        this.#setScreenMode(!this.fullscreen);
+    }
+
+    setWindowed() {
+        this.#setScreenMode(false);
+    }
+
+    openDevTools() {
+        this.browserWindow.webContents.openDevTools({ mode: "detach" });
     }
 
     reload() {
@@ -36,7 +43,7 @@ class AppWindow {
     
 };
 
-exports.mainAppWindow = new AppWindow(mainWindow);
+exports.mainAppWindow = new AppWindow(mainWindow, true, true);
 globalShortcut.register("Esc", this.mainAppWindow.setWindowed);
 
 exports.reloadAll = () => {

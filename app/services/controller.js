@@ -3,21 +3,12 @@ const { serverApi } = require("../communication/serverApi");
 
 class Controller {
     constructor() {
-        this.fullscreen = false;
         this.files = [];
         this.running = false;
-        this.changeScreenMode = this.changeScreenMode.bind(this);
-        this.openDevTools = this.openDevTools.bind(this);
         this.startSlideShow = this.startSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
         this.gotoNextImage = this.gotoNextImage.bind(this);
-        this.setFullScreenMode = this.setFullScreenMode.bind(this);
         this.openAlbum = this.openAlbum.bind(this);
-    }
-
-    initialize(mainWindow) {
-        this.mainWindow = mainWindow;
-        this.webContents = mainWindow.webContents;
     }
 
     openAlbum(files) {
@@ -32,15 +23,6 @@ class Controller {
 
     getConfiguration() {
         return this.config;
-    }
-
-    reload() { this.webContents.reloadIgnoringCache(); }
-    changeScreenMode() { this.setFullScreenMode(!this.fullscreen); }
-
-    setFullScreenMode(fullscreenMode) {
-        this.fullscreen = fullscreenMode;
-        this.mainWindow.setFullScreen(this.fullscreen);
-        this.mainWindow.menuBarVisible = !this.fullscreen;
     }
     startSlideShow() { 
         this.running = true;
@@ -67,8 +49,6 @@ class Controller {
             image: this.files[index]
         });
     }
-    
-    openDevTools() { this.webContents.openDevTools({ mode: "detach" }); }
 
 };
 

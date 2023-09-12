@@ -33,13 +33,13 @@ const MENU_TEMPLATE = [
     }, {
         label: "Ansicht",
         submenu: [
-            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: mainAppWindow.changeScreenMode }
+            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: mainAppWindow.toggleFullscreen }
         ]
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
             { "role": "reload", "label": "Neu laden", click: reloadAll },
-            { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools },
+            { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: devTools}
         ]
