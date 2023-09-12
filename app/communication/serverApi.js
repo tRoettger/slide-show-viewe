@@ -1,5 +1,5 @@
 const { ipcMain, ipcRenderer } = require("electron");
-const { getDefaultSlideShowConfigPath } = require("../windows/configuration");
+const { getDefaultSlideShowConfigPath } = require("../services/SlideshowCnfigurer");
 const fs = require("fs");
 const { fileService } = require("../services/FileService");
 const { subscriptionService } = require("../services/SubscriptionService");

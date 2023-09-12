@@ -1,4 +1,4 @@
-const { getDefaultSlideShowConfigPath } = require("../windows/configuration");
+const { getDefaultSlideShowConfigPath } = require("./SlideshowCnfigurer");
 const fs = require("fs");
 const { dialog } = require("electron");
 const path = require("path");

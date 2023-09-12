@@ -1,9 +1,9 @@
 const { Menu } = require('electron');
 const { slideshowController: controller } = require("./services/SlideshowController");
-const { configureApp, devTools } = require("./windows/configuration");
 const { selector } = require("./windows/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { reloadAll, mainAppWindow, albumSelectionAppWindow } = require('./model/AppWindow');
+const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow } = require('./model/AppWindow');
+const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
 
 const MENU_TEMPLATE = [
     {
@@ -24,7 +24,7 @@ const MENU_TEMPLATE = [
         label: "Diashow",
         submenu: [
             { "role": "start-slide-show", "label": "Diashow starten/stoppen", "accelerator": "Space", click: controller.startSlideShow },
-            { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: configureApp },
+            { "role": "cfg-app", "label": "Einstellungen", "accelerator": "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
             { 
                 "role": "load-cfg", "label": "Gespeicherte Einstellungen laden", "accelerator": "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => controller.setConfiguration(config))
@@ -44,7 +44,7 @@ const MENU_TEMPLATE = [
             { "role": "reload", "label": "Neu laden", click: reloadAll },
             { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: albumSelectionAppWindow.openDevTools },
-            { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: devTools}
+            { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools }
         ]
     }
 ];

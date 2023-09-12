@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -12,24 +12,6 @@ const createFixProperties = () => ({
         preload: path.join(__dirname, "..", "preload.js")
     }
 });
-
-const createConfigWindowProperties = () => ({
-    width: 640, height: 480,
-    webPreferences: { 
-        sandbox: false,
-        preload: path.join(__dirname, "..", "preload.js")
-     },
-    autoHideMenuBar: true
-});
-
-let configWindow;
-
-exports.configureApp = () => {
-    configWindow = new BrowserWindow(createConfigWindowProperties());
-    configWindow.loadFile(path.join(__dirname, "..", "renderer", "pages", "slide-show-config.html"));
-};
-
-exports.devTools = () => configWindow.webContents.openDevTools({ mode: "detach" });
 
 const getCfgPath = () => {
     var cfgPath = path.join(app.getPath("userData"), "./cfg");
