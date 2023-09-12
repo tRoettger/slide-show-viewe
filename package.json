@@ -1,8 +1,8 @@
 {
   "name": "slide-show-viewer",
   "author": "Tobias Röttger",
-  "license": "ISC",
-  "version": "2.0.0",
+  "license": "MIT",
+  "version": "2.0.1",
   "description": "An application to show a slide show from existing folders.",
   "main": "app/main.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "build": {
     "nsis": {
       "oneClick": false,
-      "perMachine": false,
+      "perMachine": true,
       "allowToChangeInstallationDirectory": true
     }
   }
