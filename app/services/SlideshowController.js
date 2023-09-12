@@ -77,4 +77,4 @@ class SlideshowController {
 
 exports.slideshowController = new SlideshowController();
 serverApi.registerController(this.slideshowController);
-globalShortcut.register("Space", this.slideshowController.toggleSlideShow);
+//globalShortcut.register("Space", this.slideshowController.toggleSlideShow);
