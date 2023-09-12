@@ -1,7 +1,13 @@
+:root {
+    --control-bar-height: 100px;
+    --text-wrapper-height: calc(100vh - var(--control-bar-height));
+}
 body {
     margin: 0px;
     padding: 0px;
-    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background-color);
+    color: var(--font-color);
+    font-family: var(--font-family);
 }
 div#root {
     width: 100%;
@@ -35,7 +41,7 @@ img.album-image {
 div.control-panel-area {
     position: fixed;
     bottom: 0px;
-    height: 100px;
+    height: var(--control-bar-height);
     width: 100%;
 }
 
@@ -52,6 +58,7 @@ div.control-panel-area:hover div.control-panel {
 
 a.control-btn {
     background: white;
+    color: black;
     cursor: pointer;
     user-select: none;
     display: inline-block;
@@ -72,4 +79,27 @@ a#slideshow-btn {
 
 a.control-btn:hover {
     background: grey;
+}
+
+div#text-wrapper {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: var(--text-wrapper-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div#welcome-text{
+    padding: 20px 32px;
+    border: 1px solid var(--font-color);
+    user-select: none;
+    /*text-align: center;*/
+}
+div#welcome-text h3 {
+    margin-top: 0;
 }
