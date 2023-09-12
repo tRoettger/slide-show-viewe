@@ -1,11 +1,11 @@
 const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const { FilterType, AlbumSorter } = require("../../shared/communication");
 const { isImage } = require("../model/imageFileHelper");
 const { albumPopup } = require("./album-popup");
-const { serverApi } = require("../api");
+const { serverApi } = require("../communication/serverApi");
 const { fileService } = require("../services/FileService");
+const { FilterType } = require("../model/AlbumUtils");
 
 const COVERS_PER_PAGE = 20;
 

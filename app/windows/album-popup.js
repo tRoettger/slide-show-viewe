@@ -1,7 +1,7 @@
 const { Menu } = require("electron");
 const path = require("path");
 const { fileService } = require("../services/FileService");
-const { serverApi } = require("../api");
+const { serverApi } = require("../communication/serverApi");
 
 class AlbumPopup {
     constructor() {}

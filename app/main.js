@@ -1,9 +1,11 @@
 const { app, BrowserWindow } = require('electron');
-const { serverApi } = require('./api');
-require('./menu');
+const { serverApi } = require('./communication/serverApi');
 
 serverApi.initialize();
-const createWindow = () => require('./windows/SlideshowWindow');
+const createWindow = () => {
+  require('./menu');
+  require('./windows/SlideshowWindow');
+};
 
 if(process.platform !== 'darwin') {
   app.on('window-all-closed', app.quit);

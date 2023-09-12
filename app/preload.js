@@ -1,6 +1,6 @@
 const { contextBridge } = require('electron');
-const { clientApi, clientConfigApi, clientAlbumApi } = require('./api');
+const { api, configApi, albumApi } = require('./communication/clientApi');
 
-contextBridge.exposeInMainWorld('api', clientApi);
-contextBridge.exposeInMainWorld('configApi', clientConfigApi);
-contextBridge.exposeInMainWorld('albumApi', clientAlbumApi);
+contextBridge.exposeInMainWorld('api', api);
+contextBridge.exposeInMainWorld('configApi', configApi);
+contextBridge.exposeInMainWorld('albumApi', albumApi);

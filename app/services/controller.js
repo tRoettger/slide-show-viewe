@@ -1,5 +1,5 @@
-const { isImage } = require("../../shared/slide-show");
-const { serverApi } = require("../api");
+const { isImage } = require("../model/imageFileHelper");
+const { serverApi } = require("../communication/serverApi");
 
 class Controller {
     constructor() {

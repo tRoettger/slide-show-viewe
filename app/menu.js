@@ -3,6 +3,7 @@ const { controller } = require("./services/controller");
 const { configureApp, devTools } = require("./windows/configuration");
 const { selector } = require("./windows/selector");
 const { fileService } = require('./services/FileService');
+const { reloadAll, mainAppWindow } = require('./model/AppWindow');
 
 const MENU_TEMPLATE = [
     {
@@ -32,12 +33,12 @@ const MENU_TEMPLATE = [
     }, {
         label: "Ansicht",
         submenu: [
-            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: controller.changeScreenMode }
+            { "role": "fullscreen", "label": "Vollbild", "accelerator": "F11", click: mainAppWindow.changeScreenMode }
         ]
     }, {
         label: "Entwickler Werkzeuge",
         submenu: [
-            { "role": "reload", "label": "Neu laden", click: controller.reload },
+            { "role": "reload", "label": "Neu laden", click: reloadAll },
             { "role": "dev-tools", "label": "Dev Tools (Hauptfenster)", "accelerator": "Ctrl+Shift+I", click: controller.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Album Auswahl)", click: selector.openDevTools },
             { "role": "dev-tools", "label": "Dev Tools (Diashow Einstellungen)", click: devTools}
