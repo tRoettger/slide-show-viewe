@@ -1,5 +1,5 @@
 const { Menu } = require('electron');
-const { controller } = require("./services/controller");
+const { slideshowController: controller } = require("./services/SlideshowController");
 const { configureApp, devTools } = require("./windows/configuration");
 const { selector } = require("./windows/selector");
 const { fileService } = require('./services/FileService');

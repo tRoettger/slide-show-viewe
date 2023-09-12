@@ -1,7 +1,7 @@
 const { isImage } = require("../model/imageFileHelper");
 const { serverApi } = require("../communication/serverApi");
 
-class Controller {
+class SlideshowController {
     constructor() {
         this.files = [];
         this.running = false;
@@ -52,5 +52,5 @@ class Controller {
 
 };
 
-exports.controller = new Controller();
-serverApi.registerController(this.controller);
+exports.slideshowController = new SlideshowController();
+serverApi.registerController(this.slideshowController);

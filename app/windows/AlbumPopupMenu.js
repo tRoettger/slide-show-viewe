@@ -3,7 +3,7 @@ const path = require("path");
 const { fileService } = require("../services/FileService");
 const { serverApi } = require("../communication/serverApi");
 
-class AlbumPopup {
+class AlbumPopupMenu {
     constructor() {}
 
     initMenu() {
@@ -36,5 +36,5 @@ class AlbumPopup {
     }
 }
 
-exports.albumPopup = new AlbumPopup();
-this.albumPopup.initMenu();
+exports.albumPopupMenu = new AlbumPopupMenu();
+this.albumPopupMenu.initMenu();
