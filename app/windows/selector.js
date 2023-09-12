@@ -2,11 +2,12 @@ const { BrowserWindow, dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { FilterType, AlbumSorter } = require("../../shared/communication");
-const { isImage } = require("../../shared/slide-show");
-const { COVERS_PER_PAGE } = require("../../shared/constants");
+const { isImage } = require("../model/imageFileHelper");
 const { albumPopup } = require("./album-popup");
 const { serverApi } = require("../api");
 const { fileService } = require("../services/FileService");
+
+const COVERS_PER_PAGE = 20;
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
@@ -25,14 +26,14 @@ const compareSize = (a1, a2) => a1.count - a2.count;
 const DEFAULT_COMPARATOR = compareFolder;
 
 const COMPARATORS = new Map();
-COMPARATORS.set(AlbumSorter.PATH_ASC, compareFolder);
-COMPARATORS.set(AlbumSorter.PATH_DESC,  (a1, a2) => compareFolder(a2, a1));
-COMPARATORS.set(AlbumSorter.NAME_ASC, compareName);
-COMPARATORS.set(AlbumSorter.NAME_DESC,  (a1, a2) => compareName(a2, a1));
-COMPARATORS.set(AlbumSorter.DATE_ASC, compareDate);
-COMPARATORS.set(AlbumSorter.DATE_DESC,  (a1, a2) => compareDate(a2, a1));
-COMPARATORS.set(AlbumSorter.SIZE_ASC, compareSize);
-COMPARATORS.set(AlbumSorter.SIZE_DESC,  (a1, a2) => compareSize(a2, a1));
+COMPARATORS.set("path-asc", compareFolder);
+COMPARATORS.set("path-desc",  (a1, a2) => compareFolder(a2, a1));
+COMPARATORS.set("name-asc", compareName);
+COMPARATORS.set("name-desc",  (a1, a2) => compareName(a2, a1));
+COMPARATORS.set("date_asc", compareDate);
+COMPARATORS.set("date_desc",  (a1, a2) => compareDate(a2, a1));
+COMPARATORS.set("size_asc", compareSize);
+COMPARATORS.set("size-desc",  (a1, a2) => compareSize(a2, a1));
 
 class AlbumSelector {
     constructor(coversPerPage, albumPopup, albumListener, pageInfoListener) {

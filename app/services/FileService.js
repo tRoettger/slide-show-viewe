@@ -2,8 +2,9 @@ const { getDefaultSlideShowConfigPath } = require("../windows/configuration");
 const fs = require("fs");
 const { dialog } = require("electron");
 const path = require("path");
-const { IMAGE_FILTER } = require("../../shared/slide-show");
-const { ALBUM_PROPERTIES_FILE } = require("../../shared/constants");
+const { IMAGE_FILTER } = require("../model/imageFileHelper");
+
+const ALBUM_PROPERTIES_FILE = "slideshow-viewer.json";
 
 class FileService {
     constructor(albumPropertiesFilename, configFileFilter, imageFilter) {

@@ -1,10 +1,22 @@
 const { ipcMain, ipcRenderer } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("./windows/configuration");
 const fs = require("fs");
-const { WindowId, AlbumRequest, AlbumRequestType } = require("../shared/communication");
+const { AlbumRequest } = require("../shared/communication");
 const { fileService } = require("./services/FileService");
-const { createConfig } = require("../shared/slide-show");
 const { subscriptionService } = require("./services/SubscriptionService");
+
+const createConfig = (viewDuration, transitionDuration, timingFunction) => ({
+    viewDuration: viewDuration, 
+    transitionDuration: transitionDuration, 
+    timingFunction: timingFunction
+});
+const AlbumRequestType = {
+    PAGE: "page"
+};
+
+const AlbumRequest = {
+    page: (page) => ({type: this.AlbumRequestType.PAGE, page: page})
+};
 
 /**
  * Contains channels to provide the server with information.
@@ -71,7 +83,7 @@ exports.clientApi = {
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.NEXT, onNext);
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.PREVIOUS, onPrevious);
     },
-    notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, WindowId.MAIN_WINDOW)
+    notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, "main-window")
 };
 
 exports.clientConfigApi = {
@@ -155,9 +167,7 @@ exports.serverApi = {
             }
         });
         
-        ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => {
-            controller.openAlbum(fileService.loadFiles([folder]));
-        });
+        ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => controller.startSlideShow());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => {
@@ -179,16 +189,8 @@ exports.serverApi = {
                 selector.loadPage(request.page);
             }
         });
-        ipcMain.on(InChannel.FILTER_ALBUMS, (event, filter) => {
-            selector.filterAlbums(filter);
-        });
-        
-        ipcMain.on(InChannel.CHANGE_ALBUM_ORDER, (event, order) => {
-            selector.sortAlbums(order);
-        });
-        
-        ipcMain.on(InChannel.SHOW_ALBUM_POPUP, (event, options) => {
-            selector.showAlbumPopup(options);
-        })
+        ipcMain.on(InChannel.CHANGE_ALBUM_ORDER, (event, order) => selector.sortAlbums(order));
+        ipcMain.on(InChannel.FILTER_ALBUMS, (event, filter) => selector.filterAlbums(filter));
+        ipcMain.on(InChannel.SHOW_ALBUM_POPUP, (event, options) => selector.showAlbumPopup(options))
     }
 };
