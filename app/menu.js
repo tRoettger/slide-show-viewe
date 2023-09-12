@@ -1,9 +1,9 @@
 const { Menu } = require('electron');
 const { slideshowController: controller } = require("./services/SlideshowController");
 const { configureApp, devTools } = require("./windows/configuration");
-const { selector } = require("./windows/selector");
+const { selector } = require("./windows/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { reloadAll, mainAppWindow } = require('./model/AppWindow');
+const { reloadAll, mainAppWindow, albumSelectionAppWindow } = require('./model/AppWindow');
 
 const MENU_TEMPLATE = [
     {
@@ -13,7 +13,9 @@ const MENU_TEMPLATE = [
                 "role": "open", "label": "Öffnen", "accelerator": "Ctrl+O", 
                 click: () => fileService.openFolder((folder => controller.openAlbum(folder)))
             },
-            { "role": "album-selection", "label": "Album Auswahl", "accelerator": "Alt+A", click: selector.openWindow },
+            { "role": "album-selection", "label": "Album Auswahl", "accelerator": "Alt+A", click: (event) => {
+                selector.selectRootFolder(albumSelectionAppWindow.show);
+            }},
             { "type": "separator" },
             { "role": "quit", "label": "Beenden" }
         ]

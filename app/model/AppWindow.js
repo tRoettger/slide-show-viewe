@@ -1,9 +1,10 @@
 const { globalShortcut } = require('electron');
 const { mainWindow } = require("../windows/SlideshowWindow");
+const { getOrCreateAlbumSelectionWindow } = require('../windows/AlbumSelectionWindow');
 
 class AppWindow {
-    constructor(browserWindow, fullscreenAllowed, menuBarVisible) {
-        this.browserWindow = browserWindow;
+    constructor(browserWindowSupplier, fullscreenAllowed, menuBarVisible) {
+        this.browserWindowSupplier = browserWindowSupplier;
         this.fullscreen = false;
         this.fullscreenAllowed = fullscreenAllowed;
         this.menuBarVisible = menuBarVisible;
@@ -12,15 +13,30 @@ class AppWindow {
         this.setWindowed = this.setWindowed.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
         this.reload = this.reload.bind(this);
+        this.show = this.show.bind(this);
+    }
+
+    #processBrowserWindowTask(task) {
+        const browserWindow = this.browserWindowSupplier();
+        return (browserWindow) ? task(browserWindow) : undefined;
+    }
+
+    #processWebcontentsTask(task) {
+        return this.#processBrowserWindowTask(browserWindow => {
+            const webContents = browserWindow.webContents;
+            return (webContents) ? task(webContents) : undefined;
+        });
     }
 
     #setScreenMode(fullscreen) {
         this.fullscreen = this.fullscreenAllowed && fullscreen;
-        this.browserWindow.setFullScreen(this.fullscreen);
         
-        /* Hides menubar if window is in fullscreen mode. */
-        this.browserWindow.menuBarVisible = this.menuBarVisible && !this.fullscreen;
+        this.#processBrowserWindowTask(w => {
+            w.setFullScreen(this.fullscreen)
 
+            /* Hides menubar if window is in fullscreen mode. */
+            w.menuBarVisible = this.menuBarVisible && !this.fullscreen;
+        });
     }
 
     toggleFullscreen() {
@@ -32,18 +48,22 @@ class AppWindow {
     }
 
     openDevTools() {
-        this.browserWindow.webContents.openDevTools({ mode: "detach" });
+        this.#processWebcontentsTask(c => c.openDevTools({ mode: "detach" }));
     }
 
     reload() {
-        if(this.browserWindow.webContents) {
-            this.browserWindow.webContents.reloadIgnoringCache();
-        }
+        this.#processWebcontentsTask(c => c.reloadIgnoringCache());
     }
-    
+
+    show() {
+        this.#processBrowserWindowTask(w => w.show());
+    }
+
 };
 
-exports.mainAppWindow = new AppWindow(mainWindow, true, true);
+exports.mainAppWindow = new AppWindow(() => mainWindow, true, true);
+exports.albumSelectionAppWindow = new AppWindow(getOrCreateAlbumSelectionWindow, false, false);
+
 globalShortcut.register("Esc", this.mainAppWindow.setWindowed);
 
 exports.reloadAll = () => {

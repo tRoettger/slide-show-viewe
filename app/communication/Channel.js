@@ -16,6 +16,7 @@ exports.InChannel = {
     FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
     REQUEST_ALBUMS: "request-albums",
+    REQUEST_PAGE_INFO: "request-page-info",
     SHOW_ALBUM_POPUP: "show-album-popup",
     SAVE_CONFIG: "save-config",
     SAVE_CONFIG_AS: "save-config-as",

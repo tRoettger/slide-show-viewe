@@ -16,8 +16,19 @@ class SubscriptionService {
     }
 
     broadcast(outChannel, msg) {
+        const failedSenders = [];
         for(let sender of this.#getOrEmptyMap(outChannel).values()) {
-            sender.send(outChannel, msg);
+            try {
+                sender.send(outChannel, msg);
+            } catch(error) {
+                console.error(`An error occured while broadcasting on channel "${outChannel}: `, error)
+            }
+        }
+    }
+
+    unsubscribeAll(id) {
+        for(let channelSubscriptions of this.subscriptions.values()) {
+            channelSubscriptions.delete(id);
         }
     }
 }

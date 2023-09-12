@@ -1,4 +1,4 @@
-const { BrowserWindow, dialog } = require("electron");
+const { dialog } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { isImage } = require("../model/imageFileHelper");
@@ -6,17 +6,9 @@ const { albumPopupMenu: albumPopup } = require("./AlbumPopupMenu");
 const { serverApi } = require("../communication/serverApi");
 const { fileService } = require("../services/FileService");
 const { FilterType } = require("../model/AlbumUtils");
+const { error } = require("console");
 
 const COVERS_PER_PAGE = 20;
-
-const SELECTOR_WINDOW_PROPERTIES = {
-    width: 1080, height: 720,
-    webPreferences: { 
-        sandbox: false,
-        preload: path.join(__dirname, "..", "preload.js")
-     },
-    autoHideMenuBar: true
-};
 
 const compareFolder = (a1, a2) => a1.folder.localeCompare(a2.folder);
 const compareName = (a1, a2) => a1.name.localeCompare(a2.name);
@@ -35,17 +27,18 @@ COMPARATORS.set("date_desc",  (a1, a2) => compareDate(a2, a1));
 COMPARATORS.set("size_asc", compareSize);
 COMPARATORS.set("size-desc",  (a1, a2) => compareSize(a2, a1));
 
+const NOTHING_TO_LOAD_ERROR = "NOTHING_TO_LOAD_ERROR";
+
 class AlbumSelector {
     constructor(coversPerPage, albumPopup, albumListener, pageInfoListener) {
         this.filterAlbums = this.filterAlbums.bind(this);
-        this.openWindow = this.openWindow.bind(this);
+        this.openWindow = this.selectRootFolder.bind(this);
         this.openDevTools = this.openDevTools.bind(this);
         this.showAlbumPopup = this.showAlbumPopup.bind(this);
         this.sortAlbums = this.sortAlbums.bind(this);
         this.start = 0;
         this.end = coversPerPage;
         this.coversPerPage = coversPerPage;
-        this.folders = [];
         this.albums = [];
         this.allAlbums = [];
         this.popup = albumPopup;
@@ -54,7 +47,7 @@ class AlbumSelector {
     }
 
     #computeProperties(folder, pictureFiles) {
-        var props = fileService.loadAlbumProps(folder);
+        let props = fileService.loadAlbumProps(folder);
         if (props && props.cover) {
             props.cover = fileService.parseFilePath(folder, props.cover);
             return props;
@@ -65,9 +58,9 @@ class AlbumSelector {
 
     #createAlbum(name, folder) {
         let files = fileService.loadFiles([folder]);
-        var pictureFiles = files.filter(isImage);
-        var albumProperties = this.#computeProperties(folder, pictureFiles);
-        var stats = fs.statSync(folder);
+        let pictureFiles = files.filter(isImage);
+        let albumProperties = this.#computeProperties(folder, pictureFiles);
+        let stats = fs.statSync(folder);
         return {
             cover: albumProperties.cover,
             count: pictureFiles.length,
@@ -100,19 +93,12 @@ class AlbumSelector {
             .map(f => path.join(folder, f.name));
     }
 
-    #loadFolders() {
-        this.#processFolders(this.folders);
-        this.#notifyPageInfo();
-    }
-
-    #loadWindow(folders) {
+    #loadFolders(folders) {
         if(folders.length > 0) {
-            this.folders = folders;
-            this.window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
-            this.window.title = "Album Auswahl";
-            this.folders = folders;
-            this.window.loadFile(path.join(__dirname, "..", "renderer", "pages", "selector", "view.html"))
-                .then(() => this.#loadFolders());
+            this.#processFolders(folders);
+            this.#notifyPageInfo();
+        } else {
+            throw NOTHING_TO_LOAD_ERROR;
         }
     }
 
@@ -121,7 +107,7 @@ class AlbumSelector {
     }
 
     #notifyPageInfo() {
-        var pageInfo = this.#createPageInfo();
+        let pageInfo = this.#createPageInfo();
         this.pageInfoListener(pageInfo);
     }
 
@@ -135,9 +121,9 @@ class AlbumSelector {
     }
 
     #processFolders(folders) {
-        var toProcess = [...folders];
+        let toProcess = [...folders];
         while(toProcess.length > 0) {
-            var folder = toProcess.shift();
+            let folder = toProcess.shift();
             this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
             this.#getSubFolders(folder).forEach(f => toProcess.push(f));
         }
@@ -155,7 +141,7 @@ class AlbumSelector {
     loadPage(page) {
         this.start = page * this.coversPerPage;
         this.end = this.start + this.coversPerPage;
-        for(var i = this.start; i < this.end; i++) {
+        for(let i = this.start; i < this.end; i++) {
             this.#notifyAlbum(this.albums[i]);
         }
     }
@@ -164,13 +150,20 @@ class AlbumSelector {
         this.window.webContents.openDevTools({ mode: "detach" });
     }
     
-    openWindow() {
+    selectRootFolder(onLoad) {
         this.albums = [];
         this.start = 0;
         this.end = this.coversPerPage;
-        this.folders = [];
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
-            .then(result => this.#loadWindow(result.filePaths));
+            .then(result => this.#loadFolders(result.filePaths))
+            .then(onLoad)
+            .catch((error) => {
+                if(error == NOTHING_TO_LOAD_ERROR) {
+                    /* Ignored, this error just prevents the call of the onLoad function. */
+                } else {
+                    throw error;
+                }
+            });
     }
 
     showAlbumPopup(options) {
@@ -178,11 +171,15 @@ class AlbumSelector {
     }
 
     sortAlbums(order) {
-        var sorter = COMPARATORS.get(order) || DEFAULT_COMPARATOR;
+        let sorter = COMPARATORS.get(order) || DEFAULT_COMPARATOR;
         this.albums.sort(sorter)
         this.allAlbums.sort(sorter);
         this.#notifyPageInfo();
         this.loadPage(0);
+    }
+
+    getPageInfo() {
+        return this.#createPageInfo();
     }
 }
 

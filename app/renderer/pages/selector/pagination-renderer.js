@@ -53,6 +53,10 @@ class PaginationRenderer {
         albumApi.requestAlbums(page);
     }
 
+    getCurrent() {
+        return this.current;
+    }
+
     #isSeparatorRequired(index, visiblePages) {
         return index + 1 < visiblePages.length
             && ((visiblePages[index + 1] - visiblePages[index]) > 1);

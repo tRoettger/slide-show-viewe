@@ -26,12 +26,13 @@ BTN_CLEAR.addEventListener("click", e => {
 SELECT_ORDER.addEventListener("change", e => {
     albumRenderer.clearDisplay();
     albumApi.changeAlbumOrder(SELECT_ORDER.value);
-})
+});
 
-console.log(albumApi);
-
-const ID = "album-selector";
+const ID = windowApi.windowId.ALBUM_SELECTION;
 
 albumApi.subscribeAlbum(ID, albumRenderer.render);
 albumApi.subscribePageInfo(ID, paginationRenderer.render);
 albumApi.subscribeAlbumChange(ID, albumRenderer.updateAlbum);
+
+albumApi.requestAlbums(paginationRenderer.getCurrent());
+albumApi.requestPageInfo();

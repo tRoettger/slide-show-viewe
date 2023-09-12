@@ -1,4 +1,4 @@
-const { ipcMain } = require("electron");
+const { ipcMain, ipcRenderer } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("../windows/configuration");
 const fs = require("fs");
 const { fileService } = require("../services/FileService");
@@ -77,11 +77,14 @@ exports.serverApi = {
     },
     registerSelector: (selector) => {
         ipcMain.on(InChannel.REQUEST_ALBUMS, (event, request) => {
-            console.log("Received album request: ", request);
             if(request.type == AlbumRequestType.PAGE) {
                 selector.loadPage(request.page);
             }
         });
+        ipcMain.on(InChannel.REQUEST_PAGE_INFO, (event) => event.sender.send(
+            OutChannel.NOTIFY_PAGE_INFO, 
+            selector.getPageInfo()
+        ));
         ipcMain.on(InChannel.CHANGE_ALBUM_ORDER, (event, order) => selector.sortAlbums(order));
         ipcMain.on(InChannel.FILTER_ALBUMS, (event, filter) => selector.filterAlbums(filter));
         ipcMain.on(InChannel.SHOW_ALBUM_POPUP, (event, options) => selector.showAlbumPopup(options))

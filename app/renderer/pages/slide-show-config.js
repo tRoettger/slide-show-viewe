@@ -19,7 +19,7 @@ BTN_SAVE_AS.addEventListener("click", (e) => {
     configApi.saveConfigAs(...getConfig());
 });
 
-configApi.subscribe("slideshow-config", (config) => {
+configApi.subscribe(windowApi.windowId.SLIDESHOW_CONFIG, (config) => {
     INPUT_VIEW.value = config.viewDuration;
     INPUT_TRANSITION.value = config.transitionDuration;
     SELECT_TRANSITION.value = config.timingFunction;

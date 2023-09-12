@@ -4,7 +4,7 @@ const BTN_PREVIOUS = document.getElementById("previous-btn");
 
 let slideshowController;
 
-const ID = "slideshow-view";
+const ID = windowApi.windowId.SLIDESHOW;
 
 api.subscribeAlbum(ID, album => {
     console.log("Received album: ", album);
