@@ -49,7 +49,12 @@ class AlbumSelector {
     #computeProperties(folder, pictureFiles) {
         let props = fileService.loadAlbumProps(folder);
         if (props && props.cover) {
-            props.cover = fileService.parseFilePath(folder, props.cover);
+            try {
+                props.cover = fileService.parseFilePath(folder, props.cover);
+            } catch (error) {
+                console.error("Could not load cover file. Using default cover.", error);
+                props.cover = pictureFiles[0];
+            }
             return props;
         } else {
             return { cover: pictureFiles[0] };
