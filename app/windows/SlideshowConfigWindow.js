@@ -6,7 +6,7 @@ const { subscriptionService } = require("../services/SubscriptionService");
 let instance;
 
 const createConfigWindowProperties = () => ({
-    width: 640, height: 480,
+    width: 340, height: 210,
     webPreferences: { 
         sandbox: false,
         preload: path.join(__dirname, "..", "preload.js")

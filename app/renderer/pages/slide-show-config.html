@@ -5,9 +5,9 @@
         <link href="styles/theme.css" rel="stylesheet" type="text/css" />
         <link href="styles/config.css" rel="stylesheet" type="text/css" />
         <script src="slide-show-config.js" defer type="text/javascript" ></script>
+        <title>Diashow Einstellungen</title>
     </head>
     <body>
-        <h1>Diashow Einstellungen</h1>
         <form id="config-form">
             <p>
                 <label for="transition-timing-function" title="Legt die Art des Übergangs fest.">Übergangsart</label>
@@ -20,17 +20,19 @@
                 </select>
             </p>
             <p>
-                <label for="view-duration" title="Legt die Anzeigedauer eines Bildes während der Diashow fest. Die Zeit wird in Sekunden angegeben.">Anzeigedauer</label>
+                <label for="view-duration" title="Legt die Anzeigedauer eines Bildes während der Diashow fest. Die Zeit wird in Sekunden angegeben.">Anzeigedauer (s)</label>
                 <input type="number" min="0" id="view-duration" />
             </p>
             <p>
-                <label for="transition-duration" title="Legt die Zeit für den Übergang zum nächsten Bild fest. Die Zeit wird in Sekunden angegeben.">Überganszeit</label>
+                <label for="transition-duration" title="Legt die Zeit für den Übergang zum nächsten Bild fest. Die Zeit wird in Sekunden angegeben.">Überganszeit (s)</label>
                 <input type="number" min="0" id="transition-duration" />
             </p>
-            <input id="save-as-btn" class="save-btn" type="button" value="speichern unter" />
-            <input class="save-btn" type="submit" value="speichern" 
-                title="Speichert die aktuell Konfiguration als Standardkonfiguration. Diese wird beim Programstart automatisch geladen." 
-            />
+            <p id="buttons">
+                <input id="save-as-btn" class="save-btn" type="button" value="speichern unter" />
+                <input class="save-btn" type="submit" value="speichern" 
+                    title="Speichert die aktuell Konfiguration als Standardkonfiguration. Diese wird beim Programstart automatisch geladen." 
+                />
+            </p>
         </form>
     </body>
 </html>
