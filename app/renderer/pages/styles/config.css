@@ -1,0 +1,44 @@
+:root {
+    --form-height: calc(100vh - 16px);
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--font-color);
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+}
+
+input.save-btn {
+    background-color: var(--btn-bg-color);
+    border: var(--btn-border);
+    color: var(--btn-font-color);
+    cursor: pointer;
+    padding: 5px 8px;
+}
+
+input.save-btn:hover {
+    background-color: var(--btn-hover-bg-color);
+}
+
+p {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin: 0px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: var(--form-height);
+    margin: 5px 8px;
+    padding: 0;
+}
+
+p#buttons {
+    flex-grow: 2;
+    align-items: flex-end;
+}

@@ -2,4 +2,9 @@
     --background-color: black;
     --font-color: white;
     --font-family: Arial, Helvetica, sans-serif;
+
+    --btn-bg-color: black;
+    --btn-border: 1px solid white;
+    --btn-font-color: white;
+    --btn-hover-bg-color: grey;
 }
