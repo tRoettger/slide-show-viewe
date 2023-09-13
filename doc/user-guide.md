@@ -32,7 +32,7 @@ After that the welcome-screen of the application is displayed.
 
 ## Album selection
 
-[album-selection]: (#album-selection)
+[album-selection]: #album-selection
 
 The aim of this function is to make switching between different [album]s more easy.
 
@@ -47,7 +47,7 @@ If a folder contains multiple subfolders with images, each of those subfolders i
 
 ### Album selection window
 
-[album-selection-window]: (#album-auswahl-window)
+[album-selection-window]: #album-auswahl-window
 
 ![Album selection window](./screenshots/album-selection.png)
 
@@ -71,7 +71,7 @@ Alternatively use clear the search field and hit `Enter`.
 
 ### Cover
 
-[cover]: (#cover)
+[cover]: #cover
 
 An image to represent an [album].  
 The first image is used as [cover] is used, if non is defined for the [album].  
@@ -86,7 +86,7 @@ The first image is used, if the configured [cover] image does not exists (anymor
 
 # Slideshow window
 
-[slideshow-window]: (#slideshow-window)
+[slideshow-window]: #slideshow-window
 
 The [slideshow-window] is the main window of the application.  
 On startup a welcome screen is displayed.  
@@ -95,7 +95,7 @@ Furthermore it allows to [control](#slideshow-controls) the [slideshow].
 
 ## Slideshow controls
 
-[slideshow-controls]: (#slideshow-controls)
+[slideshow-controls]: #slideshow-controls
 
 If the mouse is moved to the bottom of the [slideshow-window], the [slideshow-controls] are displayed.
 
@@ -112,19 +112,50 @@ The shortcut is `right arrow key`.
 
 By starting the [slideshow] the next image of the [album] is displayed automatically after a [configurable](#slideshow-configuration) amount of time.
 
+# Slideshow configuration
+
+This function provides a configuration window.  
+This window the configuration of the [slideshow] can be adjusted.
+
+![Slideshow configuration](./screenshots/slideshow-configuration.png)
+
+## Slideshow parameters
+
+| Parameter | Allowed values | Description |
+| --- | --- | --- |
+| Übergangsart (Transition type) | "Linear (linear)", "Fließend (ease)", "Ausklinged (ease in)", "Nachhall (ease out)", "Ausklingend und Nachhall (ease in and out)" | Sets the type of the transition between two images. See [slideshow-transitions]. |
+| Anzeigedauer (s) (Display duration (s)) | All positive numbers (including 0) | The duration an images is displayed when the [slideshow] is running in seconds. |
+| Übergangszeit (s) (Transition duration (s)) | All positive number (including 0) | The duration of the transition between to images in seconds. |
+
+## Slideshow transitions
+
+[slideshow-transitions]: #slideshow-transitions
+
+All transition type have in common, that the next images is place behind the current.  
+The opacity of the current image is lower bit by bit.  
+The transition type sets the course of the speed in which the opacity decreases.
+
+| German name (Translated name) | Description |
+| --- | --- |
+| Linear (linear) | Create a constant transition speed. |
+| Fließend (ease) | The transition starts slow, gets faster in the middle and slows down at the end. |
+| Ausklinged (ease in) | A transition, which starts slowly. |
+| Nachhall (ease out) | A transition, which ends slowly. |
+| Ausklingend und Nachhall (ease in and out) | A transition, which starts and ends slowly. |
+
 # Glossary
 
 ## Album
 
-[album]: (#album)
-[Album]: (#album)
+[album]: #album
+[Album]: #album
 
 In general the term "[album]" is used to describe a set of images in the context of this application.  
 Those are loaded from folders, therefore the term might also be used for those folders.  
 
 ## Slideshow
 
-[slideshow]: (#slideshow)
-[Slideshow]: (#slideshow)
+[slideshow]: #slideshow
+[Slideshow]: #slideshow
 
 In the context of this application the term "[slideshow]" is used for sequences of images.

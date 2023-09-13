@@ -21,7 +21,7 @@ Daraufhin wird der Startbildschirm der Anwendung angezeigt.
 
 ## Album Auswahl
 
-[Album-Auswahl]: (#album-auswahl)
+[Album-Auswahl]: #album-auswahl
 
 Das Ziel dieser Funktion ist es das Wechseln zwischen [Alben] zu erleichtern.  
 
@@ -36,7 +36,7 @@ Enthält bespielsweise eines der ausgewählten Verzeichnisse mehrere Unterverzei
 
 ### Album Auswahl Fenster
 
-[Album-Auswahl-Fenster]: (#album-auswahl-fenster)
+[Album-Auswahl-Fenster]: #album-auswahl-fenster
 
 ![Album-Auswahl Fenter](./screenshots/album-selection.png)
 
@@ -60,7 +60,7 @@ Alternativ kann das Suchfelds geleert und die Leerung anschließend mit `Enter` 
 
 ### Cover
 
-[Cover]: (#cover)
+[Cover]: #cover
 
 Ein Bild, dass ein [Album] repräsentiert.  
 Für [Alben] ohne festgelegtes [Cover] wird das erste Bild genutzt.  
@@ -75,7 +75,7 @@ Existiert das ausgewählte [Cover] Bild nicht (mehr), so wird das erste Bild des
 
 # Diashow Fenster
 
-[Diashow-Fenster]: (#diashow-fenster)
+[Diashow-Fenster]: #diashow-fenster
 
 Das [Diashow-Fenster] ist das Hauptfenster der Anwendung.  
 Beim Start der Anwendung wird der Startbildschirm angezeigt.  
@@ -84,7 +84,7 @@ Desweiteren erlaubt es die [Diashow] zu [steuern](#Diashow-steuerung).
 
 ## Diashow Steuerung
 
-[Diashow-Steuerung]: (#diashow-steuerung)
+[Diashow-Steuerung]: #diashow-steuerung
 
 Wird die Maus an den unteren Rand des [Diashow-Fenster]s bewegt, so wird die [Diashow-Steuerung] angezeigt.  
 
@@ -99,20 +99,51 @@ Das Tastenkürzel ist `Leertaste`.
 - Sprint zum nächsten Bild des [Album]s.  
 Das Tastenkürzel ist `Pfeiltaste nach rechts`.
 
-Durch das Starten der [Diashow], wird nach einer [konfigurierbaren](#diashow-einstellung) Zeit automatisch das Bild des [Album]s angezeigt.  
+Durch das Starten der [Diashow], wird nach einer [konfigurierbaren](#diashow-einstellungen) Zeit automatisch das Bild des [Album]s angezeigt.  
+
+# Diashow Einstellungen
+
+Diese Funktion stellt ein Konfigurationsfenster bereit.
+In diesem können die Einstellung der [Diashow] angepasst werden.
+
+![Diashow Einstellung](./screenshots/slideshow-configuration.png)
+
+## Diashow Parameter
+
+| Parameter | Wertebereich | Beschreibung |
+| --- | --- | --- |
+| Übergangsart | "Linear", "Fließend", "Ausklingend", "Nachhall", "Ausklingend und Nachhall" | Bestimmt die Art des Übergangs zwischen zwei Bildern. Siehe [Diashow-Übergänge]. |
+| Anzeigedauer (s) | Alle positiven Zahl (inklusive 0) | Die Zeit in Sekunden, die ein Bild während dem Abspielen der [Diashow] angezeigt wird. |
+| Übergangszeit (s) | Alle positiven Zahl (inklusive 0) | Die Zeit in Sekunden, die der Übergang von einem Bild zum nächsten dauert. |
+
+## Diashow Übergänge
+
+[Diashow-Übergänge]: #diashow-übergänge
+
+Alle Übergangsarten basieren darauf, dass das nächste Bild hinter das aktuelle gelegt wird.  
+Das aktuelle Bild wird nach und nach ausgeblendet.  
+Die Übergangsart legt fest welchen Verlauf die Geschwindigkeit des Ausblendens nimmt.
+
+| Name | Beschreibung |
+| --- | --- |
+| Linear | Erzeugt eine gleichbleibende Übergangsgeschwindigkeit. |
+| Fließend | Der Übergang beginnt langsam, wird dann schneller und verlangsamt sich zum Ende hin wieder. |
+| Ausklingend | Ein langsam beginnender Übergang. |
+| Nachhall | Ein langsam endender Übergang. |
+| Ausklinged und Nachhall | Ein Übergang, der langsam beginnt und endet. |
 
 # Glossar
 
 ## Album
 
-[Album]: (#album)
-[Alben]: (#album)
+[Album]: #album
+[Alben]: #album
 
 Generell wird der Begriff "[Album]" im Kontext dieser Anwendung als eine Sammlung von Bilder verstanden.  
 Da diese aus Verzeichnisse geladen werden, wird der Begriff auch für diese Verzeichnisse verwendet.
 
 ## Diashow
 
-[Diashow]: (#diashow)
+[Diashow]: #diashow
 
 Im Kontext dieser Anwendung wird der Begriff "[Diashow]" als Abfolge von Bildern verstanden.  
