@@ -1,13 +1,19 @@
 const { mainWindow } = require("../windows/SlideshowWindow");
-const { getOrCreateAlbumSelectionWindow } = require('../windows/AlbumSelectionWindow');
-const { getOrCreateSlideshowConfigurationWindow } = require('../windows/SlideshowConfigWindow');
+const selectionWindow = require('../windows/AlbumSelectionWindow');
+const configWindow = require('../windows/SlideshowConfigWindow');
+
+const cute = w => w.doStuff();
+
+const execute = (executor) => {
+    
+}
 
 class AppWindow {
-    constructor(browserWindowSupplier, fullscreenAllowed, menuBarVisible) {
-        this.browserWindowSupplier = browserWindowSupplier;
+    constructor(executor, fullscreenAllowed, menuBarVisible) {
         this.fullscreen = false;
         this.fullscreenAllowed = fullscreenAllowed;
         this.menuBarVisible = menuBarVisible;
+        this.executor = executor;
 
         this.toggleFullscreen = this.toggleFullscreen.bind(this);
         this.setWindowed = this.setWindowed.bind(this);
@@ -17,8 +23,7 @@ class AppWindow {
     }
 
     #processBrowserWindowTask(task) {
-        const browserWindow = this.browserWindowSupplier();
-        return (browserWindow) ? task(browserWindow) : undefined;
+        return this.executor(task);
     }
 
     #processWebcontentsTask(task) {
@@ -61,9 +66,9 @@ class AppWindow {
 
 };
 
-exports.mainAppWindow = new AppWindow(() => mainWindow, true, true);
-exports.albumSelectionAppWindow = new AppWindow(getOrCreateAlbumSelectionWindow, false, false);
-exports.slideshowConfigAppWindow = new AppWindow(getOrCreateSlideshowConfigurationWindow, false, false);
+exports.mainAppWindow = new AppWindow((task) => task(mainWindow), true, true);
+exports.albumSelectionAppWindow = new AppWindow((task) => selectionWindow.ifPresent(task), false, false);
+exports.slideshowConfigAppWindow = new AppWindow((task) => configWindow.ifPresent(task), false, false);
 
 exports.reloadAll = () => {
     for(let appWindow of [
