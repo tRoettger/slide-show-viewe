@@ -1,3 +1,6 @@
+Find the english userguide here: [doc/user-guide.md](./doc/user-guide.md)  
+Das Benutzerhandbuch in deutscher Sprache ist hier zu finden: [doc/user-guide-de.md](./doc/user-guide-de.md)
+
 # Abstract
 
 The purpose of the slideshow-viewer application is to present images.  
