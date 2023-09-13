@@ -128,24 +128,12 @@ class AlbumSelector {
         this.pageInfoListener(pageInfo);
     }
 
-    /*
-    #processAlbum(album) {
-        if(album.count > 0) {
-            this.albums.push(album);
-            if(this.albums.length <= this.end) {
-                this.#notifyAlbum(album);
-            }
-        }
-    }
-    */
-
     #processFolders(folders) {
         let toProcess = [...folders];
         const newAlbums = [];
         while(toProcess.length > 0) {
-            let folder = toProcess.shift();
+            const folder = toProcess.shift();
             newAlbums.push(this.#createAlbum(path.basename(folder), folder));
-            //this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
             toProcess = [...toProcess, ...this.#getSubFolders(folder)];
         }
         return newAlbums.filter(album => album.count > 0);
@@ -172,9 +160,6 @@ class AlbumSelector {
     }
     
     selectRootFolder(onLoad) {
-        //this.albums = [];
-        //this.start = 0;
-        //this.end = this.coversPerPage;
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadFolders(result.filePaths))
             .then(onLoad)
