@@ -6,7 +6,6 @@ const { albumPopupMenu: albumPopup } = require("../windows/AlbumPopupMenu");
 const { serverApi } = require("../communication/serverApi");
 const { fileService } = require("./FileService");
 const { FilterType } = require("../model/AlbumUtils");
-const { error } = require("console");
 
 const COVERS_PER_PAGE = 20;
 
@@ -35,6 +34,7 @@ class AlbumSelector {
         this.selectRootFolder = this.selectRootFolder.bind(this);
         this.showAlbumPopup = this.showAlbumPopup.bind(this);
         this.sortAlbums = this.sortAlbums.bind(this);
+        this.clear = this.clear.bind(this);
         
         this.coversPerPage = coversPerPage;
         this.popup = albumPopup;
@@ -49,7 +49,6 @@ class AlbumSelector {
         this.albums = [];
         this.allAlbums = [];
         this.#notifyPageInfo();
-        this.#notifyAlbums();
     }
 
     #computeProperties(folder, pictureFiles) {
@@ -95,7 +94,6 @@ class AlbumSelector {
                 .filter(album => album.name.includes(name));
         }
         this.#notifyPageInfo();
-        this.loadPage(0);
     }
 
     #getSubFolders(folder) {
@@ -106,9 +104,16 @@ class AlbumSelector {
 
     #loadFolders(folders) {
         if(folders.length > 0) {
-            this.#processFolders(folders);
-            this.#notifyPageInfo();
-            //this.#notifyAlbums();
+            const newAlbums = this.#processFolders(folders);
+            if(newAlbums.length > 0) {
+                this.allAlbums = [...this.allAlbums, ...newAlbums];
+                this.allAlbums.sort(DEFAULT_COMPARATOR);
+                this.albums = [...this.allAlbums];
+                this.start = 0;
+                this.end = this.coversPerPage;
+                
+                this.#notifyPageInfo();
+            }
         } else {
             throw NOTHING_TO_LOAD_ERROR;
         }
@@ -123,6 +128,7 @@ class AlbumSelector {
         this.pageInfoListener(pageInfo);
     }
 
+    /*
     #processAlbum(album) {
         if(album.count > 0) {
             this.albums.push(album);
@@ -131,15 +137,18 @@ class AlbumSelector {
             }
         }
     }
+    */
 
     #processFolders(folders) {
         let toProcess = [...folders];
+        const newAlbums = [];
         while(toProcess.length > 0) {
             let folder = toProcess.shift();
-            this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
-            this.#getSubFolders(folder).forEach(f => toProcess.push(f));
+            newAlbums.push(this.#createAlbum(path.basename(folder), folder));
+            //this.#processAlbum(this.#createAlbum(path.basename(folder), folder));
+            toProcess = [...toProcess, ...this.#getSubFolders(folder)];
         }
-        this.allAlbums = [...this.albums];
+        return newAlbums.filter(album => album.count > 0);
     }
 
     // Public methods
