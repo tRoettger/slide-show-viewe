@@ -17,6 +17,7 @@ class SlideshowController {
     }
 
     openAlbum(files) {
+        this.stopSlideShow();
         this.files = files.filter(isImage);
         serverApi.broadcastOpenAlbum({count: this.files.length});
     }
@@ -77,4 +78,3 @@ class SlideshowController {
 
 exports.slideshowController = new SlideshowController();
 serverApi.registerController(this.slideshowController);
-//globalShortcut.register("Space", this.slideshowController.toggleSlideShow);
