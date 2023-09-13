@@ -36,14 +36,20 @@ class AlbumSelector {
         this.showAlbumPopup = this.showAlbumPopup.bind(this);
         this.sortAlbums = this.sortAlbums.bind(this);
         
-        this.start = 0;
-        this.end = coversPerPage;
         this.coversPerPage = coversPerPage;
-        this.albums = [];
-        this.allAlbums = [];
         this.popup = albumPopup;
         this.albumListener = albumListener;
         this.pageInfoListener = pageInfoListener;
+        this.clear();
+    }
+
+    clear() {
+        this.start = 0;
+        this.end = this.coversPerPage;
+        this.albums = [];
+        this.allAlbums = [];
+        this.#notifyPageInfo();
+        this.#notifyAlbums();
     }
 
     #computeProperties(folder, pictureFiles) {
@@ -102,6 +108,7 @@ class AlbumSelector {
         if(folders.length > 0) {
             this.#processFolders(folders);
             this.#notifyPageInfo();
+            //this.#notifyAlbums();
         } else {
             throw NOTHING_TO_LOAD_ERROR;
         }
@@ -146,15 +153,19 @@ class AlbumSelector {
     loadPage(page) {
         this.start = page * this.coversPerPage;
         this.end = this.start + this.coversPerPage;
+        this.#notifyAlbums();
+    }
+
+    #notifyAlbums() {
         for(let i = this.start; i < this.end; i++) {
             this.#notifyAlbum(this.albums[i]);
         }
     }
     
     selectRootFolder(onLoad) {
-        this.albums = [];
-        this.start = 0;
-        this.end = this.coversPerPage;
+        //this.albums = [];
+        //this.start = 0;
+        //this.end = this.coversPerPage;
         dialog.showOpenDialog({ properties: [ 'openDirectory', 'multiSelections' ]})
             .then(result => this.#loadFolders(result.filePaths))
             .then(onLoad)
