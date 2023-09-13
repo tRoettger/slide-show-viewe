@@ -73,6 +73,23 @@ Existiert das ausgewählte [Cover] Bild nicht (mehr), so wird das erste Bild des
 > Das Löschen, dieser Datei ist unbedenklich, es sorgt lediglich dafür, dass das erste Bild im Verzeichnis wieder als [Cover] genutzt wird.  
 > Diese Datei kann auch auf andere Rechner übernommen werden.  
 
+# Diashow Fenster
+
+[Diashow-Fenster]: (#diashow-fenster)
+
+Das [Diashow-Fenster] ist das Hauptfenster.  
+Beim Start der Anwendung wird der Startbildschirm angezeigt.  
+Seine Funktion ist es die Bilder aus [Alben] als [Diashow] anzuzeigen und diese zu [steuern](#Diashow-steuerung).
+
+## Diashow Steuerung
+
+[Diashow-Steuerung]: (#diashow-steuerung)
+
+Wird die Maus an den unteren Rand des [Diashow-Fenster]s bewegt, so wird die [Diashow-Steuerung] angezeigt.  
+Sie besteht aus drei Schaltflächen: 
+
+- 
+
 # Glossar
 
 ## Album
