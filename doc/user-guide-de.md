@@ -77,18 +77,29 @@ Existiert das ausgewählte [Cover] Bild nicht (mehr), so wird das erste Bild des
 
 [Diashow-Fenster]: (#diashow-fenster)
 
-Das [Diashow-Fenster] ist das Hauptfenster.  
+Das [Diashow-Fenster] ist das Hauptfenster der Anwendung.  
 Beim Start der Anwendung wird der Startbildschirm angezeigt.  
-Seine Funktion ist es die Bilder aus [Alben] als [Diashow] anzuzeigen und diese zu [steuern](#Diashow-steuerung).
+Seine Funktion ist es die Bilder aus [Alben] als [Diashow] anzuzeigen.
+Desweiteren erlaubt es die [Diashow] zu [steuern](#Diashow-steuerung).
 
 ## Diashow Steuerung
 
 [Diashow-Steuerung]: (#diashow-steuerung)
 
 Wird die Maus an den unteren Rand des [Diashow-Fenster]s bewegt, so wird die [Diashow-Steuerung] angezeigt.  
-Sie besteht aus drei Schaltflächen: 
 
-- 
+![Diashow Steuerung](./screenshots/slideshow-controls.png)
+
+Von links nach rechts haben die Schaltflächen die folgenden Funktionen:
+
+- Springt zum vorheriges Bild des [Album]s.  
+Das Tastenkürzel ist `Pfeiltaste nach links`.
+- Startet bzw. stoppt die [Diashow].  
+Das Tastenkürzel ist `Leertaste`.
+- Sprint zum nächsten Bild des [Album]s.  
+Das Tastenkürzel ist `Pfeiltaste nach rechts`.
+
+Durch das Starten der [Diashow], wird nach einer [konfigurierbaren](#diashow-einstellung) Zeit automatisch das Bild des [Album]s angezeigt.  
 
 # Glossar
 

@@ -84,6 +84,34 @@ The first image is used, if the configured [cover] image does not exists (anymor
 > Deleting this file only cause a reset of the [cover].  
 > The file can be transfered to other PCs along with the folder.
 
+# Slideshow window
+
+[slideshow-window]: (#slideshow-window)
+
+The [slideshow-window] is the main window of the application.  
+On startup a welcome screen is displayed.  
+Its function is to display the images of an [album] as [slideshow].  
+Furthermore it allows to [control](#slideshow-controls) the [slideshow].
+
+## Slideshow controls
+
+[slideshow-controls]: (#slideshow-controls)
+
+If the mouse is moved to the bottom of the [slideshow-window], the [slideshow-controls] are displayed.
+
+![Slideshow Controls](./screenshots/slideshow-controls.png)
+
+From left to right the buttons provide the following functions:
+
+- Go to the previous image of the [album].  
+The shortcut is `left arrow key`.
+- Start or stop the [slideshow].  
+The shortcut is `Space`.
+- Go to the next image of the [album].  
+The shortcut is `right arrow key`.
+
+By starting the [slideshow] the next image of the [album] is displayed automatically after a [configurable](#slideshow-configuration) amount of time.
+
 # Glossary
 
 ## Album
