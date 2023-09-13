@@ -101,6 +101,15 @@ Das Tastenkürzel ist `Pfeiltaste nach rechts`.
 
 Durch das Starten der [Diashow], wird nach einer [konfigurierbaren](#diashow-einstellungen) Zeit automatisch das Bild des [Album]s angezeigt.  
 
+## Vollbild Modus
+
+[Vollbild-Modus]: #vollbild-modus
+
+Der [Vollbild-Modus] kann über den Menüpfad `Ansicht > Vollbild` gestartet werden.  
+`Esc` beendet ihn.  
+Alternativ kann er mit dem Tastenkürzel `F11` gestartet und beendet werden.  
+
+
 # Diashow Einstellungen
 
 Diese Funktion stellt ein Konfigurationsfenster bereit.

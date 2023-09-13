@@ -112,6 +112,14 @@ The shortcut is `right arrow key`.
 
 By starting the [slideshow] the next image of the [album] is displayed automatically after a [configurable](#slideshow-configuration) amount of time.
 
+## Fullscreen mode
+
+[fullscreen-mode]: #fullscreen-mode
+
+The [fullscreen-mode] can be started via the menu path `Ansicht > Vollbild (View > Fullscreen)`.  
+`Esc` ends it.  
+Alternatively it can be started and ended by the shortcut `F11`.
+
 # Slideshow configuration
 
 This function provides a configuration window.  
