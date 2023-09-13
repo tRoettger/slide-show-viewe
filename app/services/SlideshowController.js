@@ -17,6 +17,7 @@ class SlideshowController {
     }
 
     openAlbum(files) {
+        this.stopSlideShow();
         this.files = files.filter(isImage);
         serverApi.broadcastOpenAlbum({count: this.files.length});
     }
