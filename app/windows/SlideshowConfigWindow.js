@@ -26,4 +26,10 @@ exports.getOrCreateSlideshowConfigurationWindow = () => {
         instance = createWindow();
     }
     return instance;
+};
+
+exports.ifPresent = (task) => {
+    if(instance && !instance.isDestroyed()){
+        task(instance);
+    }
 }

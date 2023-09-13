@@ -22,9 +22,17 @@ const createWindow = () => {
 
 let instance;
 
+const exists = (window) => window && !window.isDestroyed();
+
 exports.getOrCreateAlbumSelectionWindow = () => {
-    if(!instance || instance.isDestroyed()) {
+    if(!exists(instance)) {
         instance = createWindow();
     }
     return instance;
-}
+};
+
+exports.ifPresent = (task) => {
+    if(exists(instance)) {
+        task(instance);
+    }
+};
