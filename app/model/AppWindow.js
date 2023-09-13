@@ -2,12 +2,6 @@ const { mainWindow } = require("../windows/SlideshowWindow");
 const selectionWindow = require('../windows/AlbumSelectionWindow');
 const configWindow = require('../windows/SlideshowConfigWindow');
 
-const cute = w => w.doStuff();
-
-const execute = (executor) => {
-    
-}
-
 class AppWindow {
     constructor(executor, fullscreenAllowed, menuBarVisible) {
         this.fullscreen = false;
