@@ -67,3 +67,12 @@ for(let element of document.getElementsByClassName("control-panel-area")) {
         { once: true }
     );
 }
+
+document.body.addEventListener("dragover", (e) => e.preventDefault());
+
+document.body.addEventListener("drop", (event) => {
+    event.preventDefault();
+    if(event.dataTransfer && (event.dataTransfer.files)) {
+        albumApi.loadAlbum(event.dataTransfer.files[0].path);
+    } 
+});
