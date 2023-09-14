@@ -49,6 +49,10 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.current = page;
         this.#renderToDisplay();
+        this.#requestAlbums(page);
+    }
+
+    #requestAlbums(page) {
         this.albumRenderer.clearDisplay();
         albumApi.requestAlbums(page);
     }
@@ -66,6 +70,7 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.count = pageInfo.count;
         this.#renderToDisplay();
+        this.#requestAlbums(this.current);
     }
 
     #renderToDisplay() {

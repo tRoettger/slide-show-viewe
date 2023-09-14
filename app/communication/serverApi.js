@@ -1,4 +1,4 @@
-const { ipcMain, ipcRenderer } = require("electron");
+const { ipcMain } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("../services/SlideshowConfigurer");
 const fs = require("fs");
 const { fileService } = require("../services/FileService");
