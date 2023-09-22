@@ -1,14 +1,18 @@
 class PaginationRenderer {
-    constructor(albumRenderer, display, offset, before, after) {
+    constructor(display, offset, before, after) {
         this.display = display;
         this.offset = offset;
         this.before = before;
-        this.albumRenderer = albumRenderer;
         this.after = after;
         this.count = 0;
         this.current = 0;
         this.render = this.render.bind(this);
         this.gotoPage = this.gotoPage.bind(this);
+        this.pageListeners = [];
+    }
+
+    subscribePage(listener) {
+        this.pageListeners.push(listener);
     }
 
     #clearDisplay() {
@@ -17,7 +21,7 @@ class PaginationRenderer {
     }
 
     #createPageItem(page) {
-        var item = document.createElement(this.current == page ? "div" : "a");
+        let item = document.createElement(this.current == page ? "div" : "a");
         item.className = "page-item";
         item.appendChild(document.createTextNode(page + this.offset));
         item.addEventListener("click", (e) => this.gotoPage(page));
@@ -25,15 +29,15 @@ class PaginationRenderer {
     }
 
     #createSeparator() {
-        var separator = document.createElement("div");
+        let separator = document.createElement("div");
         separator.className = "page-separator";
         separator.appendChild(document.createTextNode("..."));
         return separator;
     }
 
     #determineVisiblePages() {
-        var visiblePages = [];
-        for(var i = this.current - this.before; i <= this.current + this.after; i++) {
+        let visiblePages = [];
+        for(let i = this.current - this.before; i <= this.current + this.after; i++) {
             if(i > 0 && i < this.count)
                 visiblePages.push(i);
         }
@@ -53,8 +57,9 @@ class PaginationRenderer {
     }
 
     #requestAlbums(page) {
-        this.albumRenderer.clearDisplay();
-        albumApi.requestAlbums(page);
+        for(let listener of this.pageListeners) {
+            listener(page);
+        }
     }
 
     getCurrent() {
@@ -74,10 +79,10 @@ class PaginationRenderer {
     }
 
     #renderToDisplay() {
-        var visiblePages = this.#determineVisiblePages();
+        let visiblePages = this.#determineVisiblePages();
         console.log("visiblePages: ", visiblePages);
-        for(var index in visiblePages) {
-            var currentPage = visiblePages[index];
+        for(let index in visiblePages) {
+            let currentPage = visiblePages[index];
             this.display.appendChild(this.#createPageItem(currentPage));
             if(this.#isSeparatorRequired(index * 1, visiblePages)) {
                 this.display.appendChild(this.#createSeparator());
@@ -85,10 +90,11 @@ class PaginationRenderer {
         }
     }
 }
-const createPagination = (albumRenderer, paginationDisplay) => new PaginationRenderer(
-    albumRenderer,
-    paginationDisplay, 
-    1, 
-    2, 
-    2
-);
+const createPagination = (albumRenderer, paginationDisplay) => {
+    const albumPagination = new PaginationRenderer(paginationDisplay, 1, 2, 2);
+    albumPagination.subscribePage((page) => {
+        albumRenderer.clearDisplay();
+        albumApi.requestAlbums(page);
+    })
+    return albumPagination;
+};
