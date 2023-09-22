@@ -59,6 +59,16 @@ exports.serverApi = {
                 controller.provideFile(key);
             }
         });
+
+        const requestMap = new Map();
+        requestMap.set(OutChannel.RESPOND_IMAGES, (indicies) => indicies.map(controller.getImage));
+
+        ipcMain.on(InChannel.REQUEST, (event, request) => {
+            const handler = requestMap.get(request.outChannel);
+            handler ??= (body) => undefined;
+            const response = handler(request.body);
+            event.sender.send(request.outChannel, response);
+        });
         
         ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 

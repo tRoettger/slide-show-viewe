@@ -8,6 +8,11 @@ const subscribe = (id, outChannel, callback) => {
     console.log("Subscribing: ", { id: id, outChannel: outChannel });
     ipcRenderer.on(outChannel, callback);
     ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });
+};
+
+const request = (outChannel, callback, requestBody) => {
+    ipcRenderer.once(outChannel, (event, response) => callback(response));
+    ipcRenderer.send(InChannel.REQUEST, {outChannel: outChannel, body: requestBody});
 }
 
 const createConfig = (viewDuration, transitionDuration, timingFunction) => ({
@@ -24,6 +29,7 @@ exports.api = {
         next: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.NEXT),
         previous: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PREVIOUS)
     },
+    requestImages: (indicies, onImages) => request(OutChannel.RESPOND_IMAGES, onImages, indicies),
     triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
     subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, (event, imageContainer) => onImage(imageContainer)),
     subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, (event, album) => onAlbum(album)),

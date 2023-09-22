@@ -14,6 +14,7 @@ class SlideshowController {
         this.openAlbum = this.openAlbum.bind(this);
         this.isRunning = this.isRunning.bind(this);
         this.toggleSlideShow = this.toggleSlideShow.bind(this);
+        this.getImage = this.getImage.bind(this);
     }
 
     openAlbum(files) {
@@ -68,6 +69,10 @@ class SlideshowController {
             index: index, 
             image: this.files[index]
         });
+    }
+
+    getImage(index) {
+        return this.files[index];
     }
 
     subscribeState(listener) {

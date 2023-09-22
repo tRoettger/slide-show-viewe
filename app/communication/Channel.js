@@ -15,6 +15,7 @@ exports.InChannel = {
     GET_SLIDESHOW_CONFIG: "get-slideshow-config",
     FILTER_ALBUMS: "filter-albums",
     LOAD_ALBUM: "load-album",
+    REQUEST: "request",
     REQUEST_ALBUMS: "request-albums",
     REQUEST_PAGE_INFO: "request-page-info",
     SHOW_ALBUM_POPUP: "show-album-popup",
@@ -39,4 +40,5 @@ exports.OutChannel = {
     NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image",
+    RESPOND_IMAGES: "respond-images"
 };
