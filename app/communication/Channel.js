@@ -9,7 +9,8 @@ exports.InChannel = {
         START_OR_STOP: "control-slideshow-start-or-stop",
         STOP: "control-slideshow-stop",
         NEXT: "control-slideshow-next",
-        PREVIOUS: "control-slideshow-previous"
+        PREVIOUS: "control-slideshow-previous",
+        GOTO: "control-slideshow-goto"
     },
     GET_IMAGES: "get-images",
     GET_SLIDESHOW_CONFIG: "get-slideshow-config",
@@ -33,7 +34,8 @@ exports.OutChannel = {
         START: "control-slideshow-start",
         STOP: "control-slideshow-stop",
         NEXT: "control-slideshow-next",
-        PREVIOUS: "control-slideshow-previous"
+        PREVIOUS: "control-slideshow-previous",
+        GOTO: "control-slideshow-goto"
     },
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_ALBUM_CHANGED: "notify-album-changed",

@@ -15,6 +15,7 @@ class SlideshowController {
         this.isRunning = this.isRunning.bind(this);
         this.toggleSlideShow = this.toggleSlideShow.bind(this);
         this.getImage = this.getImage.bind(this);
+        this.gotoImage = this.gotoImage.bind(this);
     }
 
     openAlbum(files) {
@@ -58,6 +59,9 @@ class SlideshowController {
     }
     gotoNextImage() { 
         serverApi.broadcastSlideshowNext();
+    }
+    gotoImage(index) {
+        serverApi.broadcastSlideShowGoto(index);
     }
 
     isRunning() {

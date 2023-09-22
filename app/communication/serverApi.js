@@ -24,6 +24,7 @@ exports.serverApi = {
     broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
     broadcastSlideshowNext: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT),
     broadcastSlideshowPrevious: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS),
+    broadcastSlideShowGoto: (index) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, index),
     registerController: (controller) => {
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -83,6 +84,7 @@ exports.serverApi = {
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.STOP, (event) => controller.stopSlideShow());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => controller.gotoNextImage());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => controller.gotoPreviousImage());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.GOTO, (event, index) => controller.gotoImage(index));
         
     },
     registerSelector: (selector) => {

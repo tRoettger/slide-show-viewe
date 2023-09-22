@@ -6,7 +6,7 @@ const { WindowId } = require("../model/WindowUtils");
 
 const subscribe = (id, outChannel, callback) => {
     console.log("Subscribing: ", { id: id, outChannel: outChannel });
-    ipcRenderer.on(outChannel, callback);
+    ipcRenderer.on(outChannel, (event, msg) => callback(msg));
     ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });
 };
 
@@ -27,17 +27,19 @@ exports.api = {
         stop: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.STOP),
         startOrStop: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.START_OR_STOP),
         next: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.NEXT),
-        previous: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PREVIOUS)
+        previous: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PREVIOUS),
+        goto: (index) => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.GOTO, index)
     },
     requestImages: (indicies, onImages) => request(OutChannel.RESPOND_IMAGES, onImages, indicies),
     triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
-    subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, (event, imageContainer) => onImage(imageContainer)),
-    subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, (event, album) => onAlbum(album)),
-    subscribeSlideshowControls: (id, onStart, onStop, onNext, onPrevious) => {
+    subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, onImage),
+    subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, onAlbum),
+    subscribeSlideshowControls: (id, onStart, onStop, onNext, onPrevious, onGoto) => {
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.START, onStart);
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.STOP, onStop);
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.NEXT, onNext);
         subscribe(id, OutChannel.CONTROL_SLIDESHOW.PREVIOUS, onPrevious);
+        subscribe(id, OutChannel.CONTROL_SLIDESHOW.GOTO, onGoto);
     },
     notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, "main-window")
 };
@@ -51,7 +53,7 @@ exports.configApi = {
         InChannel.SAVE_CONFIG_AS, 
         createConfig(viewDuration, transitionDuration, timingFunction)
     ),
-    subscribe: (id, onConfig) => subscribe(id, OutChannel.CONFIGURE_SLIDESHOW, (event, config) => onConfig(config)),
+    subscribe: (id, onConfig) => subscribe(id, OutChannel.CONFIGURE_SLIDESHOW, onConfig),
     requestConfig: () => ipcRenderer.send(InChannel.GET_SLIDESHOW_CONFIG)
 };
 
@@ -65,9 +67,9 @@ exports.albumApi = {
     requestAlbums: (page) => ipcRenderer.send(InChannel.REQUEST_ALBUMS, AlbumRequest.page(page)),
     requestPageInfo: () => ipcRenderer.send(InChannel.REQUEST_PAGE_INFO),
     showAlbumPopup: (options) => ipcRenderer.send(InChannel.SHOW_ALBUM_POPUP, options),
-    subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM, (event, album) => onAlbum(album)),
-    subscribeAlbumChange: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM_CHANGED, (event, album) => onAlbum(album)),
-    subscribePageInfo: (id, onPageInfo) => subscribe(id, OutChannel.NOTIFY_PAGE_INFO, (event, pageInfo) => onPageInfo(pageInfo))
+    subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM, onAlbum),
+    subscribeAlbumChange: (id, onAlbum) => subscribe(id, OutChannel.NOTIFY_ALBUM_CHANGED, onAlbum),
+    subscribePageInfo: (id, onPageInfo) => subscribe(id, OutChannel.NOTIFY_PAGE_INFO, onPageInfo)
 };
 
 exports.windowApi = {

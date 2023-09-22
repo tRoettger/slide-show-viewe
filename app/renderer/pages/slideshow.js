@@ -34,6 +34,10 @@ const stopSlideShow = (e) => {
 }
 const gotoNext = (e) => wrapWithStopAndStart(slideshowController.showNext);
 const gotoPrevious = (e) => wrapWithStopAndStart(slideshowController.showPrevious);
+const goto = (index) => {
+    console.log("goto: ", index);
+    wrapWithStopAndStart(() => slideshowController.show(index));
+}
 
 const wrapWithStopAndStart = (stepping) => {
     if(slideshowController.isRunning()) {
@@ -55,7 +59,7 @@ configApi.subscribe(ID, (config) => {
     wrapWithStopAndStart(() => slideshowController.configure(config));
 });
 
-api.subscribeSlideshowControls(ID, startSlideShow, stopSlideShow, gotoNext, gotoPrevious);
+api.subscribeSlideshowControls(ID, startSlideShow, stopSlideShow, gotoNext, gotoPrevious, goto);
 
 api.notifySlideshowWindowReady();
 

@@ -91,6 +91,12 @@ class SlideshowController {
         this.preloadImages();
     }
 
+    show(index) {
+        this.current = index % this.count;
+        this.renderer.show(this.current);
+        this.preloadImages();
+    }
+
     start() {
         if(!this.isRunning()) {
             this.running = true;

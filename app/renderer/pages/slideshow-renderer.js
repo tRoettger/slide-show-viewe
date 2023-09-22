@@ -21,6 +21,7 @@ class SlideshowRenderer {
         this.display = display;
         this.playBtn = playBtn;
         this.interval = EMPTY_INTERVAL;
+        this.elements = [];
     }
 
     addImageElements(count) {
@@ -28,6 +29,7 @@ class SlideshowRenderer {
     }
 
     createImageElements(count) {
+        this.elements= [];
         var imageElements = [];
         for(var i = count - 1; i >= 0; i--) {
             var image = document.createElement("img");
@@ -38,6 +40,7 @@ class SlideshowRenderer {
             wrapper.className = "album-image-wrapper";
             wrapper.appendChild(image);
             imageElements.push(wrapper);
+            this.elements[i] = wrapper;
         }
         return imageElements;
     };
@@ -69,6 +72,15 @@ class SlideshowRenderer {
         child.style.animationName = "none";
         this.display.removeChild(child);
         this.display.insertBefore(child, this.display.firstChild);
+    }
+    
+    show(index) {
+        console.log("show", index);
+        const target = this.elements[index];
+        target.style.animationName = "none";
+        while(this.display.lastChild != target) {
+            this.showNext();
+        }
     }
 
     showPrevious() {

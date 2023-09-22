@@ -1,6 +1,7 @@
 :root {
     --pagination-height: 100px;
-    --images-height: calc(100vh - var(--pagination-height));
+    --images-padding: 5px;
+    --images-height: calc(100vh - var(--pagination-height) - 2 * var(--images-padding));
 }
 body {
     margin: 0px;
@@ -16,10 +17,24 @@ div#images {
     height: var(--images-height);
     overflow-y: scroll;
     justify-content: center;
+    align-content: flex-start;
+    padding: var(--images-padding);
+    gap: 5px;
 }
 
 div.image-item {
     border: 2px solid var(--background-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+div.image-item:hover {
+    border-color: var(--font-color);
+}
+div.image-item img {
+    max-width: 200px;
+    max-height: 200px;
 }
 
 div#pagination {
