@@ -2,8 +2,7 @@ const { BrowserWindow } = require("electron");
 const { WindowId } = require("../model/WindowUtils");
 const path = require("path");
 const { subscriptionService } = require("../services/SubscriptionService");
-
-let instance;
+const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
 
 const createConfigWindowProperties = () => ({
     width: 340, height: 210,
@@ -14,22 +13,13 @@ const createConfigWindowProperties = () => ({
     autoHideMenuBar: true
 });
 
-const createWindow = () => {
+const wrapper = new WindowInstanceWrapper(() => {
     const window = new BrowserWindow(createConfigWindowProperties());
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "slide-show-config.html"));
     window.on('close', (e) => subscriptionService.unsubscribeAll(WindowId.SLIDESHOW_CONFIG));
     return window;
-};
+});
 
-exports.getOrCreateSlideshowConfigurationWindow = () => {
-    if(!instance || instance.isDestroyed()) {
-        instance = createWindow();
-    }
-    return instance;
-};
+exports.getOrCreateSlideshowConfigurationWindow = wrapper.getOrCreate;
 
-exports.ifPresent = (task) => {
-    if(instance && !instance.isDestroyed()){
-        task(instance);
-    }
-}
+exports.ifPresent = wrapper.ifPresent;
