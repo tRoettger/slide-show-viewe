@@ -71,24 +71,6 @@ body {
     text-align: center;
 }
 
-.page-item, .page-separator {
-    display: inline-block;
-    padding: 5px;
-    text-decoration: none;
-    color: white;
-    user-select: none;
-}
-
-a.page-item {
-    cursor: pointer;
-    padding: 6px;
-}
-
-div.page-item, a.page-item:hover {
-    border: 1px solid white;
-    padding: 5px;
-}
-
 #order {
     background: black;
     color: white;
