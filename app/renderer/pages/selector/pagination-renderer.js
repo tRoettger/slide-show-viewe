@@ -53,10 +53,10 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.current = page;
         this.#renderToDisplay();
-        this.#requestAlbums(page);
+        this.#notifyPage(page);
     }
 
-    #requestAlbums(page) {
+    #notifyPage(page) {
         for(let listener of this.pageListeners) {
             listener(page);
         }
@@ -75,7 +75,7 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.count = pageInfo.count;
         this.#renderToDisplay();
-        this.#requestAlbums(this.current);
+        this.#notifyPage(this.current);
     }
 
     #renderToDisplay() {
