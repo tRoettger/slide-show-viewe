@@ -1,6 +1,6 @@
 const DESTROYED_INSTANCE = {isDestroyed: () => true};
 
-class WindowInstanceWrapper {
+exports.WindowInstanceWrapper = class WindowInstanceWrapper {
     constructor(createWindow) {
         this.createWindow = createWindow;
         this.instance = DESTROYED_INSTANCE;
@@ -22,5 +22,3 @@ class WindowInstanceWrapper {
     }
 
 }
-
-exports.WindowInstanceWrapper;

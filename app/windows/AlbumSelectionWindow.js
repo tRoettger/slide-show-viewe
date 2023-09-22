@@ -4,6 +4,7 @@ const { subscriptionService } = require("../services/SubscriptionService");
 const { WindowId } = require("../model/WindowUtils");
 const { selector } = require("../services/AlbumSelector");
 const { albumPopupMenu } = require("./AlbumPopupMenu");
+const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
 
 const SELECTOR_WINDOW_PROPERTIES = {
     width: 1080, height: 720,
