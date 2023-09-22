@@ -2,7 +2,7 @@
     display: inline-block;
     padding: 5px;
     text-decoration: none;
-    color: white;
+    color: var(--font-color);
     user-select: none;
 }
 
@@ -12,6 +12,6 @@ a.page-item {
 }
 
 div.page-item, a.page-item:hover {
-    border: 1px solid white;
+    border: 1px solid var(--font-color);
     padding: 5px;
 }
