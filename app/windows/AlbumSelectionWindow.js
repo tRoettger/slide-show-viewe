@@ -15,7 +15,7 @@ const SELECTOR_WINDOW_PROPERTIES = {
     autoHideMenuBar: true
 };
 
-const createWindow = () => {
+const wrapper = new WindowInstanceWrapper(() => {
     const window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "selector", "view.html"));
     window.on('close', (e) => {
@@ -23,23 +23,9 @@ const createWindow = () => {
         selector.clear();
     });
     return window;
-};
+});
 
-let instance;
-
-const exists = (window) => window && !window.isDestroyed();
-
-exports.getOrCreateAlbumSelectionWindow = () => {
-    if(!exists(instance)) {
-        instance = createWindow();
-    }
-    return instance;
-};
-
-exports.ifPresent = (task) => {
-    if(exists(instance)) {
-        task(instance);
-    }
-};
+exports.getOrCreateAlbumSelectionWindow = wrapper.getOrCreate;
+exports.ifPresent = wrapper.ifPresent;
 
 albumPopupMenu.registerTo(this);
