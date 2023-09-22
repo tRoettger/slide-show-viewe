@@ -11,7 +11,11 @@ const requestFilteredAlbums = (value) => {
 };
 
 const albumRenderer = createRenderer(ALBUMS_DISPLAY);
-const paginationRenderer = createPagination(albumRenderer, PAGINATION_DISPLAY);
+const paginationRenderer = new PaginationRenderer(PAGINATION_DISPLAY, 1, 2, 2);
+paginationRenderer.subscribePage((page) => {
+    albumRenderer.clearDisplay();
+    albumApi.requestAlbums(page);
+});
 
 FORM_FILTER.addEventListener("submit", e => {
     e.preventDefault();

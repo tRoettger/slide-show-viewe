@@ -90,11 +90,3 @@ class PaginationRenderer {
         }
     }
 }
-const createPagination = (albumRenderer, paginationDisplay) => {
-    const albumPagination = new PaginationRenderer(paginationDisplay, 1, 2, 2);
-    albumPagination.subscribePage((page) => {
-        albumRenderer.clearDisplay();
-        albumApi.requestAlbums(page);
-    })
-    return albumPagination;
-};
