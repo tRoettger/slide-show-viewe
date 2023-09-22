@@ -2,7 +2,7 @@ const { Menu } = require('electron');
 const { slideshowController: controller } = require("./services/SlideshowController");
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow } = require('./model/AppWindow');
+const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');
 const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
 
@@ -61,7 +61,8 @@ const MENU_TEMPLATE = [
             { label: "Neu laden", click: reloadAll, accelerator: "Ctrl+R" },
             { label: "Dev Tools (Hauptfenster)", accelerator: "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
             { label: "Dev Tools (Album Auswahl)", click: albumSelectionAppWindow.openDevTools },
-            { label: "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools }
+            { label: "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools },
+            { label: "Dev Tools (Album Übersicht)", click: albumOverviewAppWindow.openDevTools }
         ]
     }
 ];
