@@ -12,7 +12,6 @@ const SELECTOR_WINDOW_PROPERTIES = {
         sandbox: false,
         preload: path.join(__dirname, "..", "preload.js")
     },
-    show: false,
     autoHideMenuBar: true
 };
 
