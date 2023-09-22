@@ -69,13 +69,13 @@ class SlideshowController {
     preloadImages() {
         var shouldLoad = this.calculatePreloadIndices();
         if(shouldLoad.length > 0) {
-            api.requestImages(shouldLoad);
+            api.triggerImagesBroadcast(shouldLoad);
         }
     }
 
     setup() {
         this.renderer.setup(this.count);
-        api.requestImages(this.calculatePreloadIndices());
+        api.triggerImagesBroadcast(this.calculatePreloadIndices());
     }
 
     showNext() {

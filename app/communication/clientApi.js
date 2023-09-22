@@ -24,7 +24,7 @@ exports.api = {
         next: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.NEXT),
         previous: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PREVIOUS)
     },
-    requestImages: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
+    triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
     subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, (event, imageContainer) => onImage(imageContainer)),
     subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, (event, album) => onAlbum(album)),
     subscribeSlideshowControls: (id, onStart, onStop, onNext, onPrevious) => {
