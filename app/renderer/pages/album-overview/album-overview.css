@@ -1,0 +1,31 @@
+:root {
+    --pagination-height: 100px;
+    --images-height: calc(100vh - var(--pagination-height));
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: var(--background-color);
+    color: var(--font-color);
+    font-family: var(--font-family);
+}
+
+div#images {
+    display: flex;
+    flex-wrap: wrap;
+    height: var(--images-height);
+    overflow-y: scroll;
+    justify-content: center;
+}
+
+div.image-item {
+    border: 2px solid var(--background-color);
+}
+
+div#pagination {
+    height: var(--pagination-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
