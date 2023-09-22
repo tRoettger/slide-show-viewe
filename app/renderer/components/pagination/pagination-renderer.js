@@ -80,7 +80,6 @@ class PaginationRenderer {
 
     #renderToDisplay() {
         let visiblePages = this.#determineVisiblePages();
-        console.log("visiblePages: ", visiblePages);
         for(let index in visiblePages) {
             let currentPage = visiblePages[index];
             this.display.appendChild(this.#createPageItem(currentPage));

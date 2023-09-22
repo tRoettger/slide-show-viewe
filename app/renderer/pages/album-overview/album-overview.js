@@ -14,9 +14,12 @@ const renderImageItem = (image, width, height) => {
 };
 
 const IMAGES = document.getElementById("images");
+const pagination = new PaginationRenderer(document.getElementById("pagination"), 1, 2, 2);
 
 // TEST CODE:
 
 for(let i = 0; i < 50; i++) {
     IMAGES.appendChild(renderImageItem("", 100, 100))
 }
+
+pagination.render({count: 300});
