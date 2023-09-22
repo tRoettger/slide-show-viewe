@@ -22,4 +22,4 @@ for(let i = 0; i < 50; i++) {
     IMAGES.appendChild(renderImageItem("", 100, 100))
 }
 
-pagination.render({count: 300});
+pagination.render({count: 15});
