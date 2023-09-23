@@ -1,6 +1,5 @@
 const { isImage } = require("../model/imageFileHelper");
 const { serverApi } = require("../communication/serverApi");
-const { globalShortcut } = require("electron");
 
 class SlideshowController {
     constructor() {
