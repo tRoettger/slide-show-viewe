@@ -6,7 +6,6 @@ class SlideshowController {
         this.files = [];
         this.running = false;
         this.stateListeners = [];
-        this.current = 0;
         this.startSlideShow = this.startSlideShow.bind(this);
         this.stopSlideShow = this.stopSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
@@ -17,12 +16,14 @@ class SlideshowController {
         this.getImage = this.getImage.bind(this);
         this.gotoImage = this.gotoImage.bind(this);
         this.getAlbum = this.getAlbum.bind(this);
+        this.getCurrentIndex = this.getCurrentIndex.bind(this);
+        this.#setCurrentIndex(0);
     }
 
     openAlbum(files) {
         this.stopSlideShow();
         this.files = files.filter(isImage);
-        this.current = 0;
+        this.#setCurrentIndex(0);
         serverApi.broadcastOpenAlbum(this.getAlbum());
     }
 
@@ -36,6 +37,11 @@ class SlideshowController {
         for(let listener of this.stateListeners) {
             listener(running);
         }
+    }
+
+    #setCurrentIndex(index) {
+        this.current = index;
+        serverApi.broadcastCurrentIndex(this.current);
     }
 
     getConfiguration() {
@@ -57,15 +63,15 @@ class SlideshowController {
         }
     }
     gotoPreviousImage() { 
-        this.current = ((this.current) == 0 ? this.#getCount() : this.current) - 1;
+        this.#setCurrentIndex(((this.current) == 0 ? this.#getCount() : this.current) - 1);
         serverApi.broadcastSlideshowPrevious(this.getImage(this.current));
     }
     gotoNextImage() {
-        this.current = (this.current + 1) % this.#getCount();
+        this.#setCurrentIndex((this.current + 1) % this.#getCount());
         serverApi.broadcastSlideshowNext(this.getImage(this.current));
     }
     gotoImage(index) {
-        this.current = (index*1) % this.#getCount();
+        this.#setCurrentIndex((index*1) % this.#getCount());
         const image = this.getImage(this.current);
         serverApi.broadcastSlideShowGoto(image);
     }

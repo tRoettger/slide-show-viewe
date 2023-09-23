@@ -24,6 +24,8 @@ div#images {
 
 div.image-item {
     border: 2px solid var(--background-color);
+    background-color: var(--background-color);
+    padding: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,6 +37,11 @@ div.image-item:hover {
 div.image-item img {
     max-width: 200px;
     max-height: 200px;
+}
+
+div.current-item {
+    border-color: var(--font-color);
+    cursor: default;
 }
 
 div#pagination {

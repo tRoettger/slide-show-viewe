@@ -36,7 +36,8 @@ exports.OutChannel = {
         PREVIOUS: "control-slideshow-previous",
         START: "control-slideshow-start",
         STOP: "control-slideshow-stop",
-        TRANSITION: "control-slideshow-transition"
+        TRANSITION: "control-slideshow-transition",
+        CURRENT_INDEX: "control-slideshow-current-index"
     },
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_ALBUM_CHANGED: "notify-album-changed",

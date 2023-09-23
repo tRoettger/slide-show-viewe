@@ -26,6 +26,7 @@ exports.serverApi = {
     broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
     broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
     broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
+    broadcastCurrentIndex: (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),
     registerController: (controller) => {
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -65,6 +66,7 @@ exports.serverApi = {
         const requestMap = new Map();
         requestMap.set(OutChannel.RESPOND_IMAGES, (indicies) => indicies.map(controller.getImage));
         requestMap.set(OutChannel.RESPOND_ALBUM, controller.getAlbum);
+        requestMap.set(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, controller.getCurrentIndex);
 
         ipcMain.on(InChannel.REQUEST, (event, request) => {
             const handler = requestMap.get(request.outChannel);
