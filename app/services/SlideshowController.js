@@ -16,13 +16,14 @@ class SlideshowController {
         this.toggleSlideShow = this.toggleSlideShow.bind(this);
         this.getImage = this.getImage.bind(this);
         this.gotoImage = this.gotoImage.bind(this);
+        this.getAlbum = this.getAlbum.bind(this);
     }
 
     openAlbum(files) {
         this.stopSlideShow();
         this.files = files.filter(isImage);
         this.current = 0;
-        serverApi.broadcastOpenAlbum({count: this.files.length});
+        serverApi.broadcastOpenAlbum(this.getAlbum());
     }
 
     setConfiguration(config) {
@@ -89,6 +90,10 @@ class SlideshowController {
             index: index, 
             image: this.files[index]
         };
+    }
+
+    getAlbum() {
+        return {count: this.files ? this.files.length : 0};
     }
 
     subscribeState(listener) {

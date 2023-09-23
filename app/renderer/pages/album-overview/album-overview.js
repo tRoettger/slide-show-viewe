@@ -58,14 +58,17 @@ const ID = windowApi.windowId.ALBUM_OVERVIEW;
 const IMAGES = document.getElementById("images");
 const pagination = new PaginationRenderer(document.getElementById("pagination"), 1, 2, 2);
 const PER_PAGE = 20;
-const imgRenderer = new ImageRenderer(IMAGES, 20);
+const imgRenderer = new ImageRenderer(IMAGES, PER_PAGE);
 
 pagination.subscribePage(imgRenderer.requestImagesForPage);
 
-api.subscribeAlbum(ID, (album) => {
+const handleAlbum =(album) => {
     if(album && album.count) {
         imgRenderer.setCount(album.count);
         pagination.render({count: Math.ceil(album.count / PER_PAGE)});
         imgRenderer.requestImagesForPage(pagination.getCurrent());
     }
-});
+};
+
+api.subscribeAlbum(ID, handleAlbum);
+api.requestAlbum(handleAlbum);

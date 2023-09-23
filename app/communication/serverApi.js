@@ -64,6 +64,7 @@ exports.serverApi = {
 
         const requestMap = new Map();
         requestMap.set(OutChannel.RESPOND_IMAGES, (indicies) => indicies.map(controller.getImage));
+        requestMap.set(OutChannel.RESPOND_ALBUM, controller.getAlbum);
 
         ipcMain.on(InChannel.REQUEST, (event, request) => {
             const handler = requestMap.get(request.outChannel);

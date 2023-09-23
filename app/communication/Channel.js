@@ -43,5 +43,6 @@ exports.OutChannel = {
     NOTIFY_PAGE_INFO: "notify-page-info",
     OPEN_ALBUM: "open-album",
     PROVIDE_IMAGE: "provide-image",
+    RESPOND_ALBUM: "respond-album",
     RESPOND_IMAGES: "respond-images"
 };

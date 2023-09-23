@@ -67,6 +67,7 @@ exports.api = {
         subscribeStart: (id, onStart) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.START, onStart),
         subscribeStop: (id, onStop) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.STOP, onStop)
     },
+    requestAlbum: (onAlbum) => request(OutChannel.RESPOND_ALBUM, onAlbum),
     requestImages: (indicies, onImages) => request(OutChannel.RESPOND_IMAGES, onImages, indicies),
     triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
     subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, onImage),
