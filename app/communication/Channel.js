@@ -5,12 +5,12 @@ exports.InChannel = {
     APPLICATION_READY: "application-ready",
     CHANGE_ALBUM_ORDER: "change-album-order",
     CONTROL_SLIDESHOW: {
-        START: "control-slideshow-start",
-        START_OR_STOP: "control-slideshow-start-or-stop",
-        STOP: "control-slideshow-stop",
+        GOTO: "control-slideshow-goto",
         NEXT: "control-slideshow-next",
+        PAUSE: "control-slideshow-pause",
         PREVIOUS: "control-slideshow-previous",
-        GOTO: "control-slideshow-goto"
+        START: "control-slideshow-start",
+        TRANSITION: "control-slideshow-trans"
     },
     GET_IMAGES: "get-images",
     GET_SLIDESHOW_CONFIG: "get-slideshow-config",
@@ -31,11 +31,12 @@ exports.InChannel = {
 exports.OutChannel = {
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONTROL_SLIDESHOW: {
-        START: "control-slideshow-start",
-        STOP: "control-slideshow-stop",
+        GOTO: "control-slideshow-goto",
         NEXT: "control-slideshow-next",
         PREVIOUS: "control-slideshow-previous",
-        GOTO: "control-slideshow-goto"
+        START: "control-slideshow-start",
+        STOP: "control-slideshow-stop",
+        TRANSITION: "control-slideshow-transition"
     },
     NOTIFY_ALBUM: "notify-album",
     NOTIFY_ALBUM_CHANGED: "notify-album-changed",

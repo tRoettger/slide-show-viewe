@@ -4,13 +4,35 @@ const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequest } = require("./Message");
 const { WindowId } = require("../model/WindowUtils");
 
+const wrapCallback = (callback) => {
+    let outerError = new Error("An error occured while executing the callback");
+    return (param) => {
+        try {
+            callback(param);
+        } catch(innerError) {
+            let combinedError = new Error(innerError.message);
+            combinedError.stack = outerError.stack + "\ncaused by: " + innerError.stack;
+            throw combinedError;
+        }
+
+    };
+}
+
 const subscribe = (id, outChannel, callback) => {
     console.log("Subscribing: ", { id: id, outChannel: outChannel });
+    if(!(callback instanceof Function)) {
+        throw new Error(`Callback for channel ${outChannel} is not a function.`);
+    }
+    callback = wrapCallback(callback);
     ipcRenderer.on(outChannel, (event, msg) => callback(msg));
     ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });
 };
 
 const request = (outChannel, callback, requestBody) => {
+    if(!(callback instanceof Function)) {
+        throw new Error("Callback has to be a function");
+    }
+    callback = wrapCallback(callback);
     ipcRenderer.once(outChannel, (event, response) => callback(response));
     ipcRenderer.send(InChannel.REQUEST, {outChannel: outChannel, body: requestBody});
 }
@@ -23,24 +45,23 @@ const createConfig = (viewDuration, transitionDuration, timingFunction) => ({
 
 exports.api = {
     controlSlideshow: {
-        start: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.START),
-        stop: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.STOP),
-        startOrStop: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.START_OR_STOP),
+        goto: (index) => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.GOTO, index),
         next: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.NEXT),
+        pause: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PAUSE),
         previous: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.PREVIOUS),
-        goto: (index) => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.GOTO, index)
+        start: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.START),
+        transition: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.TRANSITION),
+        subscribeNext: (id, onNext) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.NEXT, onNext),
+        subscribePrevious: (id, onPrevious) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.PREVIOUS, onPrevious),
+        subscribeTransition: (id, onTransition) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.TRANSITION, onTransition),
+        subscribeGoto: (id, onGoto) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.GOTO, onGoto),
+        subscribeStart: (id, onStart) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.START, onStart),
+        subscribeStop: (id, onStop) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.STOP, onStop)
     },
     requestImages: (indicies, onImages) => request(OutChannel.RESPOND_IMAGES, onImages, indicies),
     triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
     subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, onImage),
     subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, onAlbum),
-    subscribeSlideshowControls: (id, onStart, onStop, onNext, onPrevious, onGoto) => {
-        subscribe(id, OutChannel.CONTROL_SLIDESHOW.START, onStart);
-        subscribe(id, OutChannel.CONTROL_SLIDESHOW.STOP, onStop);
-        subscribe(id, OutChannel.CONTROL_SLIDESHOW.NEXT, onNext);
-        subscribe(id, OutChannel.CONTROL_SLIDESHOW.PREVIOUS, onPrevious);
-        subscribe(id, OutChannel.CONTROL_SLIDESHOW.GOTO, onGoto);
-    },
     notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, "main-window")
 };
 

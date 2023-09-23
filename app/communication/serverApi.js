@@ -22,9 +22,10 @@ exports.serverApi = {
     broadcastSlideshowConfig: (config) => subscriptionService.broadcast(OutChannel.CONFIGURE_SLIDESHOW, config),
     broadcastSlideshowStart: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.START),
     broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
-    broadcastSlideshowNext: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT),
-    broadcastSlideshowPrevious: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS),
-    broadcastSlideShowGoto: (index) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, index),
+    broadcastSlideshowNext: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
+    broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
+    broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
+    broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
     registerController: (controller) => {
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -73,15 +74,9 @@ exports.serverApi = {
         
         ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.TRANSITION, (event) => controller.transition());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => controller.startSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => {
-            if(controller.isRunning()) {
-                controller.stopSlideShow();
-            } else {
-                controller.startSlideShow();
-            }
-        });
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.STOP, (event) => controller.stopSlideShow());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, (event) => controller.stopSlideShow());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => controller.gotoNextImage());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => controller.gotoPreviousImage());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.GOTO, (event, index) => controller.gotoImage(index));

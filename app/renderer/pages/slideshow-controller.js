@@ -1,114 +1,129 @@
-class SlideshowController {
-    constructor(renderer, preloadImageCount, config) {
-        this.count = 0;
-        this.current = 0;
-        this.running = false;
-        this.config = config;
-        this.loaded = [];
-        this.renderer = renderer;
-        this.showNext = this.showNext.bind(this);
-        this.showPrevious = this.showPrevious.bind(this);
-        this.preloadImageCount = preloadImageCount;
-    }
+/* ISOLATED to prevent other files to access those variables */
+(() => {
+    class SlideshowController {
+        constructor(config, remoteControl, onPause, onPlay) {
+            this.count = 0;
+            this.running = false;
+            this.config = config;
+            this.remoteControl = remoteControl;
+            this.onPause = onPause;
+            this.onPlay = onPlay;
 
-    isLoaded(index) {
-        return this.loaded.includes(index);
-    }
-
-    normalizeIndex(i) {
-        return (i < 0) ? (i + this.count) : (i % this.count);
-    }
-
-    calculatePreloadIndices() {
-        var shouldLoad = [this.current];
-        var start = this.current - this.preloadImageCount;
-        var end = this.current + this.preloadImageCount;
-        for(var i = start; i <= end; i++) {
-            var index = this.normalizeIndex(i);
-            if(!shouldLoad.includes(index)) shouldLoad.push(index);
+            this.showNext = this.showNext.bind(this);
+            this.showPrevious = this.showPrevious.bind(this);
+            this.start = this.start.bind(this);
+            this.pause = this.pause.bind(this);
         }
 
-        return shouldLoad.filter(index => !this.isLoaded(index));
-    }
+        configure(config) {
+            this.config = config;
+        }
 
-    configure(config) {
-        this.config = config;
-        this.renderer.updateAnimation(config);
-    }
+        getCount() {
+            return this.count;
+        }
 
-    getCount() {
-        return this.count;
-    }
+        isRunning() {
+            return this.running;
+        }
 
-    init() {
-        this.renderer.updateAnimation(this.config);
-    }
+        loadAlbum(album) {
+            this.pause();
+            this.count = album.count;
+        }
 
-    isRunning() {
-        return this.running;
-    }
+        pause() {
+            this.running = false;
+            if(this.interval) {
+                clearInterval(this.interval);
+            }
+            this.onPause();
+        }
 
-    loadAlbum(album) {
-        this.pause();
-        this.current = 0;
-        this.count = album.count;
-        this.loaded = [];
-        this.setup();
-    }
+        showNext() {
+            this.remoteControl.next();
+        }
 
-    notifyImage(container) {
-        this.loaded.push(container.index * 1);
-        this.renderer.renderImage(container.image, container.index);
-    }
+        showPrevious() {
+            // "+ slideshow.count" covers the step from first to last image.
+            this.remoteControl.previous();
+        }
 
-    pause() {
-        this.running = false;
-        this.renderer.stopTransition();
-    }
-
-    preloadImages() {
-        var shouldLoad = this.calculatePreloadIndices();
-        if(shouldLoad.length > 0) {
-            api.triggerImagesBroadcast(shouldLoad);
+        start() {
+            if(!this.isRunning()) {
+                this.running = true;
+                this.onPlay();
+                let swapDuration = (this.config.viewDuration + this.config.transitionDuration) * 1000;
+                console.log("Swap duration", swapDuration);
+                this.remoteControl.transition();
+                this.interval = setInterval(() => {
+                    this.showNext();
+                    this.remoteControl.transition();
+                }, swapDuration);
+            }
         }
     }
 
-    setup() {
-        this.renderer.setup(this.count);
-        api.triggerImagesBroadcast(this.calculatePreloadIndices());
-    }
+    const ID = windowApi.windowId.SLIDESHOW + "_controller";
+    const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
+    const BTN_NEXT = document.getElementById("next-btn");
+    const BTN_PREVIOUS = document.getElementById("previous-btn");
+    
+    const onPause = () => {
+        BTN_SLIDESHOW.innerHTML = "&#9655;";
+        BTN_SLIDESHOW.title = "Diashow starten";
+    };
 
-    showNext() {
-        this.current = (this.current + 1) % this.count;
-        this.renderer.showNext();
-        this.preloadImages();
-    }
+    const onPlay = () => {
+        BTN_SLIDESHOW.innerHTML =  "&#10073;&#10073;";
+        BTN_SLIDESHOW.title = "Diashow pausieren";
+    };
 
-    showPrevious() {
-        // "+ slideshow.count" covers the step from first to last image.
-        this.current = (this.current + this.count - 1) % this.count;
-        this.renderer.showPrevious();
-        this.preloadImages();
-    }
+    let controller;
 
-    show(index) {
-        this.current = index % this.count;
-        this.renderer.show(this.current);
-        this.preloadImages();
-    }
+    configApi.subscribe(ID, (config) => {
+        if(controller) {
+            controller.configure(config);
+        } else {
+            controller = new SlideshowController(config, api.controlSlideshow, onPause, onPlay);
+    
+            const controlSlideshow = (e) => {
+                if(controller.isRunning()) {
+                    api.controlSlideshow.pause();
+                } else {
+                    api.controlSlideshow.start();
+                }
+            };
+    
+            const startSlideShow = (e) => {
+                if(controller.getCount() > 1) {
+                    api.controlSlideshow.start();
+                }
+            };
+    
+            const wrapWithStopAndStart = (stepping) => {
+                if(controller.isRunning()) {
+                    controller.pause();
+                    stepping();
+                    controller.start();
+                } else {
+                    stepping();
+                }
+            }
+    
+            BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
+            BTN_NEXT.addEventListener("click", (e) => wrapWithStopAndStart(controller.showNext));
+            BTN_PREVIOUS.addEventListener("click", (e) => wrapWithStopAndStart(controller.showPrevious));
+    
+            api.subscribeAlbum(ID, album => {
+                console.log("Received album: ", album);
+                controller.loadAlbum(album);
+            });
 
-    start() {
-        if(!this.isRunning()) {
-            this.running = true;
-            var swapDuration = this.config.viewDuration + this.config.transitionDuration;
-            this.renderer.startTransition(swapDuration, this.showNext);
+            api.controlSlideshow.subscribeStart(ID, controller.start);
+            api.controlSlideshow.subscribeStop(ID, controller.pause);
         }
-    }
-}
-
-const PRELOAD_IMAGES = 5;
-const createController = (config, renderer) => {
-    const controller = new SlideshowController(renderer, PRELOAD_IMAGES, config);
-    controller.init();
-    return controller;
-};
+    
+    });
+    
+})();

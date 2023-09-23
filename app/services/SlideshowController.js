@@ -6,6 +6,7 @@ class SlideshowController {
         this.files = [];
         this.running = false;
         this.stateListeners = [];
+        this.current = 0;
         this.startSlideShow = this.startSlideShow.bind(this);
         this.stopSlideShow = this.stopSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
@@ -20,6 +21,7 @@ class SlideshowController {
     openAlbum(files) {
         this.stopSlideShow();
         this.files = files.filter(isImage);
+        this.current = 0;
         serverApi.broadcastOpenAlbum({count: this.files.length});
     }
 
@@ -54,28 +56,39 @@ class SlideshowController {
         }
     }
     gotoPreviousImage() { 
-        serverApi.broadcastSlideshowPrevious();
+        this.current = ((this.current) == 0 ? this.count : this.current) - 1;
+        serverApi.broadcastSlideshowPrevious(this.getImage(this.current));
     }
-    gotoNextImage() { 
-        serverApi.broadcastSlideshowNext();
+    gotoNextImage() {
+        this.current = (this.current + 1) % this.count;
+        serverApi.broadcastSlideshowNext(this.getImage(this.current));
     }
     gotoImage(index) {
-        serverApi.broadcastSlideShowGoto(index);
+        this.current = index % this.count;
+        serverApi.broadcastSlideShowGoto(this.getImage(this.current));
+    }
+
+    transition() {
+        serverApi.broadcastSlideShowTransition(this.getImage(this.current));
     }
 
     isRunning() {
         return this.running;
     }
+
+    getCurrentIndex() {
+        return this.current;
+    }
     
     provideFile(index) {
-        serverApi.broadcastImage({
-            index: index, 
-            image: this.files[index]
-        });
+        serverApi.broadcastImage(this.getImage(index));
     }
 
     getImage(index) {
-        return this.files[index];
+        return {
+            index: index, 
+            image: this.files[index]
+        };
     }
 
     subscribeState(listener) {

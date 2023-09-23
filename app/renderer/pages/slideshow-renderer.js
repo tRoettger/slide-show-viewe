@@ -1,129 +1,149 @@
-
-const EMPTY_INTERVAL = setInterval(() => {}, 5000);
-const BUTTON_STATES = {
-    start: { text: "&#9655;", title: "Diashow starten" },
-    pause: { text: "&#10073;&#10073;", title: "Diashow pausieren" }
-};
-
-const tryToDisplay = (id, setup) => {
-    var element = document.getElementById(id);
-    if(element) {
-        setup(element);
-    } else {
-        // retry 100 ms later
-        setTimeout(() => tryToDisplay(id, setup), 100);
-    }
-}
-
-class SlideshowRenderer {
-    constructor(cssRoot, display, playBtn) {
-        this.cssRoot = cssRoot;
-        this.display = display;
-        this.playBtn = playBtn;
-        this.interval = EMPTY_INTERVAL;
-        this.elements = [];
-    }
-
-    addImageElements(count) {
-        this.createImageElements(count).forEach(c => this.display.appendChild(c));
-    }
-
-    createImageElements(count) {
-        this.elements= [];
-        var imageElements = [];
-        for(var i = count - 1; i >= 0; i--) {
-            var image = document.createElement("img");
-            image.id = "album-image-" + i;
-            image.className = "album-image";
-            
-            var wrapper = document.createElement("div");
-            wrapper.className = "album-image-wrapper";
-            wrapper.appendChild(image);
-            imageElements.push(wrapper);
-            this.elements[i] = wrapper;
+/* ISOLATED to prevent other files to access those variables */
+(() => {
+    class SlideshowRenderer {
+        constructor(cssRoot, display, preloadImages) {
+            this.cssRoot = cssRoot;
+            this.display = display;
+            this.preloadImages = preloadImages;
+            this.elements = [];
+            this.current = 0;
+            this.updateAnimation = this.updateAnimation.bind(this);
+            this.renderImage = this.renderImage.bind(this);
         }
-        return imageElements;
-    };
-    
-    createTransition() {
-        this.display.lastChild.style.animationName = "fade";
-    }
 
-    removeImageElements() { 
-        while(this.display.firstChild != null) {
-            this.display.removeChild(this.display.lastChild); 
+        #tryToDisplay(id, setup) {
+            let element = document.getElementById(id);
+            if(element) {
+                setup(element);
+            } else {
+                // retry 100 ms later
+                setTimeout(() => this.#tryToDisplay(id, setup), 100);
+            }
         }
-    };
 
-    renderImage(image, index) {
-        tryToDisplay("album-image-" + index, (element) => {
-            element.src = image.path;
-            element.alt = image.path;
-        });
-    }
+        addImageElements(count) {
+            this.elements = this.#createImageElements(count);;
 
-    setup(count) {
-        this.removeImageElements();
-        this.addImageElements(count);
-    }
-
-    showNext() {
-        var child = this.display.lastChild;
-        child.style.animationName = "none";
-        this.display.removeChild(child);
-        this.display.insertBefore(child, this.display.firstChild);
-    }
-    
-    show(index) {
-        console.log("show", index);
-        const target = this.elements[index];
-        target.style.animationName = "none";
-        while(this.display.lastChild != target) {
-            this.showNext();
+            /* Append in reversed order */
+            const elementsToAppend = [...this.elements];
+            while(elementsToAppend.length > 0) {
+                this.display.appendChild(elementsToAppend.pop().element);
+            }
         }
-    }
 
-    showPrevious() {
-        this.display.lastChild.style.animationName = "none";
-        var child = this.display.firstChild;
-        this.display.removeChild(child);
-        this.display.appendChild(child);
-    }
+        #createImageElements(count) {
+            var imageElements = [];
+            for(var i = 0; i < count; i++) {
+                var image = document.createElement("img");
+                image.id = "album-image-" + i;
+                image.className = "album-image";
+                
+                var wrapper = document.createElement("div");
+                wrapper.className = "album-image-wrapper";
+                wrapper.appendChild(image);
+                imageElements.push({element: wrapper, loaded: false});
+            }
+            return imageElements;
+        };
 
-    #setPlayButtonState(state) {
-        this.playBtn.innerHTML = state.text;
-        this.playBtn.title = state.title;
-    }
+        transition() {
+            this.display.lastChild.style.animationName = "fade";
+        }
 
-    startTransition(swapDuration, onFinish) {
-        this.#setPlayButtonState(BUTTON_STATES.pause);
-        this.createTransition();
-        this.interval = setInterval(() => this.swapInterval(onFinish), swapDuration * 1000);
-    }
+        removeImageElements() { 
+            while(this.display.firstChild != null) {
+                this.display.removeChild(this.display.lastChild); 
+            }
+        };
 
-    stopTransition() {
-        this.#setPlayButtonState(BUTTON_STATES.start);
-        clearInterval(this.interval);
-        if(this.display.firstChild) {
+        renderImage(image, index) {
+            this.#tryToDisplay("album-image-" + index, (element) => {
+                element.src = image.path;
+                element.alt = image.path;
+                this.elements[index].loaded = true;
+            });
+        }
+
+        setup(count) {
+            this.removeImageElements();
+            this.addImageElements(count);
+            this.current = 0;
+        }
+
+        showNext() {
+            var child = this.display.lastChild;
+            this.display.removeChild(child);
+            child.style.animationName = "none";
+            this.display.insertBefore(child, this.display.firstChild);
+            this.current = (this.current + 1) % this.elements.length;
+            this.preload();
+        }
+        
+        show(index) {
+            const target = this.elements[index];
+            target.style.animationName = "none";
+            while(this.display.lastChild != target) {
+                this.showNext();
+            }
+        }
+
+        showPrevious() {
             this.display.lastChild.style.animationName = "none";
+            var child = this.display.firstChild;
+            this.display.removeChild(child);
+            this.display.appendChild(child);
+            this.current = ((this.current == 0) ? this.elements.length : this.current) - 1;
+            this.preload();
+        }
+
+        #calculateDistance(a, b) {
+            const regularDistance = Math.abs(a - b);
+            return Math.min(regularDistance, this.elements.length - regularDistance);
+        }
+
+        #determinePreloadIndicies() {
+            const indicies = [];
+            for(let i = 0; i < this.elements.length; i++) {
+                if(!(this.elements[i].loaded) && this.preloadImages > this.#calculateDistance(this.current, i)) {
+                    indicies.push(i);
+                }
+            }
+            return indicies;
+        }
+
+        preload() {
+            api.requestImages(this.#determinePreloadIndicies(), (images) => {
+                for(let imageContainer of images) {
+                    this.renderImage(imageContainer.image, imageContainer.index);
+                }
+            });
+        }
+
+        updateAnimation(config) {
+            console.log("Received config in renderer: ", config);
+            this.cssRoot.setProperty("--transition-duration", config.transitionDuration + "s");
+            this.cssRoot.setProperty("--view-duration", config.viewDuration + "s");
+            this.cssRoot.setProperty("--timing-function", config.timingFunction);
         }
     }
 
-    swapInterval(onFinish) {
-        onFinish();
-        this.createTransition();
-    };
+    const PRELOAD_IMAGES = 3;
 
-    updateAnimation(config) {
-        this.cssRoot.setProperty("--transition-duration", config.transitionDuration + "s");
-        this.cssRoot.setProperty("--view-duration", config.viewDuration + "s");
-        this.cssRoot.setProperty("--timing-function", config.timingFunction);
-    }
-}
-
-const createRenderer = () => {
     const CSS_ROOT = document.querySelector(":root").style;
     const ROOT = document.getElementById("root");
-    const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
-    return new SlideshowRenderer(CSS_ROOT, ROOT, BTN_SLIDESHOW);
-};
+    const ID = windowApi.windowId.SLIDESHOW + "_renderer";
+    const renderer = new SlideshowRenderer(CSS_ROOT, ROOT, PRELOAD_IMAGES);
+
+    configApi.subscribe(ID, (cfg) => renderer.updateAnimation(cfg));
+
+    api.controlSlideshow.subscribeNext(ID, (img) => renderer.showNext());
+    api.controlSlideshow.subscribePrevious(ID, (img) => renderer.showPrevious());
+    api.controlSlideshow.subscribeTransition(ID, (img) => renderer.transition());
+    api.controlSlideshow.subscribeGoto(ID, (img) => renderer.show(img.index));
+
+    api.subscribeAlbum(ID, (album) => {
+        renderer.setup(album.count);
+        renderer.preload();
+    });
+
+})();
