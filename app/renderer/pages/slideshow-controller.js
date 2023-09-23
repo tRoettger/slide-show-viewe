@@ -50,7 +50,7 @@
         }
 
         start() {
-            if(!this.isRunning()) {
+            if(!this.isRunning() && this.getCount() > 1) {
                 this.running = true;
                 this.onPlay();
                 let swapDuration = (this.config.viewDuration + this.config.transitionDuration) * 1000;
@@ -91,12 +91,6 @@
                 if(controller.isRunning()) {
                     api.controlSlideshow.pause();
                 } else {
-                    api.controlSlideshow.start();
-                }
-            };
-    
-            const startSlideShow = (e) => {
-                if(controller.getCount() > 1) {
                     api.controlSlideshow.start();
                 }
             };
