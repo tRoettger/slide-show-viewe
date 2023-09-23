@@ -32,8 +32,8 @@ class WindowConfigurer {
     }
 
     create(settingsFilename, defaultSettings, additionalSettings) {
-        const window = new BrowserWindow(createSecurityProperties());
-        additionalSettings ??= {};
+        const initialSettings = {...createSecurityProperties(), ...additionalSettings};
+        const window = new BrowserWindow(initialSettings);
         this.loadSettings(settingsFilename)
             .catch(() => defaultSettings)
             .then(settings => ({...settings, ...additionalSettings}))
