@@ -9,6 +9,7 @@
             this.current = 0;
             this.updateAnimation = this.updateAnimation.bind(this);
             this.renderImage = this.renderImage.bind(this);
+            this.show = this.show.bind(this);
         }
 
         #tryToDisplay(id, setup) {
@@ -80,11 +81,17 @@
         }
         
         show(index) {
+            console.log(`goto ${index} `);
             const target = this.elements[index];
-            target.style.animationName = "none";
-            while(this.display.lastChild != target) {
-                this.showNext();
+            target.element.style.animationName = "none";
+            const firstElement = this.display.firstChild;
+            let sibling;
+            while((sibling = target.element.nextSibling)) {
+                this.display.removeChild(sibling);
+                this.display.insertBefore(sibling, firstElement);
             }
+            this.current = index;
+            this.preload();
         }
 
         showPrevious() {
@@ -139,7 +146,10 @@
     api.controlSlideshow.subscribeNext(ID, (img) => renderer.showNext());
     api.controlSlideshow.subscribePrevious(ID, (img) => renderer.showPrevious());
     api.controlSlideshow.subscribeTransition(ID, (img) => renderer.transition());
-    api.controlSlideshow.subscribeGoto(ID, (img) => renderer.show(img.index));
+    api.controlSlideshow.subscribeGoto(ID, (img) => {
+        console.log("Received goto ", img);
+        renderer.show(img.index);
+    });
 
     api.subscribeAlbum(ID, (album) => {
         renderer.setup(album.count);

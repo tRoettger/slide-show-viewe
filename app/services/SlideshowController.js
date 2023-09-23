@@ -57,16 +57,17 @@ class SlideshowController {
         }
     }
     gotoPreviousImage() { 
-        this.current = ((this.current) == 0 ? this.count : this.current) - 1;
+        this.current = ((this.current) == 0 ? this.#getCount() : this.current) - 1;
         serverApi.broadcastSlideshowPrevious(this.getImage(this.current));
     }
     gotoNextImage() {
-        this.current = (this.current + 1) % this.count;
+        this.current = (this.current + 1) % this.#getCount();
         serverApi.broadcastSlideshowNext(this.getImage(this.current));
     }
     gotoImage(index) {
-        this.current = index % this.count;
-        serverApi.broadcastSlideShowGoto(this.getImage(this.current));
+        this.current = (index*1) % this.#getCount();
+        const image = this.getImage(this.current);
+        serverApi.broadcastSlideShowGoto(image);
     }
 
     transition() {
@@ -92,8 +93,12 @@ class SlideshowController {
         };
     }
 
+    #getCount() {
+        return this.files ? this.files.length : 0;
+    }
+
     getAlbum() {
-        return {count: this.files ? this.files.length : 0};
+        return {count: this.#getCount()};
     }
 
     subscribeState(listener) {
