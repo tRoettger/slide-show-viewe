@@ -6,6 +6,7 @@ exports.WindowInstanceWrapper = class WindowInstanceWrapper {
         this.instance = DESTROYED_INSTANCE;
         this.getOrCreate = this.getOrCreate.bind(this);
         this.ifPresent = this.ifPresent.bind(this);
+        this.focus = this.focus.bind(this);
     }
 
     getOrCreate() {
@@ -19,6 +20,10 @@ exports.WindowInstanceWrapper = class WindowInstanceWrapper {
         if(!this.instance.isDestroyed()) {
             task(this.instance);
         }
+    }
+
+    focus() {
+        this.getOrCreate().focus();
     }
 
 }

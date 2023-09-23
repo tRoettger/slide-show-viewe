@@ -3,8 +3,9 @@ const { slideshowController: controller } = require("./services/SlideshowControl
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
 const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');
-const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
+const { slideshowConfigWindow } = require('./windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
+const { mainWindow } = require('./windows/SlideshowWindow');
 
 const MenuItemId = {
     START_SLIDESHOW: "start-slideshow",
@@ -21,10 +22,10 @@ const MENU_TEMPLATE = [
             },
             {
                 label: "Album Auswahl", accelerator: "Alt+A", 
-                click: (event) => selector.selectRootFolder(albumSelectionAppWindow.show)
+                click: () => selector.selectRootFolder(albumSelectionAppWindow.show)
             },
             { type: "separator" },
-            { label: "Beenden" }
+            { label: "Beenden", click: () => mainWindow.close() }
         ]
     }, {
         label: "Diashow",
@@ -41,9 +42,9 @@ const MENU_TEMPLATE = [
             { label: "vorheriges Bild", accelerator: "Left", click: controller.gotoPreviousImage },
             { label: "nächstes Bild", accelerator: "Right", click: controller.gotoNextImage },
             { type: "separator" },
-            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.getOrCreate },
+            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.focus },
             { type: "separator" },
-            { label: "Einstellungen", accelerator: "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
+            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => controller.setConfiguration(config))
