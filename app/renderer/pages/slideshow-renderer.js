@@ -151,9 +151,11 @@
         renderer.show(img.index);
     });
 
-    api.subscribeAlbum(ID, (album) => {
+    const handleAlbum = (album) => {
         renderer.setup(album.count);
         renderer.preload();
-    });
+    };
+    api.subscribeAlbum(ID, handleAlbum);
+    api.requestAlbum(handleAlbum);
 
 })();
