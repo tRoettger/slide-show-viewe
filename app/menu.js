@@ -3,7 +3,7 @@ const { slideshowController: controller } = require("./services/SlideshowControl
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
 const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');
-const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
+const { slideshowConfigWindow } = require('./windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
 
 const MenuItemId = {
@@ -43,7 +43,7 @@ const MENU_TEMPLATE = [
             { type: "separator" },
             { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.getOrCreate },
             { type: "separator" },
-            { label: "Einstellungen", accelerator: "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
+            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => controller.setConfiguration(config))

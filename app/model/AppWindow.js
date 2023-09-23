@@ -1,6 +1,6 @@
 const { mainWindow } = require("../windows/SlideshowWindow");
 const selectionWindow = require('../windows/AlbumSelectionWindow');
-const configWindow = require('../windows/SlideshowConfigWindow');
+const { slideshowConfigWindow } = require('../windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require("../windows/AlbumOverviewWindow");
 
 class AppWindow {
@@ -64,7 +64,7 @@ class AppWindow {
 
 exports.mainAppWindow = new AppWindow((task) => task(mainWindow), () => mainWindow, true, true);
 exports.albumSelectionAppWindow = new AppWindow((task) => selectionWindow.ifPresent(task), () => selectionWindow.getOrCreateAlbumSelectionWindow(), false, false);
-exports.slideshowConfigAppWindow = new AppWindow((task) => configWindow.ifPresent(task), () => configWindow.getOrCreateSlideshowConfigurationWindow(), false, false);
+exports.slideshowConfigAppWindow = new AppWindow((task) => slideshowConfigWindow.ifPresent(task), () => slideshowConfigWindow.getOrCreateSlideshowConfigurationWindow(), false, false);
 exports.albumOverviewAppWindow = new AppWindow(albumOverviewWindow.ifPresent, albumOverviewWindow.getOrCreate, false, false);
 
 exports.reloadAll = () => {
