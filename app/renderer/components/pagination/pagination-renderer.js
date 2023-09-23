@@ -75,6 +75,7 @@ class PaginationRenderer {
         this.#clearDisplay();
         this.count = pageInfo.count;
         this.#renderToDisplay();
+        this.current = 0;
         this.#notifyPage(this.current);
     }
 
