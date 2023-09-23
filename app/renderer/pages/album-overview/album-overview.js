@@ -47,8 +47,8 @@ class ImageRenderer {
         const imgIndicies = determineImagesForPage(page, this.perPage, this.count);
         api.requestImages(imgIndicies, (images) => {
             this.#clear();
-            for(let i = 0; i < imgIndicies.length && i < images.length; i++) {
-                this.display.appendChild(renderImageItem(images[i].path, imgIndicies[i]));
+            for(let imageWrapper of images) {
+                this.display.appendChild(renderImageItem(imageWrapper.image.path, imageWrapper.index));
             }
         });
     }
@@ -62,11 +62,10 @@ const imgRenderer = new ImageRenderer(IMAGES, PER_PAGE);
 
 pagination.subscribePage(imgRenderer.requestImagesForPage);
 
-const handleAlbum =(album) => {
+const handleAlbum = (album) => {
     if(album && album.count) {
         imgRenderer.setCount(album.count);
         pagination.render({count: Math.ceil(album.count / PER_PAGE)});
-        imgRenderer.requestImagesForPage(pagination.getCurrent());
     }
 };
 
