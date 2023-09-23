@@ -18,14 +18,23 @@ const wrapCallback = (callback) => {
     };
 }
 
+const SUBSCRIPTIONS = new Map();
+
 const subscribe = (id, outChannel, callback) => {
-    console.log("Subscribing: ", { id: id, outChannel: outChannel });
+    console.log(`Listener "${id}" subscribes to channel "${outChannel}"`);
     if(!(callback instanceof Function)) {
         throw new Error(`Callback for channel ${outChannel} is not a function.`);
     }
     callback = wrapCallback(callback);
-    ipcRenderer.on(outChannel, (event, msg) => callback(msg));
-    ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });
+    const subscriptionId = `${id} ${outChannel}`;
+    const oldListener = SUBSCRIPTIONS.delete(subscriptionId)
+    if(oldListener) {
+        ipcRenderer.removeListener(outChannel, oldListener);
+    }
+    const listener = (event, msg) => callback(msg);
+    SUBSCRIPTIONS.set(subscriptionId, listener);
+    ipcRenderer.addListener(outChannel, listener);
+    ipcRenderer.send(InChannel.SUBSCRIBE, { id: id, outChannel: outChannel });   
 };
 
 const request = (outChannel, callback, requestBody) => {

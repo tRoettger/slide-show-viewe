@@ -83,6 +83,7 @@
 
     configApi.subscribe(ID, (config) => {
         if(controller) {
+            console.log("controller received config", config);
             controller.configure(config);
         } else {
             controller = new SlideshowController(config, api.controlSlideshow, onPause, onPlay);
@@ -103,7 +104,7 @@
                 } else {
                     stepping();
                 }
-            }
+            };
     
             BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
             BTN_NEXT.addEventListener("click", (e) => wrapWithStopAndStart(controller.showNext));
