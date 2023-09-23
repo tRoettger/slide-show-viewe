@@ -1,108 +1,125 @@
-class SlideshowController {
-    constructor(renderer, preloadImageCount, config) {
-        this.count = 0;
-        this.current = 0;
-        this.running = false;
-        this.config = config;
-        this.loaded = [];
-        this.renderer = renderer;
-        this.showNext = this.showNext.bind(this);
-        this.showPrevious = this.showPrevious.bind(this);
-        this.preloadImageCount = preloadImageCount;
-    }
+/* ISOLATED to prevent other files to access those variables */
+(() => {
+    class SlideshowController {
+        constructor(config, remoteControl, onPause, onPlay) {
+            this.count = 0;
+            this.running = false;
+            this.config = config;
+            this.remoteControl = remoteControl;
+            this.onPause = onPause;
+            this.onPlay = onPlay;
 
-    isLoaded(index) {
-        return this.loaded.includes(index);
-    }
-
-    normalizeIndex(i) {
-        return (i < 0) ? (i + this.count) : (i % this.count);
-    }
-
-    calculatePreloadIndices() {
-        var shouldLoad = [this.current];
-        var start = this.current - this.preloadImageCount;
-        var end = this.current + this.preloadImageCount;
-        for(var i = start; i <= end; i++) {
-            var index = this.normalizeIndex(i);
-            if(!shouldLoad.includes(index)) shouldLoad.push(index);
+            this.showNext = this.showNext.bind(this);
+            this.showPrevious = this.showPrevious.bind(this);
+            this.start = this.start.bind(this);
+            this.pause = this.pause.bind(this);
         }
 
-        return shouldLoad.filter(index => !this.isLoaded(index));
-    }
+        configure(config) {
+            this.config = config;
+        }
 
-    configure(config) {
-        this.config = config;
-        this.renderer.updateAnimation(config);
-    }
+        getCount() {
+            return this.count;
+        }
 
-    getCount() {
-        return this.count;
-    }
+        isRunning() {
+            return this.running;
+        }
 
-    init() {
-        this.renderer.updateAnimation(this.config);
-    }
+        loadAlbum(album) {
+            this.pause();
+            this.count = album.count;
+        }
 
-    isRunning() {
-        return this.running;
-    }
+        pause() {
+            if(this.interval) {
+                clearInterval(this.interval);
+            }
+            this.running = false;
+            this.onPause();
+        }
 
-    loadAlbum(album) {
-        this.pause();
-        this.current = 0;
-        this.count = album.count;
-        this.loaded = [];
-        this.setup();
-    }
+        showNext() {
+            this.remoteControl.next();
+        }
 
-    notifyImage(container) {
-        this.loaded.push(container.index * 1);
-        this.renderer.renderImage(container.image, container.index);
-    }
+        showPrevious() {
+            // "+ slideshow.count" covers the step from first to last image.
+            this.remoteControl.previous();
+        }
 
-    pause() {
-        this.running = false;
-        this.renderer.stopTransition();
-    }
+        start() {
+            if(!this.isRunning() && this.getCount() > 1) {
+                this.running = true;
+                this.onPlay();
+                const viewDuration = this.config.viewDuration * 1000;
+                const transitionDuration = this.config.transitionDuration * 1000;
+                const swapDuration = viewDuration + transitionDuration;
+                console.log("Swap duration", swapDuration);
 
-    preloadImages() {
-        var shouldLoad = this.calculatePreloadIndices();
-        if(shouldLoad.length > 0) {
-            api.requestImages(shouldLoad);
+                setTimeout(() => {
+                    this.remoteControl.transition();
+                }, viewDuration);
+                this.interval = setInterval(() => {
+                    this.showNext();
+                    this.remoteControl.transition();
+                }, swapDuration);
+            }
         }
     }
 
-    setup() {
-        this.renderer.setup(this.count);
-        api.requestImages(this.calculatePreloadIndices());
-    }
+    const ID = windowApi.windowId.SLIDESHOW + "_controller";
+    const BTN_SLIDESHOW = document.getElementById("slideshow-btn");
+    const BTN_NEXT = document.getElementById("next-btn");
+    const BTN_PREVIOUS = document.getElementById("previous-btn");
+    
+    const onPause = () => {
+        BTN_SLIDESHOW.innerHTML = "&#9655;";
+        BTN_SLIDESHOW.title = "Diashow starten";
+    };
 
-    showNext() {
-        this.current = (this.current + 1) % this.count;
-        this.renderer.showNext();
-        this.preloadImages();
-    }
-
-    showPrevious() {
-        // "+ slideshow.count" covers the step from first to last image.
-        this.current = (this.current + this.count - 1) % this.count;
-        this.renderer.showPrevious();
-        this.preloadImages();
-    }
-
-    start() {
-        if(!this.isRunning()) {
-            this.running = true;
-            var swapDuration = this.config.viewDuration + this.config.transitionDuration;
-            this.renderer.startTransition(swapDuration, this.showNext);
+    const onPlay = () => {
+        BTN_SLIDESHOW.innerHTML =  "&#10073;&#10073;";
+        BTN_SLIDESHOW.title = "Diashow pausieren";
+    };
+    
+    const wrapWithStopAndStart = (stepping, controller) => {
+        if(controller.isRunning()) {
+            controller.pause();
+            stepping();
+            controller.start();
+        } else {
+            stepping();
         }
-    }
-}
+    };
 
-const PRELOAD_IMAGES = 5;
-const createController = (config, renderer) => {
-    const controller = new SlideshowController(renderer, PRELOAD_IMAGES, config);
-    controller.init();
-    return controller;
-};
+    let controller;
+
+    configApi.subscribe(ID, (config) => {
+        if(controller) {
+            console.log("controller received config", config);
+            wrapWithStopAndStart(() => controller.configure(config), controller);
+        } else {
+            controller = new SlideshowController(config, api.controlSlideshow, onPause, onPlay);
+    
+            const controlSlideshow = (e) => {
+                if(controller.isRunning()) {
+                    api.controlSlideshow.pause();
+                } else {
+                    api.controlSlideshow.start();
+                }
+            };
+    
+            BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
+            BTN_NEXT.addEventListener("click", (e) => wrapWithStopAndStart(controller.showNext, controller));
+            BTN_PREVIOUS.addEventListener("click", (e) => wrapWithStopAndStart(controller.showPrevious, controller));
+    
+            api.subscribeAlbum(ID, album => controller.loadAlbum(album));
+            api.controlSlideshow.subscribeStart(ID, controller.start);
+            api.controlSlideshow.subscribeStop(ID, controller.pause);
+        }
+    
+    });
+    
+})();

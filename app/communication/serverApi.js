@@ -22,8 +22,11 @@ exports.serverApi = {
     broadcastSlideshowConfig: (config) => subscriptionService.broadcast(OutChannel.CONFIGURE_SLIDESHOW, config),
     broadcastSlideshowStart: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.START),
     broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
-    broadcastSlideshowNext: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT),
-    broadcastSlideshowPrevious: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS),
+    broadcastSlideshowNext: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
+    broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
+    broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
+    broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
+    broadcastCurrentIndex: (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),
     registerController: (controller) => {
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -59,20 +62,27 @@ exports.serverApi = {
                 controller.provideFile(key);
             }
         });
+
+        const requestMap = new Map();
+        requestMap.set(OutChannel.RESPOND_IMAGES, (indicies) => indicies.map(controller.getImage));
+        requestMap.set(OutChannel.RESPOND_ALBUM, controller.getAlbum);
+        requestMap.set(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, controller.getCurrentIndex);
+
+        ipcMain.on(InChannel.REQUEST, (event, request) => {
+            const handler = requestMap.get(request.outChannel);
+            handler ??= (body) => undefined;
+            const response = handler(request.body);
+            event.sender.send(request.outChannel, response);
+        });
         
         ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.TRANSITION, (event) => controller.transition());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => controller.startSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => {
-            if(controller.isRunning()) {
-                controller.stopSlideShow();
-            } else {
-                controller.startSlideShow();
-            }
-        });
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.STOP, (event) => controller.stopSlideShow());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, (event) => controller.stopSlideShow());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => controller.gotoNextImage());
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => controller.gotoPreviousImage());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.GOTO, (event, index) => controller.gotoImage(index));
         
     },
     registerSelector: (selector) => {

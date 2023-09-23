@@ -22,7 +22,7 @@ There are multiple options how to open an [album].
 
 ## Direct
 
-The shortcut für this function is `Ctrl+O`.  
+The shortcut for this function is `Ctrl+O`.  
 The function can also be called via the menu path `Datei > Öffnen (File > Open)`.  
 In both cases an open-folder-dialog will open.  
 If the selection is accepted by `Ordner auswählen (choose folder)`, the selected folder is opened as [album].
@@ -150,6 +150,24 @@ The transition type sets the course of the speed in which the opacity decreases.
 | Ausklinged (ease in) | A transition, which starts slowly. |
 | Nachhall (ease out) | A transition, which ends slowly. |
 | Ausklingend und Nachhall (ease in and out) | A transition, which starts and ends slowly. |
+
+# Album overview
+
+[album-overview]: #album-overview
+
+The shortcut for this function is `Alt+O`.
+The function can also be called via the menu path `Diashow > Übersicht (Slideshow > Overview)`.
+In both cases a new window opens.  
+It shows small versions of the current albums images.
+
+By clicking one of the images it is displayed in the [slideshow-window].  
+All images in between will be skipped by the [slideshow].
+
+The image currently displayed in the [slideshow-window] is highlighted by a border.
+
+A maximum of 20 images is available per page.  
+The navigation on the bottom of the window can be used to access further images.  
+The current page is highlighted by a border in the navigation.
 
 # Glossary
 

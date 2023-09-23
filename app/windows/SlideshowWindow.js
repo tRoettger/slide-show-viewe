@@ -3,6 +3,7 @@ const { saveWindowProperties, readWindowProperties } = require("../services/Slid
 const { BrowserWindow } = require('electron');
 const configWindow = require('./SlideshowConfigWindow');
 const selectionWindow = require('./AlbumSelectionWindow');
+const { albumOverviewWindow } = require('./AlbumOverviewWindow');
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow(readWindowProperties());
@@ -11,6 +12,7 @@ const createWindow = () => {
     saveWindowProperties(mainWindow);
     configWindow.ifPresent(window => window.close());
     selectionWindow.ifPresent(window => window.close());
+    albumOverviewWindow.ifPresent(window => window.close());
   });
   return mainWindow;
 };

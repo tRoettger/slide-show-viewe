@@ -1,6 +1,7 @@
 const { mainWindow } = require("../windows/SlideshowWindow");
 const selectionWindow = require('../windows/AlbumSelectionWindow');
 const configWindow = require('../windows/SlideshowConfigWindow');
+const { albumOverviewWindow } = require("../windows/AlbumOverviewWindow");
 
 class AppWindow {
     constructor(executor, getOrCreate, fullscreenAllowed, menuBarVisible) {
@@ -64,12 +65,14 @@ class AppWindow {
 exports.mainAppWindow = new AppWindow((task) => task(mainWindow), () => mainWindow, true, true);
 exports.albumSelectionAppWindow = new AppWindow((task) => selectionWindow.ifPresent(task), () => selectionWindow.getOrCreateAlbumSelectionWindow(), false, false);
 exports.slideshowConfigAppWindow = new AppWindow((task) => configWindow.ifPresent(task), () => configWindow.getOrCreateSlideshowConfigurationWindow(), false, false);
+exports.albumOverviewAppWindow = new AppWindow(albumOverviewWindow.ifPresent, albumOverviewWindow.getOrCreate, false, false);
 
 exports.reloadAll = () => {
     for(let appWindow of [
         this.mainAppWindow,
         this.albumSelectionAppWindow,
-        this.slideshowConfigAppWindow
+        this.slideshowConfigAppWindow,
+        this.albumOverviewAppWindow
     ]) {
         appWindow.reload();
     }

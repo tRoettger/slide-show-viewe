@@ -2,8 +2,9 @@ const { Menu } = require('electron');
 const { slideshowController: controller } = require("./services/SlideshowController");
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow } = require('./model/AppWindow');
+const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');
 const { getOrCreateSlideshowConfigurationWindow } = require('./windows/SlideshowConfigWindow');
+const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
 
 const MenuItemId = {
     START_SLIDESHOW: "start-slideshow",
@@ -37,14 +38,16 @@ const MENU_TEMPLATE = [
                 label: "Diashow pausieren",  accelerator: "Space", registerAccelerator: false,
                 click: controller.stopSlideShow, id: MenuItemId.STOP_SLIDESHOW, enabled: false
             },
+            { label: "vorheriges Bild", accelerator: "Left", click: controller.gotoPreviousImage },
+            { label: "nächstes Bild", accelerator: "Right", click: controller.gotoNextImage },
+            { type: "separator" },
+            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.getOrCreate },
+            { type: "separator" },
             { label: "Einstellungen", accelerator: "Ctrl+P", click: getOrCreateSlideshowConfigurationWindow },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => controller.setConfiguration(config))
-            },
-            { type: "separator" },
-            { label: "vorheriges Bild", accelerator: "Left", click: controller.gotoPreviousImage },
-            { label: "nächstes Bild", accelerator: "Right", click: controller.gotoNextImage }
+            }
         ]
     }, {
         label: "Ansicht",
@@ -58,7 +61,8 @@ const MENU_TEMPLATE = [
             { label: "Neu laden", click: reloadAll, accelerator: "Ctrl+R" },
             { label: "Dev Tools (Hauptfenster)", accelerator: "Ctrl+Shift+I", click: mainAppWindow.openDevTools },
             { label: "Dev Tools (Album Auswahl)", click: albumSelectionAppWindow.openDevTools },
-            { label: "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools }
+            { label: "Dev Tools (Diashow Einstellungen)", click: slideshowConfigAppWindow.openDevTools },
+            { label: "Dev Tools (Album Übersicht)", click: albumOverviewAppWindow.openDevTools }
         ]
     }
 ];

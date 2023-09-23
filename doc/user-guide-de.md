@@ -141,6 +141,24 @@ Die Übergangsart legt fest welchen Verlauf die Geschwindigkeit des Ausblendens 
 | Nachhall | Ein langsam endender Übergang. |
 | Ausklinged und Nachhall | Ein Übergang, der langsam beginnt und endet. |
 
+# Album Übersicht
+
+[Album-Übersicht]: #album-übersicht
+
+Das Tastenkürzel für dies Funktion ist `Alt+O`.  
+Die Funktion kann auch über den Menüpfad `Diashow > Übersicht` aufgerufen werden.  
+In beiden Fällen öffnet sich ein neues Fenster.  
+In diesem werden die Bilder des Album im Kleinformat dargestellt.  
+
+Durch einen Klick auf eines dieser Bild wird dieses im [Diashow-Fenster] angezeigt.  
+Und die [Diashow] überspringt alle Bilder bis zum ausgewählten.  
+
+Das aktuell im [Diashow-Fenster] angezeigte Bild ist durch einen Rahmen hervorgehoben.  
+
+Es werden maximal 20 Bilder pro Seite angezeigt.  
+Um auf weitere Bilder zu zugreifen, kann die Navigation am unteren Rand des Fensters verwendet werden.  
+In der Navigation ist die aktuelle Seite durch einen Rahmen hervorgehoben.
+
 # Glossar
 
 ## Album
