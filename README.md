@@ -29,6 +29,8 @@ So moving the folder to another location does not break the cover configuration.
 
 # Changelogs
 
+With v2.0.1 the changelog was moved to the [github release page](https://github.com/tRoettger/slide-show-viewer/releases).
+
 - [v1.1.2](./doc/v1.1.2/changelog.md)
 - [v1.1.3](./doc/v1.1.3/changelog.md)
 - [v1.2.0](./doc/v1.2.0/changelog.md) ([de](./doc/v1.2.0/changelog-de.md))
