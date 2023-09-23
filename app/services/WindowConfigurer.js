@@ -1,7 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { createSecurityProperties } = require("../model/WindowUtils");
 
 const fromTemplate = (template, values) => {
     const result = {};
@@ -15,6 +14,14 @@ const fromTemplate = (template, values) => {
     }
     return result;
 };
+
+const createSecurityProperties = () => ({
+    webPreferences: {
+        sandbox: false,
+        preload: path.join(__dirname, "..", "preload.js")
+    }, 
+    show: false
+});
 
 class WindowConfigurer {
     constructor(securityFilter, encoding) {

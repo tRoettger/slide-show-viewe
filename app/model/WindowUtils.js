@@ -6,11 +6,3 @@ exports.WindowId = {
     SLIDESHOW: "slideshow-window",
     SLIDESHOW_CONFIG: "slideshow-configuration-window"
 };
-
-exports.createSecurityProperties = () => ({
-    webPreferences: {
-        sandbox: false,
-        preload: path.join(__dirname, "..", "preload.js")
-    }, 
-    show: false
-});
