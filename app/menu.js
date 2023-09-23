@@ -43,7 +43,7 @@ const MENU_TEMPLATE = [
             { label: "nächstes Bild", accelerator: "Right", click: controller.gotoNextImage },
             { type: "separator" },
             { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.focus },
-            { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: mainWindow.focus },
+            { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainWindow.focus() },
             { type: "separator" },
             { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
             { 
