@@ -1,22 +1,15 @@
-const { BrowserWindow } = require("electron");
 const path = require("path");
 const { subscriptionService } = require("../services/SubscriptionService");
 const { WindowId } = require("../model/WindowUtils");
 const { selector } = require("../services/AlbumSelector");
 const { albumPopupMenu } = require("./AlbumPopupMenu");
 const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
+const { windowConfigurer } = require("../services/WindowConfigurer");
 
-const SELECTOR_WINDOW_PROPERTIES = {
-    width: 1080, height: 720,
-    webPreferences: { 
-        sandbox: false,
-        preload: path.join(__dirname, "..", "preload.js")
-    },
-    autoHideMenuBar: true
-};
+const DEFAULT_SETTINGS = { width: 1080, height: 720 };
 
 const wrapper = new WindowInstanceWrapper(() => {
-    const window = new BrowserWindow(SELECTOR_WINDOW_PROPERTIES);
+    const window = windowConfigurer.create("album-selection", DEFAULT_SETTINGS, { autoHideMenuBar: true });
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "selector", "view.html"));
     window.on('close', (e) => {
         subscriptionService.unsubscribeAll(WindowId.ALBUM_SELECTION);

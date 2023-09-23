@@ -1,6 +1,7 @@
-const { app } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const { createSecurityProperties } = require("../model/WindowUtils");
 
 const fromTemplate = (template, values) => {
     const result = {};
@@ -23,15 +24,25 @@ class WindowConfigurer {
         this.storeSettings = this.storeSettings.bind(this);
     }
 
-    register(settingsFilename) {
-        return {
-            configure: (window) => this.loadSettings(settingsFilename).then(settings => {
+    create(settingsFilename, defaultSettings, additionalSettings) {
+        const window = new BrowserWindow(createSecurityProperties());
+        additionalSettings ??= {};
+        this.loadSettings(settingsFilename)
+            .catch(() => defaultSettings)
+            .then(settings => ({...settings, ...additionalSettings}))
+            .then(settings => {
                 console.log(`Configure ${settingsFilename}`, settings);
                 this.#configurePosition(window, settings);
                 this.#configureSize(window, settings);
-            }),
-            store: (settings) => this.storeSettings(settings, settingsFilename)
-        }
+            })
+            .then(() => window.show());
+        window.on(
+            'close', 
+            () => this.storeSettings(window.getBounds(), settingsFilename)
+                .then(() => console.log(`Stored ${settingsFilename} settings successfully`))
+                .catch((err) => console.error(`An error occured while storing the ${settingsFilename} settings:`, err))
+        );
+        return window;
     }
 
     #configureSize(window, settings) {
