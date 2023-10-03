@@ -46,4 +46,12 @@ class SlideshowPlayer extends Observable {
     }
 }
 
+const log = (msg, obj) => console.log(`SlideshowPlayer: ${msg}`);
+
 exports.slideshowPlayer = new SlideshowPlayer();
+this.slideshowPlayer.subscribe("self", {
+    start: () => log("start"),
+    pause: () => log("pause"),
+    next: () => log("next"),
+    previous: () => log("previous"),
+});

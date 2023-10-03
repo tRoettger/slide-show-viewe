@@ -17,6 +17,7 @@ class TransitionService extends Observable {
         this.setTransitionDuration = this.setTransitionDuration.bind(this);
         this.startAutoplay = this.startAutoplay.bind(this);
         this.stopAutoplay = this.stopAutoplay.bind(this);
+        this.resetAutoplay = this.resetAutoplay.bind(this);
     }
 
     setTransitionDuration(transitionDuration) {

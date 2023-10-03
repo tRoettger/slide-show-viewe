@@ -22,6 +22,7 @@ class SlideshowService {
         this.getAlbum = this.getAlbum.bind(this);
         this.getCurrentIndex = this.getCurrentIndex.bind(this);
         this.setConfiguration = this.setConfiguration.bind(this);
+        this.transition = this.transition.bind(this);
 
         this.#setCurrentIndex(0);
     }
