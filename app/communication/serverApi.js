@@ -8,6 +8,8 @@ const { AlbumRequestType } = require("./Message");
 const { configService } = require("../services/ConfigService");
 const { slideshowPlayer } = require("../services/SlideshowPlayer");
 
+const ID = "serverAPI";
+
 exports.serverApi = {
 
     initialize: () => ipcMain.on(InChannel.SUBSCRIBE, (event, subscription) => subscriptionService.subscribe(
@@ -26,6 +28,7 @@ exports.serverApi = {
     broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
     broadcastSlideshowNext: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
     broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
+    broadcastSlideShowAbortTransition: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.ABORT_TRANSITION),
     broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
     broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
     broadcastCurrentIndex: (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),

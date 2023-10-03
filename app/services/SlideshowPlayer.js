@@ -1,9 +1,11 @@
+const { Observable } = require("../model/Observable");
+
 const START = (listener) => listener.start();
 const PAUSE = (listener) => listener.pause();
 const NEXT = (listener) => listener.next();
 const PREVIOUS = (listener) => listener.previous();
 
-class SlideshowPlayer extends Observable{
+class SlideshowPlayer extends Observable {
     constructor() {
         super((listener) => (this.isRunning() ? START : PAUSE)(listener));
         this.running = false;

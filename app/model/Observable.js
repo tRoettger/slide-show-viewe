@@ -1,4 +1,4 @@
-class Observable {
+exports.Observable = class Observable {
 
     /**
      * 

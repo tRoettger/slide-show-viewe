@@ -31,6 +31,7 @@ exports.InChannel = {
 exports.OutChannel = {
     CONFIGURE_SLIDESHOW: "configure-slideshow",
     CONTROL_SLIDESHOW: {
+        ABORT_TRANSITION: "control-slideshow-abort-transition",
         GOTO: "control-slideshow-goto",
         NEXT: "control-slideshow-next",
         PREVIOUS: "control-slideshow-previous",

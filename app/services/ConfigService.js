@@ -1,3 +1,5 @@
+const { Observable } = require("../model/Observable");
+
 class ConfigService extends Observable {
     constructor(initialConfig) {
         super((listener) => listener(this.config));
