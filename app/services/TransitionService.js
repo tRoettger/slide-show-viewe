@@ -21,11 +21,11 @@ class TransitionService extends Observable {
     }
 
     setTransitionDuration(transitionDuration) {
-        this.transitionDuration = transitionDuration;
+        this.transitionDuration = transitionDuration * 1000;
     }
 
     setViewDuration(viewDuration) {
-        this.viewDuration = viewDuration;
+        this.viewDuration = viewDuration * 1000;
     }
 
     startAutoplay() {
@@ -34,7 +34,7 @@ class TransitionService extends Observable {
             const transitionTimeout = setTimeout(() => {
                 this.notify(AUTO_NEXT);
                 this.startAutoplay();
-            });
+            }, this.transitionDuration);
             this.clear = () => clearTimeout(transitionTimeout);
         }, this.viewDuration);
         this.clear = () => clearTimeout(viewTimeout);
@@ -61,6 +61,21 @@ configService.subscribe(ID, config => {
 slideshowPlayer.subscribe(ID, {
     start: this.transitionService.startAutoplay,
     pause: this.transitionService.stopAutoplay,
-    next: this.transitionService.resetAutoplay,
-    previous: this.transitionService.resetAutoplay
+    next: () => {
+        if(slideshowPlayer.isRunning()){
+            this.transitionService.resetAutoplay();
+        }
+    },
+    previous: () => {
+        if(slideshowPlayer.isRunning()) {
+            this.transitionService.resetAutoplay();
+        }
+    }
 });
+
+const log = (msg, obj) => (() => console.log(`TransitionService: ${msg}`, obj));
+/*this.transitionService.subscribe("self", {
+    transition: log("transition"),
+    autoNext: log("autoNext"),
+    autoPause: log("autoPause")
+});*/

@@ -138,7 +138,10 @@
         }
 
         abortTransition() {
-            this.display.lastChild.style.animationName = "none";
+            const lastChild = this.display.lastChild;
+            if(lastChild) {
+                lastChild.style.animationName = "none";
+            }
         }
     }
 
