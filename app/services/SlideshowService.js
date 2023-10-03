@@ -1,5 +1,6 @@
 const { isImage } = require("../model/imageFileHelper");
 const { serverApi } = require("../communication/serverApi");
+const { configService } = require("./ConfigService");
 
 class SlideshowService {
     constructor() {
@@ -18,7 +19,8 @@ class SlideshowService {
         this.gotoImage = this.gotoImage.bind(this);
         this.getAlbum = this.getAlbum.bind(this);
         this.getCurrentIndex = this.getCurrentIndex.bind(this);
-        
+        this.setConfiguration = this.setConfiguration.bind(this);
+
         this.#setCurrentIndex(0);
     }
 
@@ -117,3 +119,4 @@ class SlideshowService {
 
 exports.slideshowService = new SlideshowService();
 serverApi.registerController(this.slideshowService);
+configService.subscribe("slidshowService", this.slideshowService.setConfiguration);

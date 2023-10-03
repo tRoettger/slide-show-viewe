@@ -6,6 +6,7 @@ const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWin
 const { slideshowConfigWindow } = require('./windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
 const { mainWindow } = require('./windows/SlideshowWindow');
+const { configService } = require('./services/ConfigService');
 
 const MenuItemId = {
     START_SLIDESHOW: "start-slideshow",
@@ -48,7 +49,7 @@ const MENU_TEMPLATE = [
             { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
-                click: () => fileService.loadConfig((config) => controller.setConfiguration(config))
+                click: () => fileService.loadConfig((config) => configService.setConfig(config))
             }
         ]
     }, {

@@ -5,6 +5,7 @@ const { fileService } = require("../services/FileService");
 const { subscriptionService } = require("../services/SubscriptionService");
 const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequestType } = require("./Message");
+const { configService } = require("../services/ConfigService");
 
 exports.serverApi = {
 
@@ -35,7 +36,7 @@ exports.serverApi = {
                     } else {
                         const cfg = JSON.parse(data);
                         console.log("config loaded:", cfg);
-                        controller.setConfiguration(cfg);
+                        configService.setConfig(cfg);
                     }
                 });
         });
@@ -46,15 +47,15 @@ exports.serverApi = {
         ));
 
         ipcMain.on(InChannel.SAVE_CONFIG, (event, arg) => {
-            controller.setConfiguration(arg);
+            configService.setConfig(cfg);
             event.sender.send(InChannel.SAVE_CONFIG, { successful: true });
             fileService.saveConfig(arg);
         });
 
         ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
-            controller.setConfiguration(config);
-            event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
+            configService.setConfig(cfg);
             fileService.saveConfigAs(config);
+            event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
         });
 
         ipcMain.on(InChannel.GET_IMAGES, (event, keys) => {
