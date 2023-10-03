@@ -157,6 +157,7 @@
     api.controlSlideshow.subscribeNext(ID, (img) => renderer.showNext());
     api.controlSlideshow.subscribePrevious(ID, (img) => renderer.showPrevious());
     api.controlSlideshow.subscribeTransition(ID, (img) => renderer.transition());
+    api.controlSlideshow.subscribeAbortTransition(ID, renderer.abortTransition);
     api.controlSlideshow.subscribeGoto(ID, (img) => {
         console.log("Received goto ", img);
         renderer.show(img.index);

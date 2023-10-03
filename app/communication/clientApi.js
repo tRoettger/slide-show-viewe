@@ -61,6 +61,7 @@ exports.api = {
         start: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.START),
         transition: () => ipcRenderer.send(InChannel.CONTROL_SLIDESHOW.TRANSITION),
         requestCurrentIndex: (onCurrentIndex) => request(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, onCurrentIndex),
+        subscribeAbortTransition: (id, onAbortTransition) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.ABORT_TRANSITION, onAbortTransition),
         subscribeNext: (id, onNext) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.NEXT, onNext),
         subscribePrevious: (id, onPrevious) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.PREVIOUS, onPrevious),
         subscribeTransition: (id, onTransition) => subscribe(id, OutChannel.CONTROL_SLIDESHOW.TRANSITION, onTransition),

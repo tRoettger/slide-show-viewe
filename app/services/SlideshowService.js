@@ -130,9 +130,9 @@ slideshowPlayer.subscribe(ID, {
     pause: this.slideshowService.stopSlideShow,
     next: this.slideshowService.gotoNextImage,
     previous: () => {
-        if(!slideshowPlayer.isRunning()) {
+        //if(!slideshowPlayer.isRunning()) {
             this.slideshowService.gotoPreviousImage();
-        }
+        //}
     }
 });
 transitionService.subscribe(ID, {

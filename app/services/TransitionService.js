@@ -73,7 +73,7 @@ slideshowPlayer.subscribe(ID, {
     }
 });
 
-const log = (msg, obj) => (() => console.log(`TransitionService: ${msg}`, obj));
+const log = (msg) => (() => console.log(`TransitionService: ${msg}`));
 /*this.transitionService.subscribe("self", {
     transition: log("transition"),
     autoNext: log("autoNext"),
