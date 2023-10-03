@@ -1,5 +1,5 @@
 const { Menu } = require('electron');
-const { slideshowController: controller } = require("./services/SlideshowController");
+const { slideshowService: controller } = require("./services/SlideshowService");
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
 const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');

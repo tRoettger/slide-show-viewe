@@ -1,11 +1,12 @@
 const { isImage } = require("../model/imageFileHelper");
 const { serverApi } = require("../communication/serverApi");
 
-class SlideshowController {
+class SlideshowService {
     constructor() {
         this.files = [];
         this.running = false;
         this.stateListeners = [];
+        
         this.startSlideShow = this.startSlideShow.bind(this);
         this.stopSlideShow = this.stopSlideShow.bind(this);
         this.gotoPreviousImage = this.gotoPreviousImage.bind(this);
@@ -17,6 +18,7 @@ class SlideshowController {
         this.gotoImage = this.gotoImage.bind(this);
         this.getAlbum = this.getAlbum.bind(this);
         this.getCurrentIndex = this.getCurrentIndex.bind(this);
+        
         this.#setCurrentIndex(0);
     }
 
@@ -113,5 +115,5 @@ class SlideshowController {
 
 };
 
-exports.slideshowController = new SlideshowController();
-serverApi.registerController(this.slideshowController);
+exports.slideshowService = new SlideshowService();
+serverApi.registerController(this.slideshowService);

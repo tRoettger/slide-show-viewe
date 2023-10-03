@@ -13,10 +13,14 @@
             this.showPrevious = this.showPrevious.bind(this);
             this.start = this.start.bind(this);
             this.pause = this.pause.bind(this);
+            this.transition = this.transition.bind(this);
+            this.resetTransition = this.resetTransition.bind(this);
         }
 
         configure(config) {
-            this.config = config;
+            this.#pauseAndResumeFor(() => {
+                this.config = config;
+            });
         }
 
         getCount() {
@@ -33,6 +37,10 @@
         }
 
         pause() {
+            if(this.cancelSchedule) {
+                console.log("cancel schedule: ", new Error("for stack"));
+                this.cancelSchedule();
+            }
             if(this.interval) {
                 clearInterval(this.interval);
             }
@@ -41,31 +49,76 @@
         }
 
         showNext() {
-            this.remoteControl.next();
+            this.#pauseAndResumeFor(() => this.remoteControl.next());
         }
 
         showPrevious() {
-            // "+ slideshow.count" covers the step from first to last image.
-            this.remoteControl.previous();
+            this.#pauseAndResumeFor(() => this.remoteControl.previous());
+        }
+
+        #schedule(task, timeout) {
+            this.cancelSchedule = undefined;
+            return new Promise((resolve, reject) => {
+                this.cancelSchedule = undefined;
+                let scheduledTimeout = setTimeout(() => {
+                    try {
+                        task();
+                        this.cancelSchedule = undefined;
+                        resolve();
+                    } catch(err) {
+                        console.error(err);
+                        reject(err);
+                    }
+                }, timeout);
+                this.cancelSchedule = () => {
+                    clearTimeout(scheduledTimeout);
+                    reject();
+                };
+            });
+        }
+
+        transition() {
+            this.remoteControl.transition();
+        }
+
+        #transitionToNextImage() {
+            const next = () => {
+                console.log("controller: next after transition");
+                this.remoteControl.next();
+            };
+            this.#schedule(this.transition, this.config.viewDuration * 1000)
+                //.then(() => this.#schedule(next, this.config.transitionDuration * 1000))
+                .then(() => this.#transitionToNextImage())
+                .catch(err => {
+                    if(err) {
+                        console.error(err);
+                    } else {
+                        console.log("controller: transition canceled");
+                    }
+                });
         }
 
         start() {
             if(!this.isRunning() && this.getCount() > 1) {
                 this.running = true;
                 this.onPlay();
-                const viewDuration = this.config.viewDuration * 1000;
-                const transitionDuration = this.config.transitionDuration * 1000;
-                const swapDuration = viewDuration + transitionDuration;
-                console.log("Swap duration", swapDuration);
 
-                setTimeout(() => {
-                    this.remoteControl.transition();
-                }, viewDuration);
-                this.interval = setInterval(() => {
-                    this.showNext();
-                    this.remoteControl.transition();
-                }, swapDuration);
+                this.#transitionToNextImage();
             }
+        }
+
+        #pauseAndResumeFor(task) {
+            if(this.isRunning()) {
+                this.pause();
+                task();
+                this.start();
+            } else {
+                task();
+            }
+        }
+
+        resetTransition() {
+            this.#pauseAndResumeFor(() => {});
         }
     }
 
@@ -83,23 +136,13 @@
         BTN_SLIDESHOW.innerHTML =  "&#10073;&#10073;";
         BTN_SLIDESHOW.title = "Diashow pausieren";
     };
-    
-    const wrapWithStopAndStart = (stepping, controller) => {
-        if(controller.isRunning()) {
-            controller.pause();
-            stepping();
-            controller.start();
-        } else {
-            stepping();
-        }
-    };
 
     let controller;
 
     configApi.subscribe(ID, (config) => {
         if(controller) {
             console.log("controller received config", config);
-            wrapWithStopAndStart(() => controller.configure(config), controller);
+            controller.configure(config);
         } else {
             controller = new SlideshowController(config, api.controlSlideshow, onPause, onPlay);
     
@@ -112,12 +155,15 @@
             };
     
             BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
-            BTN_NEXT.addEventListener("click", (e) => wrapWithStopAndStart(controller.showNext, controller));
-            BTN_PREVIOUS.addEventListener("click", (e) => wrapWithStopAndStart(controller.showPrevious, controller));
+            BTN_NEXT.addEventListener("click", (e) => controller.showNext());
+            BTN_PREVIOUS.addEventListener("click", (e) => controller.showPrevious());
     
             api.subscribeAlbum(ID, album => controller.loadAlbum(album));
             api.controlSlideshow.subscribeStart(ID, controller.start);
             api.controlSlideshow.subscribeStop(ID, controller.pause);
+            api.controlSlideshow.subscribeNext(ID, controller.resetTransition);
+            api.controlSlideshow.subscribePrevious(ID, controller.resetTransition);
+            api.controlSlideshow.subscribeGoto(ID, controller.resetTransition);
         }
     
     });
