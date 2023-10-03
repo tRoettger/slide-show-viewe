@@ -7,6 +7,7 @@ const { slideshowConfigWindow } = require('./windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
 const { mainWindow } = require('./windows/SlideshowWindow');
 const { configService } = require('./services/ConfigService');
+const { slideshowPlayer } = require('./services/SlideshowPlayer');
 
 const MenuItemId = {
     START_SLIDESHOW: "start-slideshow",
@@ -34,14 +35,14 @@ const MENU_TEMPLATE = [
             { label: "Diashow starten/pausieren", visible: false, accelerator: "Space", click: controller.toggleSlideShow },
             { 
                 label: "Diashow starten", accelerator: "Space", registerAccelerator: false,
-                click: controller.startSlideShow, id: MenuItemId.START_SLIDESHOW
+                click: slideshowPlayer.start, id: MenuItemId.START_SLIDESHOW
             },
             { 
                 label: "Diashow pausieren",  accelerator: "Space", registerAccelerator: false,
-                click: controller.stopSlideShow, id: MenuItemId.STOP_SLIDESHOW, enabled: false
+                click: slideshowPlayer.pause, id: MenuItemId.STOP_SLIDESHOW, enabled: false
             },
-            { label: "vorheriges Bild", accelerator: "Left", click: controller.gotoPreviousImage },
-            { label: "nächstes Bild", accelerator: "Right", click: controller.gotoNextImage },
+            { label: "vorheriges Bild", accelerator: "Left", click: slideshowPlayer.previous },
+            { label: "nächstes Bild", accelerator: "Right", click: slideshowPlayer.next },
             { type: "separator" },
             { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.focus },
             { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainWindow.focus() },

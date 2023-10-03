@@ -6,6 +6,7 @@ const { subscriptionService } = require("../services/SubscriptionService");
 const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequestType } = require("./Message");
 const { configService } = require("../services/ConfigService");
+const { slideshowPlayer } = require("../services/SlideshowPlayer");
 
 exports.serverApi = {
 
@@ -78,11 +79,10 @@ exports.serverApi = {
         
         ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.TRANSITION, (event) => controller.transition());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => controller.startSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, (event) => controller.stopSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => controller.gotoNextImage());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => controller.gotoPreviousImage());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => slideshowPlayer.start);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, (event) => slideshowPlayer.pause);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => slideshowPlayer.next);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => slideshowPlayer.previous);
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.GOTO, (event, index) => controller.gotoImage(index));
         
     },

@@ -1,6 +1,7 @@
 const { isImage } = require("../model/imageFileHelper");
 const { serverApi } = require("../communication/serverApi");
 const { configService } = require("./ConfigService");
+const { slideshowPlayer } = require("./SlideshowPlayer");
 
 class SlideshowService {
     constructor() {
@@ -120,3 +121,9 @@ class SlideshowService {
 exports.slideshowService = new SlideshowService();
 serverApi.registerController(this.slideshowService);
 configService.subscribe("slidshowService", this.slideshowService.setConfiguration);
+slideshowPlayer.subscribe("slideshowService", {
+    start: this.slideshowService.startSlideShow,
+    pause: this.slideshowService.stopSlideShow,
+    next: this.slideshowService.gotoNextImage,
+    previous: this.slideshowService.gotoPreviousImage
+})
