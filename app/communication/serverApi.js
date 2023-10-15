@@ -56,9 +56,9 @@ exports.serverApi = {
             fileService.saveConfig(cfg);
         });
 
-        ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
+        ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, cfg) => {
             configService.setConfig(cfg);
-            fileService.saveConfigAs(config);
+            fileService.saveConfigAs(cfg);
             event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
         });
 
