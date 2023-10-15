@@ -10,6 +10,7 @@
             this.updateAnimation = this.updateAnimation.bind(this);
             this.renderImage = this.renderImage.bind(this);
             this.show = this.show.bind(this);
+            this.abortTransition = this.abortTransition.bind(this);
         }
 
         #tryToDisplay(id, setup) {
@@ -48,6 +49,7 @@
         };
 
         transition() {
+            console.log("renderer: transition");
             this.display.lastChild.style.animationName = "fade";
         }
 
@@ -72,6 +74,8 @@
         }
 
         showNext() {
+            console.log("renderer: show next");
+            this.abortTransition();
             var child = this.display.lastChild;
             this.display.removeChild(child);
             child.style.animationName = "none";
@@ -95,7 +99,7 @@
         }
 
         showPrevious() {
-            this.display.lastChild.style.animationName = "none";
+            this.abortTransition();
             var child = this.display.firstChild;
             this.display.removeChild(child);
             this.display.appendChild(child);
@@ -132,6 +136,13 @@
             this.cssRoot.setProperty("--view-duration", config.viewDuration + "s");
             this.cssRoot.setProperty("--timing-function", config.timingFunction);
         }
+
+        abortTransition() {
+            const lastChild = this.display.lastChild;
+            if(lastChild) {
+                lastChild.style.animationName = "none";
+            }
+        }
     }
 
     const PRELOAD_IMAGES = 3;
@@ -146,10 +157,12 @@
     api.controlSlideshow.subscribeNext(ID, (img) => renderer.showNext());
     api.controlSlideshow.subscribePrevious(ID, (img) => renderer.showPrevious());
     api.controlSlideshow.subscribeTransition(ID, (img) => renderer.transition());
+    api.controlSlideshow.subscribeAbortTransition(ID, renderer.abortTransition);
     api.controlSlideshow.subscribeGoto(ID, (img) => {
         console.log("Received goto ", img);
         renderer.show(img.index);
     });
+    api.controlSlideshow.subscribeStop(ID, renderer.abortTransition);
 
     const handleAlbum = (album) => {
         renderer.setup(album.count);

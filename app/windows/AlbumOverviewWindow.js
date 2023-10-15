@@ -1,4 +1,3 @@
-const { BrowserWindow } = require("electron");
 const path = require("path");
 const { WindowId } = require("../model/WindowUtils");
 const { subscriptionService } = require("../services/SubscriptionService");

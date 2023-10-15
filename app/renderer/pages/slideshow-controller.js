@@ -1,18 +1,17 @@
 /* ISOLATED to prevent other files to access those variables */
 (() => {
     class SlideshowController {
-        constructor(config, remoteControl, onPause, onPlay) {
+        constructor(config, remoteControl) {
             this.count = 0;
             this.running = false;
             this.config = config;
             this.remoteControl = remoteControl;
-            this.onPause = onPause;
-            this.onPlay = onPlay;
 
             this.showNext = this.showNext.bind(this);
             this.showPrevious = this.showPrevious.bind(this);
             this.start = this.start.bind(this);
             this.pause = this.pause.bind(this);
+            this.toggle = this.toggle.bind(this);
         }
 
         configure(config) {
@@ -33,11 +32,7 @@
         }
 
         pause() {
-            if(this.interval) {
-                clearInterval(this.interval);
-            }
-            this.running = false;
-            this.onPause();
+            this.remoteControl.pause();
         }
 
         showNext() {
@@ -45,27 +40,23 @@
         }
 
         showPrevious() {
-            // "+ slideshow.count" covers the step from first to last image.
             this.remoteControl.previous();
         }
 
         start() {
-            if(!this.isRunning() && this.getCount() > 1) {
-                this.running = true;
-                this.onPlay();
-                const viewDuration = this.config.viewDuration * 1000;
-                const transitionDuration = this.config.transitionDuration * 1000;
-                const swapDuration = viewDuration + transitionDuration;
-                console.log("Swap duration", swapDuration);
+            this.remoteControl.start();
+        }
 
-                setTimeout(() => {
-                    this.remoteControl.transition();
-                }, viewDuration);
-                this.interval = setInterval(() => {
-                    this.showNext();
-                    this.remoteControl.transition();
-                }, swapDuration);
+        toggle() {
+            if(this.running) {
+                this.pause();
+            } else {
+                this.start();
             }
+        }
+
+        setRunning(running) {
+            this.running = running;
         }
     }
 
@@ -74,50 +65,30 @@
     const BTN_NEXT = document.getElementById("next-btn");
     const BTN_PREVIOUS = document.getElementById("previous-btn");
     
-    const onPause = () => {
-        BTN_SLIDESHOW.innerHTML = "&#9655;";
-        BTN_SLIDESHOW.title = "Diashow starten";
-    };
-
-    const onPlay = () => {
-        BTN_SLIDESHOW.innerHTML =  "&#10073;&#10073;";
-        BTN_SLIDESHOW.title = "Diashow pausieren";
-    };
-    
-    const wrapWithStopAndStart = (stepping, controller) => {
-        if(controller.isRunning()) {
-            controller.pause();
-            stepping();
-            controller.start();
-        } else {
-            stepping();
-        }
-    };
-
     let controller;
 
     configApi.subscribe(ID, (config) => {
         if(controller) {
             console.log("controller received config", config);
-            wrapWithStopAndStart(() => controller.configure(config), controller);
+            controller.configure(config);
         } else {
-            controller = new SlideshowController(config, api.controlSlideshow, onPause, onPlay);
+            controller = new SlideshowController(config, api.controlSlideshow);
     
-            const controlSlideshow = (e) => {
-                if(controller.isRunning()) {
-                    api.controlSlideshow.pause();
-                } else {
-                    api.controlSlideshow.start();
-                }
-            };
-    
-            BTN_SLIDESHOW.addEventListener("click", controlSlideshow);
-            BTN_NEXT.addEventListener("click", (e) => wrapWithStopAndStart(controller.showNext, controller));
-            BTN_PREVIOUS.addEventListener("click", (e) => wrapWithStopAndStart(controller.showPrevious, controller));
+            BTN_SLIDESHOW.addEventListener("click", controller.toggle);
+            BTN_NEXT.addEventListener("click", (e) => controller.showNext());
+            BTN_PREVIOUS.addEventListener("click", (e) => controller.showPrevious());
     
             api.subscribeAlbum(ID, album => controller.loadAlbum(album));
-            api.controlSlideshow.subscribeStart(ID, controller.start);
-            api.controlSlideshow.subscribeStop(ID, controller.pause);
+            api.controlSlideshow.subscribeStart(ID, () => {
+                controller.setRunning(true);
+                BTN_SLIDESHOW.innerHTML =  "&#10073;&#10073;";
+                BTN_SLIDESHOW.title = "Diashow pausieren";
+            });
+            api.controlSlideshow.subscribeStop(ID, () => {
+                controller.setRunning(false);
+                BTN_SLIDESHOW.innerHTML = "&#9655;";
+                BTN_SLIDESHOW.title = "Diashow starten";
+            });
         }
     
     });

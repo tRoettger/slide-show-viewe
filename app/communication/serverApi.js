@@ -5,6 +5,10 @@ const { fileService } = require("../services/FileService");
 const { subscriptionService } = require("../services/SubscriptionService");
 const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequestType } = require("./Message");
+const { configService } = require("../services/ConfigService");
+const { slideshowPlayer } = require("../services/SlideshowPlayer");
+
+const ID = "serverAPI";
 
 exports.serverApi = {
 
@@ -24,6 +28,7 @@ exports.serverApi = {
     broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
     broadcastSlideshowNext: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
     broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
+    broadcastSlideShowAbortTransition: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.ABORT_TRANSITION),
     broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
     broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
     broadcastCurrentIndex: (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),
@@ -35,7 +40,7 @@ exports.serverApi = {
                     } else {
                         const cfg = JSON.parse(data);
                         console.log("config loaded:", cfg);
-                        controller.setConfiguration(cfg);
+                        configService.setConfig(cfg);
                     }
                 });
         });
@@ -46,15 +51,15 @@ exports.serverApi = {
         ));
 
         ipcMain.on(InChannel.SAVE_CONFIG, (event, arg) => {
-            controller.setConfiguration(arg);
+            configService.setConfig(cfg);
             event.sender.send(InChannel.SAVE_CONFIG, { successful: true });
             fileService.saveConfig(arg);
         });
 
         ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
-            controller.setConfiguration(config);
-            event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
+            configService.setConfig(cfg);
             fileService.saveConfigAs(config);
+            event.sender.send(InChannel.SAVE_CONFIG_AS, { successful: true });
         });
 
         ipcMain.on(InChannel.GET_IMAGES, (event, keys) => {
@@ -77,11 +82,10 @@ exports.serverApi = {
         
         ipcMain.on(InChannel.LOAD_ALBUM, (event, folder) => controller.openAlbum(fileService.loadFiles([folder])));
 
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.TRANSITION, (event) => controller.transition());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, (event) => controller.startSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, (event) => controller.stopSlideShow());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, (event) => controller.gotoNextImage());
-        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, (event) => controller.gotoPreviousImage());
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.START, slideshowPlayer.start);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PAUSE, slideshowPlayer.pause);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.NEXT, slideshowPlayer.next);
+        ipcMain.on(InChannel.CONTROL_SLIDESHOW.PREVIOUS, slideshowPlayer.previous);
         ipcMain.on(InChannel.CONTROL_SLIDESHOW.GOTO, (event, index) => controller.gotoImage(index));
         
     },
