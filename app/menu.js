@@ -37,7 +37,7 @@ const MENU_TEMPLATE = [
     }, {
         label: "Diashow",
         submenu: [
-            { label: "Diashow starten/pausieren", visible: false, accelerator: "Space", click: controller.toggleSlideShow },
+            { label: "Diashow starten/pausieren", visible: false, accelerator: "Space", click: slideshowPlayer.toggle },
             { 
                 label: "Diashow starten", accelerator: "Space", registerAccelerator: false,
                 click: slideshowPlayer.start, id: MenuItemId.START_SLIDESHOW
