@@ -146,7 +146,11 @@ transitionService.subscribe(ID, {
     autoNext: this.slideshowService.gotoNextImage,
     autoPause: serverApi.broadcastSlideShowAbortTransition
 });
-this.slideshowService.subscribe("TransitionService", (image) => transitionService.resetAutoplay());
+this.slideshowService.subscribe("TransitionService", (image) => {
+    if(slideshowPlayer.isRunning()) {
+        transitionService.resetAutoplay();
+    }
+});
 this.slideshowService.subscribe(
     "ServerAPI", 
     (image) => serverApi.broadcastSlideShowGoto(image)
