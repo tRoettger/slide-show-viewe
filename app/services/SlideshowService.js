@@ -3,9 +3,11 @@ const { serverApi } = require("../communication/serverApi");
 const { configService } = require("./ConfigService");
 const { slideshowPlayer } = require("./SlideshowPlayer");
 const { transitionService } = require("./TransitionService");
+const { Observable } = require("../model/Observable");
 
-class SlideshowService {
+class SlideshowService extends Observable {
     constructor() {
+        super();
         this.files = [];
         this.running = false;
         this.stateListeners = [];
@@ -25,6 +27,10 @@ class SlideshowService {
         this.transition = this.transition.bind(this);
 
         this.#setCurrentIndex(0);
+    }
+
+    subscribe(id, onGoto) {
+        super.subscribe(id, {onGoto: onGoto});
     }
 
     openAlbum(files) {
@@ -80,7 +86,7 @@ class SlideshowService {
     gotoImage(index) {
         this.#setCurrentIndex((index*1) % this.#getCount());
         const image = this.getImage(this.current);
-        serverApi.broadcastSlideShowGoto(image);
+        this.notify(l => l.onGoto(image));
     }
 
     transition() {
@@ -139,4 +145,9 @@ transitionService.subscribe(ID, {
     transition: this.slideshowService.transition,
     autoNext: this.slideshowService.gotoNextImage,
     autoPause: serverApi.broadcastSlideShowAbortTransition
-})
+});
+this.slideshowService.subscribe("TransitionService", (image) => transitionService.resetAutoplay());
+this.slideshowService.subscribe(
+    "ServerAPI", 
+    (image) => serverApi.broadcastSlideShowGoto(image)
+);
