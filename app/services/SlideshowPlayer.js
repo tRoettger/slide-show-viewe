@@ -14,6 +14,7 @@ class SlideshowPlayer extends Observable {
         this.pause = this.pause.bind(this);
         this.next = this.next.bind(this);
         this.previous = this.previous.bind(this);
+        this.toggle = this.toggle.bind(this);
         
         this.isRunning = this.isRunning.bind(this);
     }
@@ -22,6 +23,14 @@ class SlideshowPlayer extends Observable {
         if(this.running != running) {
             this.running = running;
             this.notify(notification);
+        }
+    }
+
+    toggle() {
+        if(this.isRunning()) {
+            this.pause();
+        } else {
+            this.start();
         }
     }
 
