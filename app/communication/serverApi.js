@@ -50,10 +50,10 @@ exports.serverApi = {
             controller.getConfiguration()
         ));
 
-        ipcMain.on(InChannel.SAVE_CONFIG, (event, arg) => {
+        ipcMain.on(InChannel.SAVE_CONFIG, (event, cfg) => {
             configService.setConfig(cfg);
             event.sender.send(InChannel.SAVE_CONFIG, { successful: true });
-            fileService.saveConfig(arg);
+            fileService.saveConfig(cfg);
         });
 
         ipcMain.on(InChannel.SAVE_CONFIG_AS, (event, config) => {
