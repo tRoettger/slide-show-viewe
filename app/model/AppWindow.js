@@ -62,7 +62,7 @@ exports.AppWindow = class AppWindow {
     }
 
     focus() {
-        this.#processBrowserWindowTask(w => w.focus());
+        this.getOrCreate().focus();
     }
 
 };
