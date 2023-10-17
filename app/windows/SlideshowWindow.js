@@ -2,7 +2,7 @@ const path = require('path');
 const { slideshowConfigAppWindow } = require('./SlideshowConfigWindow');
 const { albumOverviewAppWindow } = require('./AlbumOverviewWindow');
 const { windowConfigurer } = require('../services/WindowConfigurer');
-const { albumSelectionAppWindow } = require('./Alb')
+const { albumSelectionAppWindow } = require('./AlbumSelectionWindow')
 const { AppWindow } = require('../model/AppWindow');
 
 const DEFAULT_SETTINGS = { width: 800, height: 600 };

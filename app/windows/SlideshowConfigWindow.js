@@ -3,6 +3,7 @@ const path = require("path");
 const { subscriptionService } = require("../services/SubscriptionService");
 const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
 const { windowConfigurer } = require("../services/WindowConfigurer");
+const { AppWindow } = require("../model/AppWindow");
 
 const DEFAULT_SETTINGS = { width: 340, height: 210 };
 

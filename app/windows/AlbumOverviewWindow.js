@@ -3,6 +3,7 @@ const { WindowId } = require("../model/WindowUtils");
 const { subscriptionService } = require("../services/SubscriptionService");
 const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
 const { windowConfigurer } = require("../services/WindowConfigurer");
+const { AppWindow } = require("../model/AppWindow");
 
 const DEFAULT_SETTINGS = {
     width: 800, height: 600
