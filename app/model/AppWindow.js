@@ -3,7 +3,7 @@ const selectionWindow = require('../windows/AlbumSelectionWindow');
 const { slideshowConfigWindow } = require('../windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require("../windows/AlbumOverviewWindow");
 
-class AppWindow {
+exports.AppWindow = class AppWindow {
     constructor(executor, getOrCreate, fullscreenAllowed, menuBarVisible) {
         this.fullscreen = false;
         this.fullscreenAllowed = fullscreenAllowed;
