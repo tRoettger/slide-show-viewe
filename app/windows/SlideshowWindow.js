@@ -3,6 +3,7 @@ const { slideshowConfigWindow } = require('./SlideshowConfigWindow');
 const selectionWindow = require('./AlbumSelectionWindow');
 const { albumOverviewWindow } = require('./AlbumOverviewWindow');
 const { windowConfigurer } = require('../services/WindowConfigurer');
+const { AppWindow } = require('../model/AppWindow');
 
 const DEFAULT_SETTINGS = { width: 800, height: 600 };
 
@@ -18,3 +19,4 @@ const createWindow = () => {
 };
 
 exports.mainWindow = createWindow();
+exports.mainAppWindow = new AppWindow((task) => task(mainWindow), () => mainWindow, true, true);
