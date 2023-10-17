@@ -63,6 +63,10 @@ exports.AppWindow = class AppWindow {
         this.#processBrowserWindowTask(w => w.close());
     }
 
+    focus() {
+        this.#processBrowserWindowTask(w => w.focus());
+    }
+
 };
 
 exports.albumSelectionAppWindow = new AppWindow((task) => selectionWindow.ifPresent(task), () => selectionWindow.getOrCreateAlbumSelectionWindow(), false, false);
