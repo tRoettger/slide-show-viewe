@@ -11,6 +11,8 @@ exports.AppWindow = class AppWindow {
         this.openDevTools = this.openDevTools.bind(this);
         this.reload = this.reload.bind(this);
         this.show = this.show.bind(this);
+        this.focus = this.focus.bind(this);
+        this.close = this.close.bind(this);
     }
 
     #processBrowserWindowTask(task) {

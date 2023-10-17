@@ -49,7 +49,7 @@ const MENU_TEMPLATE = [
             { label: "vorheriges Bild", accelerator: "Left", click: slideshowPlayer.previous },
             { label: "nächstes Bild", accelerator: "Right", click: slideshowPlayer.next },
             { type: "separator" },
-            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.focus },
+            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewAppWindow.focus },
             { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainAppWindow.focus() },
             { type: "separator" },
             { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
