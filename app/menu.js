@@ -2,8 +2,8 @@ const { Menu } = require('electron');
 const { slideshowService: controller } = require("./services/SlideshowService");
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { slideshowConfigWindow, slideshowConfigAppWindow } = require('./windows/SlideshowConfigWindow');
-const { albumOverviewWindow, albumOverviewAppWindow } = require('./windows/AlbumOverviewWindow');
+const { slideshowConfigAppWindow } = require('./windows/SlideshowConfigWindow');
+const { albumOverviewAppWindow } = require('./windows/AlbumOverviewWindow');
 const { mainAppWindow } = require('./windows/SlideshowWindow');
 const { configService } = require('./services/ConfigService');
 const { slideshowPlayer } = require('./services/SlideshowPlayer');
@@ -52,7 +52,7 @@ const MENU_TEMPLATE = [
             { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewAppWindow.focus },
             { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainAppWindow.focus() },
             { type: "separator" },
-            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
+            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigAppWindow.focus },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => configService.setConfig(config))

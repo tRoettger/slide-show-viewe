@@ -14,6 +14,4 @@ const wrapper = new WindowInstanceWrapper(() => {
     return window;
 });
 
-exports.slideshowConfigWindow = wrapper;
-
 exports.slideshowConfigAppWindow = new AppWindow(wrapper.ifPresent, wrapper.getOrCreate, false, false);
