@@ -18,7 +18,6 @@ const wrapper = new WindowInstanceWrapper(() => {
     return window;
 });
 
-exports.getOrCreateAlbumSelectionWindow = wrapper.getOrCreate;
-exports.ifPresent = wrapper.ifPresent;
+exports.albumSelectionAppWindow = new AppWindow(wrapper.ifPresent, wrapper.getOrCreate, false, false);
 
 albumPopupMenu.registerTo(this);

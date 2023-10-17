@@ -6,9 +6,13 @@ const { windowConfigurer } = require("../services/WindowConfigurer");
 
 const DEFAULT_SETTINGS = { width: 340, height: 210 };
 
-exports.slideshowConfigWindow = new WindowInstanceWrapper(() => {
+const wrapper = new WindowInstanceWrapper(() => {
     const window = windowConfigurer.create("slideshow-config", DEFAULT_SETTINGS, { autoHideMenuBar: true});
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "slide-show-config.html"));
     window.on('close', (e) => subscriptionService.unsubscribeAll(WindowId.SLIDESHOW_CONFIG));
     return window;
 });
+
+exports.slideshowConfigWindow = wrapper;
+
+exports.slideshowConfigAppWindow = new AppWindow(wrapper.ifPresent, wrapper.getOrCreate, false, false);

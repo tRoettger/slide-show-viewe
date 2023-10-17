@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS = {
     width: 800, height: 600
 };
 
-exports.albumOverviewWindow = new WindowInstanceWrapper(() => {
+const wrapper = new WindowInstanceWrapper(() => {
     const window = windowConfigurer.create("album-overview", DEFAULT_SETTINGS, {autoHideMenuBar: true});
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "album-overview", "album-overview.html"));
     window.on('close', (e) => {
@@ -16,3 +16,5 @@ exports.albumOverviewWindow = new WindowInstanceWrapper(() => {
     });
     return window;
 });
+
+exports.albumOverviewAppWindow = new AppWindow(wrapper.ifPresent, wrapper.getOrCreate, false, false);
