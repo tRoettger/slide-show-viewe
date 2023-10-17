@@ -1,4 +1,3 @@
-const { mainWindow } = require("../windows/SlideshowWindow");
 const selectionWindow = require('../windows/AlbumSelectionWindow');
 const { slideshowConfigWindow } = require('../windows/SlideshowConfigWindow');
 const { albumOverviewWindow } = require("../windows/AlbumOverviewWindow");
@@ -58,6 +57,10 @@ exports.AppWindow = class AppWindow {
 
     show() {
         this.getOrCreate().show();
+    }
+
+    close() {
+        this.#processBrowserWindowTask(w => w.close());
     }
 
 };
