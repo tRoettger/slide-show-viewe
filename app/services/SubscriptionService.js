@@ -1,4 +1,4 @@
-class SubscriptionService {
+exports.SubscriptionService = class SubscriptionService {
     constructor() {
         this.subscriptions = new Map();
     }
@@ -32,4 +32,3 @@ class SubscriptionService {
         }
     }
 }
-exports.subscriptionService = new SubscriptionService();

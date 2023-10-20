@@ -2,13 +2,15 @@ const { ipcMain } = require("electron");
 const { getDefaultSlideShowConfigPath } = require("../services/SlideshowConfigurer");
 const fs = require("fs");
 const { fileService } = require("../services/FileService");
-const { subscriptionService } = require("../services/SubscriptionService");
+const { subscriptionService, SubscriptionService } = require("../services/SubscriptionService");
 const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequestType } = require("./Message");
 const { configService } = require("../services/ConfigService");
 const { slideshowPlayer } = require("../services/SlideshowPlayer");
 
 const ID = "serverAPI";
+
+const subscriptionService = new SubscriptionService();
 
 exports.serverApi = {
 
