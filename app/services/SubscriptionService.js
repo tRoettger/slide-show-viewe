@@ -1,6 +1,9 @@
 exports.SubscriptionService = class SubscriptionService {
     constructor() {
         this.subscriptions = new Map();
+        this.broadcast = this.broadcast.bind(this);
+        this.subscribe = this.subscribe.bind(this);
+        this.unsubscribeAll = this.unsubscribeAll.bind(this);
     }
 
     #getOrEmptyMap(outChannel) {
