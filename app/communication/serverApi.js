@@ -102,5 +102,6 @@ exports.serverApi = {
         ipcMain.on(InChannel.CHANGE_ALBUM_ORDER, (event, order) => selector.sortAlbums(order));
         ipcMain.on(InChannel.FILTER_ALBUMS, (event, filter) => selector.filterAlbums(filter));
         ipcMain.on(InChannel.SHOW_ALBUM_POPUP, (event, options) => selector.showAlbumPopup(options))
-    }
+    },
+    unsubscribe: subscriptionService.unsubscribeAll
 };
