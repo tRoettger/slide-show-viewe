@@ -24,18 +24,8 @@ exports.serverApi = {
 
     broadcastAlbumNotification: (album) => subscriptionService.broadcast(OutChannel.NOTIFY_ALBUM, album),
     broadcastAlbumChange: (album) => subscriptionService.broadcast(OutChannel.NOTIFY_ALBUM_CHANGED, album),
-    broadcastImage: (imageContainer) => subscriptionService.broadcast(OutChannel.PROVIDE_IMAGE, imageContainer),
     broadcastPageInfo: (pageInfo) => subscriptionService.broadcast(OutChannel.NOTIFY_PAGE_INFO, pageInfo),
-    broadcastOpenAlbum: (album) => subscriptionService.broadcast(OutChannel.OPEN_ALBUM, album),
-    broadcastSlideshowConfig: (config) => subscriptionService.broadcast(OutChannel.CONFIGURE_SLIDESHOW, config),
-    broadcastSlideshowStart: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.START),
-    broadcastSlideshowStop: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
-    broadcastSlideshowNext: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
-    broadcastSlideShowTransition: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image),
-    broadcastSlideShowAbortTransition: () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.ABORT_TRANSITION),
-    broadcastSlideshowPrevious: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
     broadcastSlideShowGoto: (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.GOTO, image),
-    broadcastCurrentIndex: (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),
     registerController: (controller) => {
         ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
             fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
@@ -112,14 +102,14 @@ exports.serverApi = {
 slideshowService.subscribe(ID, (image) => this.serverApi.broadcastSlideShowGoto(image));
 this.serverApi.registerController(slideshowService);
 slideshowService.subscribeSlideshow(
-    (album) => this.serverApi.broadcastOpenAlbum(album),
-    this.serverApi.broadcastSlideshowConfig,
-    this.serverApi.broadcastCurrentIndex,
-    this.serverApi.broadcastSlideshowStart,
-    this.serverApi.broadcastSlideshowStop,
-    this.serverApi.broadcastSlideshowPrevious,
-    this.serverApi.broadcastSlideshowNext,
-    this.serverApi.broadcastImage,
-    this.serverApi.broadcastSlideShowAbortTransition,
-    this.serverApi.broadcastSlideShowTransition
+    (album) => subscriptionService.broadcast(OutChannel.OPEN_ALBUM, album),
+    (config) => subscriptionService.broadcast(OutChannel.CONFIGURE_SLIDESHOW, config),
+    (currentIndex) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.CURRENT_INDEX, currentIndex),
+    () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.START),
+    () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.STOP),
+    (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.PREVIOUS, image),
+    (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.NEXT, image),
+    (imageContainer) => subscriptionService.broadcast(OutChannel.PROVIDE_IMAGE, imageContainer),
+    () => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.ABORT_TRANSITION),
+    (image) => subscriptionService.broadcast(OutChannel.CONTROL_SLIDESHOW.TRANSITION, image)
 )
