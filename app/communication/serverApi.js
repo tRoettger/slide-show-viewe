@@ -107,3 +107,5 @@ exports.serverApi = {
     },
     unsubscribe: subscriptionService.unsubscribeAll
 };
+
+ipcMain.on(InChannel.UNSUBSCRIBE, (event, id) => console.log("Unsubscribing", id));

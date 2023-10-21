@@ -22,7 +22,8 @@ exports.InChannel = {
     SHOW_ALBUM_POPUP: "show-album-popup",
     SAVE_CONFIG: "save-config",
     SAVE_CONFIG_AS: "save-config-as",
-    SUBSCRIBE: "subscribe"
+    SUBSCRIBE: "subscribe",
+    UNSUBSCRIBE: "unsubscribe"
 };
 
 /**

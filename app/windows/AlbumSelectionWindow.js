@@ -5,17 +5,13 @@ const { albumPopupMenu } = require("./AlbumPopupMenu");
 const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
 const { windowConfigurer } = require("../services/WindowConfigurer");
 const { AppWindow } = require("../model/AppWindow");
-const { serverApi } = require("../communication/serverApi");
 
 const DEFAULT_SETTINGS = { width: 1080, height: 720 };
 
 const wrapper = new WindowInstanceWrapper(() => {
     const window = windowConfigurer.create("album-selection", DEFAULT_SETTINGS, { autoHideMenuBar: true });
     window.loadFile(path.join(__dirname, "..", "renderer", "pages", "selector", "view.html"));
-    window.on('close', (e) => {
-        serverApi.unsubscribe(WindowId.ALBUM_SELECTION);
-        selector.clear();
-    });
+    window.on('close', (e) => selector.clear());
     return window;
 });
 
