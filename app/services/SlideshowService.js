@@ -106,7 +106,7 @@ class SlideshowService extends Observable {
     gotoImage(index) {
         this.#setCurrentIndex((index*1) % this.#getCount());
         const image = this.getImage(this.current);
-        this.notify(l => l.onGoto(image));
+        this.notify(listener => listener(image));
     }
 
     #transition() {
