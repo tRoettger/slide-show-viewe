@@ -7,6 +7,7 @@ const { OutChannel, InChannel } = require("./Channel");
 const { AlbumRequestType } = require("./Message");
 const { configService } = require("../services/ConfigService");
 const { slideshowPlayer } = require("../services/SlideshowPlayer");
+const { slideshowService } = require("../services/SlideshowService");
 
 const ID = "serverAPI";
 
@@ -107,3 +108,18 @@ exports.serverApi = {
         ipcMain.on(InChannel.SHOW_ALBUM_POPUP, (event, options) => selector.showAlbumPopup(options))
     }
 };
+
+slideshowService.subscribe(ID, (image) => this.serverApi.broadcastSlideShowGoto(image));
+this.serverApi.registerController(slideshowService);
+slideshowService.subscribeSlideshow(
+    (album) => this.serverApi.broadcastOpenAlbum(album),
+    this.serverApi.broadcastSlideshowConfig,
+    this.serverApi.broadcastCurrentIndex,
+    this.serverApi.broadcastSlideshowStart,
+    this.serverApi.broadcastSlideshowStop,
+    this.serverApi.broadcastSlideshowPrevious,
+    this.serverApi.broadcastSlideshowNext,
+    this.serverApi.broadcastImage,
+    this.serverApi.broadcastSlideShowAbortTransition,
+    this.serverApi.broadcastSlideShowTransition
+)

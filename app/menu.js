@@ -76,7 +76,7 @@ const MENU_TEMPLATE = [
     }
 ];
 
-controller.subscribeState((running) => {
+controller.subscribeSlideshow(onStateChange = (running) => {
     Menu.getApplicationMenu().getMenuItemById(MenuItemId.START_SLIDESHOW).enabled = !running;
     Menu.getApplicationMenu().getMenuItemById(MenuItemId.STOP_SLIDESHOW).enabled = running;
 });
