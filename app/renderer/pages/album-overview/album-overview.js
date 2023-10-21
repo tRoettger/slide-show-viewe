@@ -91,6 +91,7 @@ const handleAlbum = (album) => {
     }
 };
 
+window.addEventListener("beforeunload", () => api.unsubscribe(ID));
 api.subscribeAlbum(ID, handleAlbum);
 api.requestAlbum(handleAlbum);
 api.controlSlideshow.subscribeCurrentIndex(ID, imgRenderer.highlightCurrentItem);
