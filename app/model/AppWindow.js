@@ -15,12 +15,12 @@ exports.AppWindow = class AppWindow {
         this.close = this.close.bind(this);
     }
 
-    #processBrowserWindowTask(task) {
+    ifPresent(task) {
         return this.executor(task);
     }
 
     #processWebcontentsTask(task) {
-        return this.#processBrowserWindowTask(browserWindow => {
+        return this.ifPresent(browserWindow => {
             const webContents = browserWindow.webContents;
             return (webContents) ? task(webContents) : undefined;
         });
@@ -29,7 +29,7 @@ exports.AppWindow = class AppWindow {
     #setScreenMode(fullscreen) {
         this.fullscreen = this.fullscreenAllowed && fullscreen;
         
-        this.#processBrowserWindowTask(w => {
+        this.ifPresent(w => {
             w.setFullScreen(this.fullscreen)
 
             /* Hides menubar if window is in fullscreen mode. */
@@ -58,7 +58,7 @@ exports.AppWindow = class AppWindow {
     }
 
     close() {
-        this.#processBrowserWindowTask(w => w.close());
+        this.ifPresent(w => w.close());
     }
 
     focus() {
