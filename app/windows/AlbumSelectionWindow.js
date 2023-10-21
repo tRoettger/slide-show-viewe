@@ -1,5 +1,4 @@
 const path = require("path");
-const { WindowId } = require("../model/WindowUtils");
 const { selector } = require("../services/AlbumSelector");
 const { albumPopupMenu } = require("./AlbumPopupMenu");
 const { WindowInstanceWrapper } = require("./WindowInstanceWrapper");
