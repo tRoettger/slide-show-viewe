@@ -11,6 +11,15 @@ class ConfigService extends Observable {
         this.notify((listener) => listener(config));
     }
 
+    setDefaultConfig() {
+        this.config = {
+            viewDuration: 3,
+            transitionDuration: 2,
+            timingFunction: "linear"
+        };
+        this.notify((listener) => listener(this.config));
+    }
+
 }
 
 exports.configService = new ConfigService({});

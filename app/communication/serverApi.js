@@ -45,9 +45,11 @@ ipcMain.on(InChannel.APPLICATION_READY, (event, windowId) => {
     fs.readFile(getDefaultSlideShowConfigPath(), { encoding: 'utf-8' }, (err, data) => {
             if(err) {
                 console.log("Error occured while loading default slideshow configuration: ", err);
+                console.log("Using default configuration.");
+                configService.setDefaultConfig();
             } else {
                 const cfg = JSON.parse(data);
-                console.log("config loaded:", cfg);
+                console.log("Configuration loaded:", cfg);
                 configService.setConfig(cfg);
             }
         });
