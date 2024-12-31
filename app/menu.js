@@ -2,12 +2,12 @@ const { Menu } = require('electron');
 const { slideshowService: controller } = require("./services/SlideshowService");
 const { selector } = require("./services/AlbumSelector");
 const { fileService } = require('./services/FileService');
-const { reloadAll, mainAppWindow, albumSelectionAppWindow, slideshowConfigAppWindow, albumOverviewAppWindow } = require('./model/AppWindow');
-const { slideshowConfigWindow } = require('./windows/SlideshowConfigWindow');
-const { albumOverviewWindow } = require('./windows/AlbumOverviewWindow');
-const { mainWindow } = require('./windows/SlideshowWindow');
+const { slideshowConfigAppWindow } = require('./windows/SlideshowConfigWindow');
+const { albumOverviewAppWindow } = require('./windows/AlbumOverviewWindow');
+const { mainAppWindow } = require('./windows/SlideshowWindow');
 const { configService } = require('./services/ConfigService');
 const { slideshowPlayer } = require('./services/SlideshowPlayer');
+const { albumSelectionAppWindow } = require('./windows/AlbumSelectionWindow');
 
 const MenuItemId = {
     START_SLIDESHOW: "start-slideshow",
@@ -16,7 +16,7 @@ const MenuItemId = {
 
 const pauseAndReloadAll = () => {
     slideshowPlayer.pause();
-    reloadAll();
+    reload();
 };
 
 const MENU_TEMPLATE = [
@@ -32,7 +32,7 @@ const MENU_TEMPLATE = [
                 click: () => selector.selectRootFolder(albumSelectionAppWindow.show)
             },
             { type: "separator" },
-            { label: "Beenden", click: () => mainWindow.close() }
+            { label: "Beenden", click: () => mainAppWindow.close() }
         ]
     }, {
         label: "Diashow",
@@ -49,10 +49,10 @@ const MENU_TEMPLATE = [
             { label: "vorheriges Bild", accelerator: "Left", click: slideshowPlayer.previous },
             { label: "nächstes Bild", accelerator: "Right", click: slideshowPlayer.next },
             { type: "separator" },
-            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewWindow.focus },
-            { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainWindow.focus() },
+            { label: "Übersicht", accelerator: "Alt+O", click: albumOverviewAppWindow.focus },
+            { label: "Diashow Fenster", visible: false, accelerator: "Alt+1", click: () => mainAppWindow.focus() },
             { type: "separator" },
-            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigWindow.focus },
+            { label: "Einstellungen", accelerator: "Ctrl+P", click: slideshowConfigAppWindow.focus },
             { 
                 label: "Gespeicherte Einstellungen laden", accelerator: "Ctrl+L", 
                 click: () => fileService.loadConfig((config) => configService.setConfig(config))
@@ -76,9 +76,25 @@ const MENU_TEMPLATE = [
     }
 ];
 
-controller.subscribeState((running) => {
+controller.subscribeSlideshow(onStateChange = (running) => {
     Menu.getApplicationMenu().getMenuItemById(MenuItemId.START_SLIDESHOW).enabled = !running;
     Menu.getApplicationMenu().getMenuItemById(MenuItemId.STOP_SLIDESHOW).enabled = running;
 });
 
 Menu.setApplicationMenu(Menu.buildFromTemplate(MENU_TEMPLATE));
+
+const reloadListeners = new Map();
+
+const reload = () => {
+    for(let listener of reloadListeners.values()) {
+        listener();
+    };
+}
+
+const subscribeReload = (id, listener) => {
+    reloadListeners.set(id, listener);
+};
+subscribeReload("slideshowConfigAppWindow", slideshowConfigAppWindow.reload);
+subscribeReload("albumOverviewAppWindow", albumOverviewAppWindow.reload);
+subscribeReload("mainAppWindow", mainAppWindow.reload);
+subscribeReload("albumSelectionAppWindow", albumSelectionAppWindow.reload);

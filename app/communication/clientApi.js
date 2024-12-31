@@ -75,7 +75,8 @@ exports.api = {
     triggerImagesBroadcast: (shouldLoad) => ipcRenderer.send(InChannel.GET_IMAGES, shouldLoad),
     subscribeImages: (id, onImage) => subscribe(id, OutChannel.PROVIDE_IMAGE, onImage),
     subscribeAlbum: (id, onAlbum) => subscribe(id, OutChannel.OPEN_ALBUM, onAlbum),
-    notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, "main-window")
+    notifySlideshowWindowReady: () => ipcRenderer.send(InChannel.APPLICATION_READY, "main-window"),
+    unsubscribe: (id) => ipcRenderer.send(InChannel.UNSUBSCRIBE, id)
 };
 
 exports.configApi = {

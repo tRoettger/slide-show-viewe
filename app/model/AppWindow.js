@@ -1,9 +1,4 @@
-const { mainWindow } = require("../windows/SlideshowWindow");
-const selectionWindow = require('../windows/AlbumSelectionWindow');
-const { slideshowConfigWindow } = require('../windows/SlideshowConfigWindow');
-const { albumOverviewWindow } = require("../windows/AlbumOverviewWindow");
-
-class AppWindow {
+exports.AppWindow = class AppWindow {
     constructor(executor, getOrCreate, fullscreenAllowed, menuBarVisible) {
         this.fullscreen = false;
         this.fullscreenAllowed = fullscreenAllowed;
@@ -16,14 +11,16 @@ class AppWindow {
         this.openDevTools = this.openDevTools.bind(this);
         this.reload = this.reload.bind(this);
         this.show = this.show.bind(this);
+        this.focus = this.focus.bind(this);
+        this.close = this.close.bind(this);
     }
 
-    #processBrowserWindowTask(task) {
+    ifPresent(task) {
         return this.executor(task);
     }
 
     #processWebcontentsTask(task) {
-        return this.#processBrowserWindowTask(browserWindow => {
+        return this.ifPresent(browserWindow => {
             const webContents = browserWindow.webContents;
             return (webContents) ? task(webContents) : undefined;
         });
@@ -32,7 +29,7 @@ class AppWindow {
     #setScreenMode(fullscreen) {
         this.fullscreen = this.fullscreenAllowed && fullscreen;
         
-        this.#processBrowserWindowTask(w => {
+        this.ifPresent(w => {
             w.setFullScreen(this.fullscreen)
 
             /* Hides menubar if window is in fullscreen mode. */
@@ -60,20 +57,12 @@ class AppWindow {
         this.getOrCreate().show();
     }
 
-};
-
-exports.mainAppWindow = new AppWindow((task) => task(mainWindow), () => mainWindow, true, true);
-exports.albumSelectionAppWindow = new AppWindow((task) => selectionWindow.ifPresent(task), () => selectionWindow.getOrCreateAlbumSelectionWindow(), false, false);
-exports.slideshowConfigAppWindow = new AppWindow((task) => slideshowConfigWindow.ifPresent(task), () => slideshowConfigWindow.getOrCreateSlideshowConfigurationWindow(), false, false);
-exports.albumOverviewAppWindow = new AppWindow(albumOverviewWindow.ifPresent, albumOverviewWindow.getOrCreate, false, false);
-
-exports.reloadAll = () => {
-    for(let appWindow of [
-        this.mainAppWindow,
-        this.albumSelectionAppWindow,
-        this.slideshowConfigAppWindow,
-        this.albumOverviewAppWindow
-    ]) {
-        appWindow.reload();
+    close() {
+        this.ifPresent(w => w.close());
     }
+
+    focus() {
+        this.getOrCreate().focus();
+    }
+
 };

@@ -5,13 +5,7 @@ const { serverApi } = require("../communication/serverApi");
 
 class AlbumPopupMenu {
     constructor() {
-        this.showPopup = () => {};
-    }
-
-    initMenu() {
-        this.menu = Menu.buildFromTemplate([
-            { label: "Cover ändern", "click": () => this.#changeCover() }
-        ]);
+        this.showPopup = (menu) => {};
     }
 
     #changeCover() {
@@ -33,13 +27,17 @@ class AlbumPopupMenu {
 
     popup(options) {
         this.album = options.album;
-        this.showPopup();
+        const menu = Menu.buildFromTemplate([
+            { label: this.album.name, enabled: false },
+            { type: "separator" },
+            { label: "Cover ändern", "click": () => this.#changeCover() }
+        ]);
+        this.showPopup(menu);
     }
 
     registerTo(window) {
-        this.showPopup = () => window.ifPresent(w => this.menu.popup(w));
+        this.showPopup = (menu) => window.ifPresent(w => menu.popup(w));
     }
 }
 
 exports.albumPopupMenu = new AlbumPopupMenu();
-this.albumPopupMenu.initMenu();

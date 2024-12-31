@@ -34,6 +34,8 @@ SELECT_ORDER.addEventListener("change", e => {
 
 const ID = windowApi.windowId.ALBUM_SELECTION;
 
+window.addEventListener("beforeunload", () => api.unsubscribe(ID));
+
 albumApi.subscribeAlbum(ID, albumRenderer.render);
 albumApi.subscribePageInfo(ID, paginationRenderer.render);
 albumApi.subscribeAlbumChange(ID, albumRenderer.updateAlbum);
